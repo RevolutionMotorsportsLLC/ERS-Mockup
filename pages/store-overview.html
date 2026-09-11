@@ -118,6 +118,34 @@
   </div>
 </section>
 
+<!-- ============ DEPARTMENT DETAIL ============ -->
+<section>
+  <div class="gutter">
+    <h2>Department Detail</h2>
+    <p>The operating detail the roll-up above doesn't carry, one segment block per department.</p>
+  </div>
+  <div>
+    <table><thead><tr>
+      <th class="l">Line item</th><th>Sep 10</th><th>MTD</th>
+    </tr></thead><tbody id="deptDetailBody"></tbody></table>
+    <p class="mini note-el">Motorclothes counter sales equal its Total sales above &mdash; no wholesale channel, so
+      every dollar is retail. Service's Total labor + Total parts sum to its Total sales above, split.</p>
+
+    <div class="spec note-el">
+      <b class="h">Department detail &mdash; what this is and isn't</b>
+      <ul>
+        <li>This is the first pass at closing the gap between this page and the old nightly email to owners, which
+          carried real operating detail (LIPT, obsolescence, technician productivity, financed products by name)
+          that nothing in ERS currently tracks per store. This pass adds only what's cleanly defined today; the
+          rest waits on Logan.</li>
+        <li>Sales, gross profit and margin for every department already live in Departments, above &mdash; these
+          blocks add only what that table can't show: unit counts, financing penetration, the retail/wholesale
+          split.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <div class="foot">
   <span>ERS Store Overview &middot; rebuild guidance mockup</span>
   <span>Revolution Motorsports, L.L.C. &middot; Destin, FL</span>
@@ -199,7 +227,7 @@ function render(){
   for (i = 0; i < rows.length; i++) {
     var r = rows[i], last = i === rows.length - 1, c = cmpCells(r, cfg);
     html += '<tr' + (last ? ' class="tot"' : '') + '>' +
-      '<td class="l">' + r.n + '</td>' +
+      '<td class="l">' + r.n + '<span class="src">statement</span></td>' +
       '<td>' + money(r.s) + '</td><td>' + money(r.g) + '</td>' +
       '<td>' + (r.s ? pct1(r.g / r.s * 100) : '\u2014') + '</td>' +
       (showProj ? '<td>' + money(r.s * PF) + '</td><td>' + money(r.g * PF) + '</td>' : '');
@@ -249,6 +277,51 @@ function renderHeader(){
   document.getElementById('ptick').style.left  = PACE + '%';
 }
 
+/* ---------- Department detail ----------
+   Sales/gross/margin already live in the Departments table above - this table adds
+   only what that one can't show (unit counts, financing penetration, the retail/
+   wholesale split), one segment block per department - same convention as the
+   New/Used/Total blocks on Bike Sales. */
+function renderDeptDetail(){
+  var d = DATA.detail;
+  var blocks = [
+    { label: 'Bike Sales', rows: [
+      { label: 'New unit sales',   band: 'counted', day: commas(d.bikeSales.day.new),   mtd: commas(d.bikeSales.mtd.new) },
+      { label: 'Used unit sales',  band: 'counted', day: commas(d.bikeSales.day.used),  mtd: commas(d.bikeSales.mtd.used) },
+      { label: 'Total unit sales', band: 'counted', day: commas(d.bikeSales.day.total), mtd: commas(d.bikeSales.mtd.total) }
+    ]},
+    { label: 'F & I', rows: [
+      { label: 'Units sold', band: 'counted', day: commas(d.fi.day.units),    mtd: commas(d.fi.mtd.units) },
+      { label: 'Financed',   band: 'counted', day: commas(d.fi.day.financed), mtd: commas(d.fi.mtd.financed) },
+      { label: '% Financed', band: 'derived',
+        day: pct1(d.fi.day.units ? d.fi.day.financed / d.fi.day.units * 100 : 0),
+        mtd: pct1(d.fi.mtd.units ? d.fi.mtd.financed / d.fi.mtd.units * 100 : 0) }
+    ]},
+    { label: 'Parts', rows: [
+      { label: 'Counter sales', band: 'statement', day: money(d.parts.day.counter), mtd: money(d.parts.mtd.counter) }
+    ]},
+    { label: 'Motorclothes', rows: [
+      { label: 'Counter sales', band: 'statement', day: money(d.motorclothes.day.counter), mtd: money(d.motorclothes.mtd.counter) }
+    ]},
+    { label: 'Service', rows: [
+      { label: 'Total labor', band: 'statement', day: money(d.service.day.labor),      mtd: money(d.service.mtd.labor) },
+      { label: 'Total parts', band: 'statement', day: money(d.service.day.parts),      mtd: money(d.service.mtd.parts) },
+      { label: 'Closed ROs',  band: 'counted',   day: commas(d.service.day.closedRos), mtd: commas(d.service.mtd.closedRos) }
+    ]}
+  ];
+  var html = '', i, j;
+  for (i = 0; i < blocks.length; i++) {
+    html += '<tr class="band"><td colspan="3">' + blocks[i].label + '</td></tr>';
+    for (j = 0; j < blocks[i].rows.length; j++) {
+      var r = blocks[i].rows[j];
+      html += '<tr' + (j === blocks[i].rows.length - 1 ? ' class="endband"' : '') + '>' +
+        '<td class="l">' + r.label + '<span class="src">' + r.band + '</span></td>' +
+        '<td>' + r.day + '</td><td>' + r.mtd + '</td></tr>';
+    }
+  }
+  document.getElementById('deptDetailBody').innerHTML = html;
+}
+
 /* ---------- Load every sample figure from /data, then render ---------- */
 fetch('../data/store-overview.json')
   .then(function(res){ return res.json(); })
@@ -261,6 +334,7 @@ fetch('../data/store-overview.json')
     DEPTS = DATA.departments;
     renderHeader();
     render();
+    renderDeptDetail();
   })
   .catch(function(err){
     document.querySelector('main').insertAdjacentHTML('afterbegin',
