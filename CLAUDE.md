@@ -1,0 +1,176 @@
+# ERS Mockup — Project Instructions
+
+Read this at the start of every session. It carries the decisions already made, so they
+are not relitigated.
+
+---
+
+## What this project is
+
+A complete, clickable front-end mockup of ERS (Executive Review System), a daily operating
+dashboard for Harley-Davidson dealerships built by Revolution Motorsports on Talon data.
+
+The mockup is **the specification**. The development team builds exactly what they are
+given — when they were sent a Store Overview mockup they reproduced it pixel for pixel,
+including choices that were meant as suggestions. Treat every detail as something that
+will ship.
+
+**Seth Cooke** runs this and is transitioning out within months. Everything produced here
+must be handoff-ready: assume the reader is **Logan** six months from now, not Seth today.
+Seth is not a developer. Explain technical terms in plain language on first use.
+
+---
+
+## Hard rules
+
+1. **Every figure on a page must reconcile with every other figure on that page.** The
+   deal list totals equal the KPI table, which equals the ribbon. F&I total back end
+   equals the deal list's back-end column. If a number moves and a tie breaks, one of
+   them is wrong. This is not decoration — it is the product's entire trust argument.
+2. **Display, don't calculate, wherever possible.** Sales and gross profit are read from
+   the Talon income statement so they cannot disagree with the dealer's own month-end
+   packet. Only ratios, projections and comparisons are calculated by ERS.
+3. **Every row declares its source** with a small tag beside the label:
+   - `statement` — read from the Talon income statement
+   - `counted` — unit, deal or invoice records; not dollars
+   - `entered` — dealer or CRM entered
+   - `derived` — ERS arithmetic on the above. **The only band where a formula can be
+     wrong**, and the only band needing an equation in the formula specification.
+4. **Never show a zero where there is no value.** An em-dash means "no goal set" or "not
+   available". A zero means "this happened zero times" — a different and worse claim.
+5. **Sample data is never typed into a page.** It lives in `/data` as its own file and the
+   page reads from it. This draws the seam between front end and back end for the
+   developers.
+
+---
+
+## Time tabs — identical on every table that has them
+
+Three tabs, in this order:
+
+| Tab | Adds |
+|---|---|
+| **Day w/ MTD** (default) | The day's own figures, and Projected month-end |
+| **vs. Last Month** | The complete prior month, plus % of that month |
+| **vs. Last Year** | The complete same month last year, plus % of that month |
+
+- **Month to date is never a tab.** Its columns are always on screen; the tab controls only
+  the block on the right.
+- **Prior periods are complete months**, not the same days of them. The income statement
+  export reports finished periods — there is no "August as of day 10" to read.
+- `% of prior = month-to-date ÷ that whole month's figure`, read against the percentage of
+  the period elapsed.
+- **Ratio rows show a difference, not a percentage** — `+$115`, `−0.3 pts`. A margin at
+  100% of last month is flat, not on pace.
+- **Colour only where a judgment is possible.** Pace rows: green at +3 points or more, red
+  at −3 or worse. Ratio differences: ±$25, ±0.3 pts. Day columns are values, not
+  comparisons — never coloured.
+
+---
+
+## Projected month-end
+
+```
+Projected = MTD ÷ open days elapsed × total open days
+```
+
+- **Day w/ MTD tab only.** On a comparison tab the reader is looking backwards and a
+  forecast of the current month is clutter between the two periods.
+- Applied to **units, sales and gross** only.
+- **No projected margin, ever.** Both figures scale by the same factor, so a projected
+  margin always equals the month-to-date margin. Ratio rows are recomputed from the
+  projected rows above them, not projected directly.
+- **Two day counts, deliberate. Do not reconcile them.**
+  - *Display* — the accounting period as the page states it (e.g. 10 of 30). Drives the
+    header, the progress bar and the comparison colour.
+  - *Projection* — a **six-day trading week**, the Harley norm. September 2026 has 26 open
+    days. Understates month-end on purpose.
+  - The column heading must state the projection basis (`· 26 open days`) so the two
+    counts are not read as an error.
+- Long term this should come from a **per-store open-day calendar**; the seven stores will
+  not all keep the same week.
+
+---
+
+## Table conventions already settled
+
+- **Segment blocks.** Where a table has segments (New / Used / New + Used), they are
+  stacked blocks with a band header, not columns. The total block is last, dark band, bold.
+- **Row order follows the derivation chain.** Units, then dollars, then gross profit, then
+  the ratios built from them — so a derived figure sits directly under its own inputs and a
+  dealer can check it without leaving the screen.
+- **Grouped column headers** where a table has more than one measure per period.
+- **Cross-store ranking does not exist on a single-store tab.** Benchmarking is Phase 2,
+  consent-gated, and suppressed below three or four contributing stores. Design the empty
+  state before the feature.
+- **Long lists** get a six-row window that scrolls, with headings and totals pinned, plus a
+  Show all toggle. Totals always reflect the filters, never what is on screen.
+
+---
+
+## Notes on the page
+
+Two audiences, two documents. Do not mix them.
+
+- **On the page:** only what a developer needs while writing code — formulas, column rules,
+  colour thresholds, anything they would otherwise get wrong. Short bullets. The Bike Sales
+  mockup runs about 270 words of notes across three boxes; that is the ceiling, not a target.
+- **In `OPEN_QUESTIONS.md`:** definitions and data sources that need Logan's answer. These
+  block the spec, not the build.
+- Every page carries a **Hide notes** toggle so the tables can be read clean.
+
+---
+
+## Design system
+
+Defined once in `/styles/tokens.css` and never redefined per page.
+
+```
+--paper #FBFAF8   --ink #17181A    --ink-mid #5A5F66   --ink-low #9BA0A7
+--rule  #E4E3DF   --rule-hard #C9C8C3
+--accent #D9541F  --accent-soft #FAEDE7
+--up #2C6E4C      --down #B23A2B
+Display: Barlow Condensed 600/700, uppercase, letterspaced — headings and table headers
+Body:    Inter — labels and prose
+Mono:    IBM Plex Mono — every number, always
+```
+
+Base body text 13px. Table rows 11.5px mono, 4px vertical padding. Keep it compact — an
+earlier version was rescaled down 15% because a fifteen-row table would not fit one screen.
+
+---
+
+## File layout
+
+```
+/index.html            navigation shell
+/pages/                one file per tab
+/styles/tokens.css     the design system above
+/styles/app.css        shared layout and table styles
+/data/*.json           all sample figures, per store and period
+/scripts/              shared table rendering
+OPEN_QUESTIONS.md      for Logan
+CLAUDE.md              this file
+```
+
+---
+
+## Status
+
+**Done, and approved:** Bike Sales tab, Store Overview rebuild guidance.
+
+**Next, in order:** shared component kit from the two finished tabs → Parts, Motorclothes
+and Service (variations on Bike Sales, not new designs) → Compare Stores → nightly email.
+Scorecards, CRM, Riding Academy and Maintenance are separate problems; leave them.
+
+**Not this project's job:** the Talon mapping, the formula specification, the acceptance
+test. The mockup removes ambiguity about what to build. It does not make the numbers right.
+
+---
+
+## Repository
+
+This mockup is real intellectual property — the formula specification expressed as a
+working interface. It belongs in a **Revolution-controlled repository with Seth and Logan
+holding admin access**, from the first commit. Revolution previously lost a codebase to a
+departing developer; repo admin access has been an open action item since July 2026.

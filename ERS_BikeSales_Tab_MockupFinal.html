@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ERS — Bike Sales Tab (V4 Mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBFAF8; --rail:#1A1B1E; --rail-ink:#B8BCC2;
+  --ink:#17181A; --ink-mid:#5A5F66; --ink-low:#9BA0A7;
+  --rule:#E4E3DF; --rule-hard:#C9C8C3;
+  --accent:#D9541F; --accent-soft:#FAEDE7;
+  --up:#2C6E4C; --down:#B23A2B;
+  --disp:'Barlow Condensed','Arial Narrow',sans-serif;
+  --body:'Inter',-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:13px;line-height:1.4}
+.app{display:grid;grid-template-columns:190px minmax(0,1fr);min-height:100vh}
+
+.rail{background:var(--rail);color:var(--rail-ink);padding:20px 0 28px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.rail .mark{font-family:var(--disp);font-weight:700;font-size:23px;letter-spacing:.15em;text-transform:uppercase;color:#fff;padding:0 18px 2px;line-height:1}
+.rail .mark em{font-style:normal;color:var(--accent)}
+.rail .sub{font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:#6E747C;padding:0 18px 16px;text-transform:uppercase}
+.rail h3{font-family:var(--disp);font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#6E747C;padding:13px 18px 6px}
+.rail a{display:block;padding:5px 18px;color:var(--rail-ink);text-decoration:none;font-size:12.5px}
+.rail a:hover{background:#242629;color:#fff}
+.rail a.on{color:#fff;box-shadow:inset 3px 0 0 var(--accent);background:#242629}
+.rail a:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+
+main{padding:18px 26px 40px;max-width:1240px}
+.mockbar{background:var(--accent-soft);border-left:3px solid var(--accent);color:#8A3510;
+  font-family:var(--mono);font-size:10.5px;padding:8px 11px;margin-bottom:16px;line-height:1.55}
+.mockbar b{font-weight:600}
+
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;padding-bottom:12px;border-bottom:2px solid var(--ink)}
+.head h1{font-family:var(--disp);font-size:26px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;line-height:1}
+.head .meta{font-family:var(--mono);font-size:11px;color:var(--ink-mid);margin-top:5px}
+.head .meta b{color:var(--ink)}
+.acts{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.btn{font-family:var(--body);font-size:11.5px;padding:5px 10px;border:1px solid var(--rule-hard);background:#fff;border-radius:2px;cursor:pointer;color:var(--ink)}
+.btn:hover{border-color:var(--ink-mid)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select.btn,input.btn{font-family:var(--mono);font-size:12px;padding:5px 8px}
+
+.headline{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--rule);margin-top:13px;padding-top:15px}
+.hl{padding-right:16px}
+.hl .k{font-family:var(--disp);font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-low);display:block;margin-bottom:3px}
+.hl .v{font-family:var(--mono);font-size:23px;font-weight:500;letter-spacing:-.03em;display:block;line-height:1.1}
+.hl .d{font-family:var(--mono);font-size:10.5px;color:var(--ink-mid);display:block;margin-top:5px}
+.hl .d b{color:var(--ink);font-weight:500}
+
+.progress{margin:16px 0 4px;padding:10px 0 0;border-top:1px solid var(--rule)}
+.progress .row{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;color:var(--ink-mid);margin-bottom:6px}
+.progress .row b{color:var(--ink)}
+.ptrack{height:7px;background:#EDECE8;position:relative}
+.pfill{position:absolute;inset:0 auto 0 0;background:var(--accent)}
+.ptick{position:absolute;top:-3px;bottom:-3px;width:1px;background:var(--ink)}
+
+.secnav{position:sticky;top:0;z-index:6;background:var(--paper);display:flex;gap:8px;flex-wrap:wrap;padding:9px 0;margin-top:14px;border-bottom:1px solid var(--rule-hard)}
+.secnav a{display:block;min-width:108px;padding:6px 9px 7px;border:1px solid var(--rule-hard);background:#fff;border-radius:2px;text-decoration:none;color:var(--ink)}
+.secnav a:hover{border-color:var(--ink-mid)}
+.secnav a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.secnav a .t{font-family:var(--disp);font-size:11.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;display:block;line-height:1.15}
+.secnav a .s{font-family:var(--mono);font-size:9px;color:var(--ink-low);display:block;margin-top:3px}
+.secnav a.on{background:var(--ink);border-color:var(--ink)}
+.secnav a.on .t{color:#fff}
+.secnav a.on .s{color:#8A8F96}
+.anchor{scroll-margin-top:74px}
+body.notes-off .note-el{display:none}
+@media (max-width:1180px){.secnav a{min-width:0;flex:1 1 46%}}
+
+section{display:grid;grid-template-columns:100px minmax(0,1fr);gap:22px;border-top:1px solid var(--rule-hard);padding:16px 0 4px;margin-top:16px}
+.gutter{position:sticky;top:84px;align-self:start}
+.gutter h2{font-family:var(--disp);font-size:12.5px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;line-height:1.25}
+.gutter p{font-size:10.5px;color:var(--ink-low);margin-top:5px;line-height:1.4}
+
+.bases{display:flex;border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.bases button{font-family:var(--disp);font-size:12.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;background:none;border:0;border-bottom:3px solid transparent;color:var(--ink-low);padding:6px 14px 6px 0;margin-right:18px;cursor:pointer;line-height:1.3}
+.bases button:hover{color:var(--ink)}
+.bases button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.bases button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.basisnote{font-family:var(--mono);font-size:10.5px;color:var(--ink-mid);margin-top:7px}
+.basisnote b{color:var(--ink)}
+
+table{width:100%;border-collapse:collapse}
+thead th{font-family:var(--disp);font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-low);text-align:right;padding:0 10px 5px 0;border-bottom:1px solid var(--ink);white-space:nowrap}
+thead th.l{text-align:left}
+thead th:last-child{padding-right:0}
+thead th.cmp{color:var(--accent)}
+tbody td{font-family:var(--mono);font-size:11.5px;text-align:right;padding:4px 10px 4px 0;border-bottom:1px solid var(--rule);white-space:nowrap}
+tbody td.l{font-family:var(--body);font-size:12px;text-align:left}
+tbody td:last-child{padding-right:0}
+tbody tr.band td{background:#EFEDE9;border-bottom:1px solid var(--rule-hard);font-family:var(--disp);font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;text-align:left;padding:3px 9px 3px 7px;color:var(--ink)}
+tbody tr.band.tot td{background:var(--ink);color:#fff}
+tbody tr.totrow td{font-weight:600}
+tbody tr.endband td{border-bottom:1px solid var(--rule-hard)}
+tbody tr.zero td{color:var(--ink-low)}
+tbody tr.vehicles td{background:#F4F2EE}
+table.deals tbody tr.today td{background:#FDF2EC}
+table.deals tbody tr.today td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+table.deals tbody tr.today:hover td{background:#F9E9E0}
+table.deals th.nu,table.deals td.nu{padding-right:3px}
+.legend{display:inline-block;width:9px;height:9px;background:#FDF2EC;
+  box-shadow:inset 2px 0 0 var(--accent);vertical-align:-1px;margin-right:4px}
+.src{font-family:var(--mono);font-size:9px;color:var(--ink-low);letter-spacing:.04em;padding-left:7px}
+td.base{font-family:var(--mono);font-size:10px;color:var(--ink-low);text-align:left}
+.up{color:var(--up)}.down{color:var(--down)}.dim{color:var(--ink-low)}
+.mini{font-size:10.5px;color:var(--ink-low);margin-top:8px;line-height:1.55}
+.mini b{color:var(--ink-mid)}
+
+.spec{border-left:3px solid var(--accent);background:var(--accent-soft);padding:9px 12px;font-size:11.5px;color:#7A3011;margin-top:12px;line-height:1.6}
+.spec b.h{font-family:var(--disp);font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;display:block;margin-bottom:6px;color:#8A3510}
+.spec code{font-family:var(--mono);font-size:11px;background:#fff;border:1px solid #EBD6CB;padding:1px 5px;color:#5A2408}
+
+.tbl-title{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:2px}
+.tbl-title h4{font-family:var(--disp);font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.tbl-title .cnt{font-family:var(--mono);font-size:10.5px;color:var(--ink-mid)}
+.chip{font-family:var(--mono);font-size:10px;letter-spacing:.05em;padding:3px 8px;border-radius:2px;border:1px solid var(--rule-hard);background:#fff;cursor:pointer;color:var(--ink-mid)}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+td.muted{color:#C9C8C3}
+
+.filters{display:flex;gap:22px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-mid);padding:8px 0 0}
+.filters .fg b{font-family:var(--disp);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink);margin-right:10px}
+.filters label{margin-right:12px;cursor:pointer;white-space:nowrap}
+
+table.deals thead th{font-size:9.5px;letter-spacing:.06em;padding:0 5px 5px 0;cursor:pointer}
+table.deals thead th:hover{color:var(--ink)}
+table.deals thead th .ar{color:var(--accent);font-size:9px}
+table.deals tbody td{font-size:10.5px;padding:3.5px 5px 3.5px 0}
+table.deals tbody td.l{font-size:10.5px}
+table.deals tbody td.vin{font-size:9.5px;color:var(--ink-mid);letter-spacing:-.02em}
+table.deals tbody tr:hover td{background:#F4F2EE}
+table.deals tbody tr.tot td{border-top:1px solid var(--ink);border-bottom:0;font-weight:600;background:#FBF6E6;padding-top:6px}
+table.deals tbody tr.tot td.l{font-family:var(--disp);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.tscroll{max-height:178px;overflow-y:auto;overflow-x:hidden;border-bottom:1px solid var(--rule)}
+.tscroll.open{max-height:none;overflow:visible;border-bottom:0}
+.tscroll:not(.open) table.deals thead th{position:sticky;top:0;z-index:2;background:var(--paper);box-shadow:inset 0 -1px 0 var(--ink)}
+.tscroll:not(.open) table.deals tbody tr.tot td{position:sticky;bottom:0;z-index:2;background:#FBF6E6;box-shadow:inset 0 1px 0 var(--ink)}
+
+.notes{margin-top:12px;padding:11px 13px;border:1px dashed var(--rule-hard);background:#fff}
+.notes b.h{font-family:var(--disp);font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-mid);display:block;margin-bottom:7px}
+.notes ul{margin:0;padding-left:16px;font-size:11px;color:var(--ink-mid);line-height:1.7}
+.notes li b{color:var(--ink);font-weight:600}
+
+.foot{margin-top:20px;padding-top:12px;border-top:1px solid var(--rule-hard);font-family:var(--mono);font-size:10.5px;color:var(--ink-low);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media (max-width:1180px){
+  .app{grid-template-columns:1fr}
+  .rail{position:static;height:auto;display:grid;grid-template-columns:1fr 1fr;padding-bottom:16px}
+  .rail .mark,.rail .sub{grid-column:1/-1}
+  main{padding:18px 16px 34px}
+  .headline{grid-template-columns:repeat(2,1fr);gap:16px 0}
+  section{grid-template-columns:1fr;gap:12px}
+  .gutter{position:static}
+  .scroller{overflow-x:auto}
+}
+@media (max-width:560px){.headline{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<nav class="rail">
+  <div class="mark">ER<em>S</em></div>
+  <div class="sub">Executive Review System</div>
+  <h3>Overview</h3><a href="#">Store Overview</a><a href="#">Compare Stores</a>
+  <h3>Departments</h3><a href="#" class="on">Bike Sales</a><a href="#">Parts Sales</a>
+  <a href="#">Motorclothes</a><a href="#">Service</a>
+  <h3>Management</h3><a href="#">CRM</a><a href="#">Riding Academy</a>
+  <h3>Admin</h3><a href="#">Maintenance</a>
+</nav>
+
+<main>
+<div class="mockbar">
+  MOCKUP &mdash; <b>Bike Sales tab, build reference.</b> Structure and behaviour, not final polish. Figures are
+  fabricated but reconcile across the page: the deal list totals equal the KPI table, which equals the ribbon, and
+  F&amp;I total back end equals the deal list's back-end column.<br>
+  <b>Hide notes</b> in the section bar strips every explanatory box for a clean read of the tables.<br>
+  <b>Open questions live in a separate document</b> (ERS_BikeSales_Open_Questions) &mdash; those are for Logan, not
+  for the build.
+</div>
+
+<div class="head">
+  <div>
+    <h1>Bike Sales</h1>
+    <div class="meta">Emerald Coast &middot; Tuesday, September 08, 2026 &middot; open day <b>8</b> of <b>30</b></div>
+  </div>
+  <div class="acts">
+    <select class="btn" aria-label="Store"><option>Emerald Coast</option><option>Haven</option><option>Honky Tonk</option><option>M.C.H.D.</option><option>Madhouse</option><option>Moonshine</option><option>Music City</option></select>
+    <input class="btn" type="date" value="2026-09-08" aria-label="Overview of date">
+    <button class="btn">Print page</button>
+    <button class="btn">Export to Excel</button>
+  </div>
+</div>
+
+<div class="headline">
+  <div class="hl"><span class="k">Total sales</span><span class="v">$625,100</span><span class="d">month to date</span></div>
+  <div class="hl"><span class="k">Gross profit</span><span class="v">$119,896</span><span class="d">front end, month to date</span></div>
+  <div class="hl"><span class="k">Gross margin</span><span class="v">19.2%</span><span class="d">front end gross &divide; sales</span></div>
+  <div class="hl"><span class="k">Bike units</span><span class="v">28</span><span class="d">New <b>7</b> &nbsp;&middot;&nbsp; Used <b>21</b></span></div>
+  <div class="hl"><span class="k">Open days</span><span class="v">8 <span style="font-size:15px;color:var(--ink-low)">of 30</span></span><span class="d"><b>22</b> remaining</span></div>
+</div>
+
+<div class="progress">
+  <div class="row">
+    <span>Month progress &mdash; <b>8</b> of 30 open days used, <b>22</b> remaining</span>
+    <span>26.7% of month elapsed</span>
+  </div>
+  <div class="ptrack"><div class="pfill" style="width:26.7%"></div><div class="ptick" style="left:26.7%"></div></div>
+</div>
+
+<nav class="secnav" aria-label="Sections on this page">
+  <span id="seclinks" style="display:flex;gap:8px;flex-wrap:wrap"></span>
+  <button class="chip" id="notesToggle" aria-pressed="false"
+          style="margin-left:auto;align-self:center">Hide notes</button>
+</nav>
+
+<!-- ============ BIKE SALES KPIS ============ -->
+<section class="anchor" id="sec-kpi">
+  <div class="gutter">
+    <h2>Bike Sales KPIs</h2>
+    <p>Fifteen scorecard tables in one.</p>
+  </div>
+  <div>
+    <div class="bases" role="tablist" aria-label="Comparison basis">
+      <button role="tab" aria-selected="true"  data-basis="day">Day w/ MTD</button>
+      <button role="tab" aria-selected="false" data-basis="lastmonth">vs. Last Month</button>
+      <button role="tab" aria-selected="false" data-basis="lastyear">vs. Last Year</button>
+    </div>
+    <div class="basisnote" id="basisnote"></div>
+    <table><thead><tr id="kpihead"></tr></thead><tbody id="kpibody"></tbody></table>
+
+    <div class="spec note-el">
+      <b class="h">Projected month-end</b>
+      <code>Projected = MTD &divide; open days elapsed &times; total open days</code> &mdash; here
+      <code>MTD &divide; 7 &times; 26</code>, factor 3.71.
+      <ul>
+        <li>Applied to <b>units, sales and gross</b>. The two ratio rows are recomputed from the projected rows
+          above them, not projected directly. Units round to whole bikes after projecting.</li>
+        <li>Day w/ MTD tab only.</li>
+        <li><b>Two day counts, deliberate. Do not reconcile them.</b> Header, progress bar and comparison colour
+          use the accounting period, <b>8 of 30</b>. The projection uses a six-day trading week, <b>7 of 26</b>,
+          which understates month-end on purpose.</li>
+        <li>The column heading must state the projection basis &mdash; <i>&middot; 26 open days</i> &mdash; so the
+          two counts are not read as an error.</li>
+      </ul>
+    </div>
+
+    <div class="spec note-el">
+      <b class="h">Comparison columns</b>
+      <ul>
+        <li>Prior column is a <b>complete month</b> &mdash; all of August, all of September 2025 &mdash; not the
+          same 8 days of it. The export only reports finished periods.</li>
+        <li><code>% of prior = MTD &divide; that month's figure</code>, on unit, sales and gross rows.</li>
+        <li><b>Ratio rows show a difference instead</b> &mdash; +$115, &minus;0.3 pts. A margin at 100% of last
+          month is flat, not on pace.</li>
+        <li>Colour against <b>26.7%</b> elapsed: green at +3 points or more, red at &minus;3 or worse. Ratio rows
+          colour on the difference: &plusmn;$25, &plusmn;0.3 pts.</li>
+        <li>Day w/ MTD adds one column, the day's own figure. It is a value, not a comparison &mdash; never
+          coloured.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRANSACTIONS ============ -->
+<section class="anchor" id="sec-trans">
+  <div class="gutter">
+    <h2>Transactions</h2>
+    <p>Traffic, floor activity, conversion.</p>
+  </div>
+  <div>
+    <table><thead><tr>
+      <th class="l">Line item</th><th>Sep 08</th><th>MTD</th>
+      <th class="cmp">Goal</th><th class="cmp">MTD vs goal</th>
+    </tr></thead><tbody id="transbody"></tbody></table>
+
+    <div class="spec note-el">
+      <b class="h">Transactions and conversion</b>
+      <code>Total transactions = parts invoices + Motorclothes invoices + service repair orders</code> &mdash;
+      61 + 224 + 63 = 348 month to date.<br>
+      <code>Transactions per greet = total transactions &divide; greets</code>, same shape for sit-downs and unit
+      sales. <b>Lower is better</b>: the figure is how much traffic it takes to produce one, so the goal is a
+      ceiling. Goals exist for the three ratios and missed opportunities only; every other row shows an em-dash,
+      never a zero.
+    </div>
+  </div>
+</section>
+
+<!-- ============ F&I ============ -->
+<section class="anchor" id="sec-fi">
+  <div class="gutter">
+    <h2>F &amp; I</h2>
+    <p>The Talon deal-charge export, with calculated rows attached.</p>
+  </div>
+  <div>
+    <div class="tbl-title">
+      <h4>F &amp; I Deal Charges</h4>
+      <span class="cnt">month to date &middot; 28 units sold, 23 financed</span>
+    </div>
+    <table><thead><tr>
+      <th class="l">Deal charge</th><th># Units</th><th>Penetration</th><th>Total</th>
+    </tr></thead><tbody id="fibody"></tbody></table>
+    <table style="margin-top:2px"><thead><tr>
+      <th class="l">Calculated from the table above</th><th></th><th>MTD</th><th class="cmp">Base</th>
+    </tr></thead><tbody id="fikpibody"></tbody></table>
+
+    <div class="spec note-el">
+      <b class="h">Penetration uses two denominators</b>
+      Most rows divide by <b>units sold</b>. <b>GAP Insurance and OTC ESP divide by financed deals</b> &mdash; in the
+      export that is unlabelled, so ERS marks the row <i>of financed</i>. GAP is correct that way, since GAP can only
+      be sold on a financed deal.<br>
+      <code>Back end fees per copy = total back-end gross &divide; units sold</code> &middot;
+      <code>Products per deal = products sold &divide; deals</code> &middot;
+      <code>Reserve % = finance income &divide; total back-end gross</code><br>
+      Total back end must equal the <b>Back end gross</b> column of the deal list &mdash; $66,755. Vehicles is a base
+      row, not a charge: its Total is vehicle sales and is excluded from every calculation.
+    </div>
+  </div>
+</section>
+
+<!-- ============ INVENTORY ============ -->
+<section class="anchor" id="sec-inv">
+  <div class="gutter">
+    <h2>Current Inventory</h2>
+    <p>Unchanged, moved above the deal list.</p>
+  </div>
+  <div>
+    <div style="display:flex;gap:7px;margin-bottom:10px">
+      <button class="chip" id="zoomNew" aria-pressed="false">Zoom New</button>
+      <button class="chip" id="zoomUsed" aria-pressed="false">Zoom Used</button>
+      <button class="chip" id="zoomOff" aria-pressed="true">Show all</button>
+    </div>
+    <table><thead><tr>
+      <th class="l">Style</th><th>New</th><th>Used</th><th>Used &gt; 60</th><th>No PDI</th><th>No safety check</th>
+    </tr></thead><tbody id="invbody"></tbody></table>
+    <p class="mini note-el">Content and calculation unchanged from the current page. <b>Used &gt; 60</b> sits next to the used
+      count rather than at the end of the row, because it is the aging figure a GM acts on.</p>
+  </div>
+</section>
+
+<!-- ============ PER DEAL ============ -->
+<section class="anchor" id="sec-deals">
+  <div class="gutter">
+    <h2>Per Deal</h2>
+    <p>32 columns reduced to 14. One table, two date scopes.</p>
+  </div>
+  <div>
+    <div class="filters">
+      <div class="fg"><b>New or used</b>
+        <label><input type="radio" name="nu" value="All" checked> All</label>
+        <label><input type="radio" name="nu" value="New"> New</label>
+        <label><input type="radio" name="nu" value="Used"> Used</label></div>
+    </div>
+
+    <div class="tbl-title" style="margin-top:20px">
+      <h4 id="dealTitle"></h4>
+      <span class="cnt">
+        <button class="chip" data-scope="day" aria-pressed="false">Sep 08</button>
+        <button class="chip" data-scope="mtd" aria-pressed="true">Month to date</button>
+        <span id="dealcnt" style="margin-left:10px"></span>
+        <button class="chip" id="dealToggle" aria-expanded="false" style="margin-left:6px">Show all</button>
+      </span>
+    </div>
+    <div class="scroller"><div class="tscroll" id="dealScroll">
+      <table class="deals"><thead><tr id="dealhead"></tr></thead><tbody id="dealbody"></tbody></table>
+    </div></div>
+
+    <div class="spec note-el">
+      <b class="h">The deal list</b>
+      One component, two date scopes &mdash; the Sep 08 view is the month list filtered to today, so the two can
+      never disagree. Newest first, six rows in the frame, headings and totals pinned while the body scrolls. Any
+      heading sorts; dates sort as dates, not as text. Totals reflect the <b>filter</b>, not what is on screen.
+      In the month view <b>today's deals are shaded</b> with an accent rule, so the day reads apart from the month
+      without switching to the Sep 08 view.<br>
+      While collapsed the VIN shows its <b>last 8 characters</b>, with the full number on hover; <b>Show all</b>
+      restores it. Names display as <b>Last, F.</b> with the full name on hover &mdash; Talon stores them in caps as
+      LAST, FIRST, which is the widest thing in the row. Both are display conventions to keep all 14 columns visible
+      without horizontal scrolling; either can be reverted if the full strings are wanted. <code>Margin = front-end gross &divide; total sale</code> &mdash; <b>placeholder</b>, see the
+      open questions document before building.
+    </div>
+  </div>
+</section>
+
+<!-- ============ BUILD NOTES ============ -->
+<section class="anchor" id="sec-notes">
+  <div class="gutter">
+    <h2>Build Notes</h2>
+    <p>Changes against the current tab.</p>
+  </div>
+  <div>
+    <div class="notes">
+      <b class="h">What is different from the current Bike Sales page</b>
+      <ul>
+        <li><b>New:</b> KPI ribbon, and a sticky section menu.</li>
+        <li><b>New:</b> the Bike Sales KPI table &mdash; fifteen scorecard tables in one, in New / Used / New + Used
+          blocks, with Projected month-end as a standing column.</li>
+        <li><b>New:</b> Transactions, replacing the old KPI Metrics table, and an F&amp;I section built on the Talon
+          deal-charge export.</li>
+        <li><b>Changed:</b> the deal list drops from 32 columns to 14, and the two tables become one with a date
+          scope toggle.</li>
+        <li><b>Changed:</b> the four time filters add two comparison columns to the KPI table rather than switching
+          the page. Building all four is a separate task-list line, not part of the base table.</li>
+        <li><b>Moved:</b> Current Inventory, above the deal list.</li>
+        <li><b>Removed:</b> the Sale type and Deal type selectors on the deal list. Almost every deal is in-store,
+          and dropping them simplifies the first build.</li>
+        <li><b>Removed for now:</b> the two percentage tables at the foot of the current page, and any cross-store
+          ranking. Benchmarking is Phase 2 and consent-gated.</li>
+      </ul>
+    </div>
+    <p class="mini"><b>Source bands.</b> The tag beside each row label says where the figure comes from:
+      <b>statement</b> read from the Talon income statement, <b>counted</b> from unit or deal records,
+      <b>entered</b> from the CRM, <b>derived</b> calculated by ERS. Derived is the only band where a formula can be
+      wrong, and the only band needing an equation in the formula specification.</p>
+  </div>
+</section>
+
+<div class="foot">
+  <span>Nightly sweep completed 4:12 AM &middot; post-sale adjustments through September 08 applied</span>
+  <span>ERS Bike Sales tab &middot; build reference &middot; Revolution Motorsports, L.L.C.</span>
+</div>
+</main>
+</div>
+
+<script>
+/* Two day counts, on purpose.
+   DISPLAY    - the accounting period as the page states it: 8 of 30. Drives the
+                header, the progress bar and the pace colour on the comparison column.
+   PROJECTION - a six-day trading week: 7 elapsed of 26. Drives the month-end
+                projection only, which understates by design. */
+var OPEN_ELAPSED = 8, OPEN_TOTAL = 30;
+var PROJ_ELAPSED = 7, PROJ_TOTAL = 26;
+var PACE = OPEN_ELAPSED / OPEN_TOTAL * 100;
+var PF   = PROJ_TOTAL / PROJ_ELAPSED;
+
+function commas(n){
+  var s = String(Math.abs(Math.round(n))), o = '', c = 0, i;
+  for (i = s.length - 1; i >= 0; i--) { o = s.charAt(i) + o; if (++c % 3 === 0 && i > 0) o = ',' + o; }
+  return (n < 0 ? '\u2212' : '') + o;
+}
+function money(n){ return '$' + commas(n); }
+function pct1(n){ return n.toFixed(1) + '%'; }
+function sgn(n, f){ return (n >= 0 ? '+' : '\u2212') + f(Math.abs(n)); }
+
+/* ---------- Bike Sales KPIs ---------- */
+var K = {
+  /* mtd and day are this period. lastmonth is ALL of August 2026 and lastyear is
+     ALL of September 2025 - complete months, not the same days of them. */
+  mtd:      {New:{u:7,  s:219800,  g:13783},  Used:{u:21, s:405300,   g:106113}},
+  day:      {New:{u:2,  s:62800,   g:4300},   Used:{u:1,  s:19300,    g:5100}},
+  lastmonth:{New:{u:32, s:1000000, g:64000},  Used:{u:66, s:1280000,  g:330000}},
+  lastyear: {New:{u:31, s:948000,  g:64200},  Used:{u:63, s:1185000,  g:296000}}
+};
+for (var pk in K) if (K.hasOwnProperty(pk)) {
+  K[pk].Total = {u:K[pk].New.u + K[pk].Used.u, s:K[pk].New.s + K[pk].Used.s, g:K[pk].New.g + K[pk].Used.g};
+}
+function proj(d){ return {u:Math.round(d.u * PF), s:Math.round(d.s * PF), g:Math.round(d.g * PF)}; }
+
+var ROWS = [
+  {key:'u',  band:'counted',   val:function(d){ return d.u; }, fmt:commas, ratio:false},
+  {key:'s',  band:'statement', val:function(d){ return d.s; }, fmt:money,  ratio:false},
+  {key:'g',  band:'statement', val:function(d){ return d.g; }, fmt:money,  ratio:false},
+  {key:'pc', band:'derived',   val:function(d){ return d.u ? d.g / d.u : 0; }, fmt:money, ratio:'money'},
+  {key:'gm', band:'derived',   val:function(d){ return d.s ? d.g / d.s * 100 : 0; }, fmt:pct1, ratio:'pct'}
+];
+var SEGS = [
+  {seg:'New',  label:'New',        prefix:'New Unit'},
+  {seg:'Used', label:'Used',       prefix:'Used Unit'},
+  {seg:'Total',label:'New + Used', prefix:'New + Used Unit'}
+];
+function rowLabel(seg, row){
+  var p = seg === 'New' ? 'New Unit' : (seg === 'Used' ? 'Used Unit' : 'New + Used Unit');
+  if (row.key === 'u')  return p + ' Sales';
+  if (row.key === 's')  return p + ' \u2013 Total $ Sales';
+  if (row.key === 'g')  return p + ' FE Gross Profit';
+  if (row.key === 'pc') return p + ' Front End per Copy';
+  return seg === 'Total' ? 'New + Used Gross Margin' : p + ' Gross Margin';
+}
+
+var BASES = {
+  day: {
+    grp:'Day \u00b7 Sep 08', src:'day', kind:'value',
+    note:'Today, <b>September 08</b>, beside the month to date.'
+  },
+  lastmonth: {
+    grp:'August 2026 \u00b7 complete month', cols:['Figure','% of Aug'], src:'lastmonth', kind:'prior',
+    note:'Month to date against <b>all of August 2026</b> \u2014 the complete month, not August through day 8. Last column is this month as a percentage of it, against <b>26.7%</b> elapsed.'
+  },
+  lastyear: {
+    grp:'September 2025 \u00b7 complete month', cols:['Figure','% of Sep 25'], src:'lastyear', kind:'prior',
+    note:'Month to date against <b>all of September 2025</b> \u2014 the complete month. Same reading as vs. Last Month.'
+  }
+};
+var basis = 'day';
+
+function ratioCell(row, diff){
+  var txt = row.ratio === 'pct' ? sgn(diff, function(n){ return n.toFixed(1) + ' pts'; }) : sgn(diff, money);
+  var t   = row.ratio === 'pct' ? 0.3 : 25;
+  return {txt:txt, cls: diff >= t ? 'up' : (diff <= -t ? 'down' : '')};
+}
+function cmpCell(row, seg, cfg){
+  var cur = K.mtd[seg], src = K[cfg.src][seg];
+  if (cfg.kind === 'value') return {c1:row.fmt(row.val(src)), c2:null, cls:''};
+  /* ratio rows show a difference - a margin at 100% of last month is flat, not on pace */
+  if (row.ratio) {
+    var d = ratioCell(row, row.val(cur) - row.val(src));
+    return {c1:row.fmt(row.val(src)), c2:d.txt, cls:d.cls};
+  }
+  var pv = row.val(src), p = pv ? row.val(cur) / pv * 100 : 0;
+  return {c1:row.fmt(pv), c2:pct1(p), cls: p >= PACE + 3 ? 'up' : (p <= PACE - 3 ? 'down' : '')};
+}
+
+function renderKPI(){
+  var cfg = BASES[basis], html = '', si, ri;
+  /* the projection only appears on Day w/ MTD - on a comparison tab the reader is
+     looking backwards and this month's forecast is noise between the two periods */
+  var showProj = basis === 'day';
+  var span = 2 + (showProj ? 1 : 0) + (cfg.kind === 'value' ? 1 : 2);
+
+  document.getElementById('kpihead').innerHTML =
+    '<th class="l">Line item</th><th>MTD</th>' +
+    (showProj ? '<th>Projected month-end \u00b7 26 open days</th>' : '') +
+    (cfg.kind === 'value'
+      ? '<th class="cmp">Sep 08</th>'
+      : '<th class="cmp">' + cfg.grp + '</th><th class="cmp">' + cfg.cols[1] + '</th>');
+
+  for (si = 0; si < SEGS.length; si++) {
+    var S = SEGS[si], cur = K.mtd[S.seg], pr = proj(cur);
+    html += '<tr class="band' + (S.seg === 'Total' ? ' tot' : '') + '"><td colspan="' + span + '">' +
+            S.label + '</td></tr>';
+    for (ri = 0; ri < ROWS.length; ri++) {
+      var row = ROWS[ri], c = cmpCell(row, S.seg, cfg);
+      html += '<tr class="' + (S.seg === 'Total' ? 'totrow ' : '') + (ri === ROWS.length - 1 ? 'endband' : '') + '">' +
+        '<td class="l">' + rowLabel(S.seg, row) + '<span class="src">' + row.band + '</span></td>' +
+        '<td>' + row.fmt(row.val(cur)) + '</td>' +
+        (showProj ? '<td>' + row.fmt(row.val(pr)) + '</td>' : '') +
+        '<td>' + c.c1 + '</td>' +
+        (c.c2 === null ? '' : '<td class="' + c.cls + '">' + c.c2 + '</td>') + '</tr>';
+    }
+  }
+  document.getElementById('kpibody').innerHTML = html;
+  document.getElementById('basisnote').innerHTML = cfg.note;
+}
+(function(){
+  var t = document.querySelectorAll('.bases button'), i;
+  for (i = 0; i < t.length; i++) (function(b){
+    b.onclick = function(){
+      for (var j = 0; j < t.length; j++) t[j].setAttribute('aria-selected','false');
+      b.setAttribute('aria-selected','true'); basis = b.getAttribute('data-basis'); renderKPI();
+    };
+  })(t[i]);
+})();
+
+/* ---------- Transactions ---------- */
+var TX = {parts:{day:11,mtd:61}, mc:{day:38,mtd:224}, service:{day:9,mtd:63},
+          greets:{day:29,mtd:174}, sitdowns:{day:14,mtd:68}, units:{day:3,mtd:28}, missed:{day:-1,mtd:-14}};
+function txTotal(p){ return TX.parts[p] + TX.mc[p] + TX.service[p]; }
+var TXROWS = [
+  {block:'Store traffic \u2014 what came through the door'},
+  {n:'Parts invoices',        band:'counted', get:function(p){ return TX.parts[p]; },    fmt:commas},
+  {n:'Motorclothes invoices', band:'counted', get:function(p){ return TX.mc[p]; },       fmt:commas},
+  {n:'Service repair orders', band:'counted', get:function(p){ return TX.service[p]; },  fmt:commas},
+  {n:'Total transactions',    band:'counted', get:txTotal, fmt:commas, total:true},
+  {block:'Sales floor activity'},
+  {n:'Greets',                band:'entered', get:function(p){ return TX.greets[p]; },   fmt:commas},
+  {n:'Sit-downs',             band:'entered', get:function(p){ return TX.sitdowns[p]; }, fmt:commas},
+  {n:'Unit sales',            band:'counted', get:function(p){ return TX.units[p]; },    fmt:commas},
+  {n:'Missed opportunities',  band:'entered', get:function(p){ return TX.missed[p]; },   fmt:commas, goal:0, dir:'zero'},
+  {block:'Conversion \u2014 transactions per'},
+  {n:'Transactions per greet',    band:'derived', get:function(p){ var g = TX.greets[p];   return g ? txTotal(p)/g : 0; }, fmt:function(n){ return n.toFixed(1); }, goal:3,  dir:'ceiling'},
+  {n:'Transactions per sit-down', band:'derived', get:function(p){ var g = TX.sitdowns[p]; return g ? txTotal(p)/g : 0; }, fmt:function(n){ return n.toFixed(1); }, goal:7,  dir:'ceiling'},
+  {n:'Transactions per sale',     band:'derived', get:function(p){ var g = TX.units[p];    return g ? txTotal(p)/g : 0; }, fmt:function(n){ return n.toFixed(1); }, goal:25, dir:'ceiling', last:true}
+];
+function renderTrans(){
+  var html = '', i;
+  for (i = 0; i < TXROWS.length; i++) {
+    var r = TXROWS[i];
+    if (r.block) { html += '<tr class="band"><td colspan="5">' + r.block + '</td></tr>'; continue; }
+    var goal = '<span class="dim">\u2014</span>', vs = goal, cls = '';
+    if (r.goal !== undefined) {
+      goal = r.fmt(r.goal);
+      var diff = r.get('mtd') - r.goal;
+      if (r.dir === 'ceiling') {
+        vs  = (diff <= 0 ? '\u2212' : '+') + r.fmt(Math.abs(diff));
+        cls = diff <= -0.05 ? 'up' : (diff >= 0.05 ? 'down' : '');
+      } else {
+        vs  = (diff < 0 ? '\u2212' : '+') + commas(Math.abs(diff));
+        cls = Math.abs(diff) < 0.5 ? 'up' : 'down';
+      }
+    }
+    html += '<tr class="' + (r.total ? 'totrow ' : '') + (r.last ? 'endband' : '') + '">' +
+      '<td class="l">' + r.n + '<span class="src">' + r.band + '</span></td>' +
+      '<td>' + r.fmt(r.get('day')) + '</td><td>' + r.fmt(r.get('mtd')) + '</td>' +
+      '<td>' + goal + '</td><td class="' + cls + '">' + vs + '</td></tr>';
+  }
+  document.getElementById('transbody').innerHTML = html;
+}
+
+/* ---------- F & I (month to date) ---------- */
+var FI_BASE = {units:28, financed:23, deals:27};
+var FI_CHARGES = [
+  {n:'Vehicles',           den:null,       base:true, u:28, v:625100},
+  {n:'Finance Income',     den:'units',    u:23, v:18900},
+  {n:'ESP Contracts',      den:'units',    u:14, v:22400},
+  {n:'GAP Insurance',      den:'financed', u:2,  v:1850},
+  {n:'Payment Protection', den:'units',    u:0,  v:0},
+  {n:'PPM',                den:'units',    u:9,  v:12300},
+  {n:'Cycle Insurance',    den:'units',    u:0,  v:0},
+  {n:'Debt Protection',    den:'units',    u:0,  v:0},
+  {n:'Other F&I Products', den:'units',    u:25, v:9600},
+  {n:'OTC ESP',            den:'financed', u:1,  v:1705},
+  {n:'OTC PPM',            den:'units',    u:0,  v:0}
+];
+function fiFind(n){ for (var i = 0; i < FI_CHARGES.length; i++) if (FI_CHARGES[i].n === n) return FI_CHARGES[i]; }
+function fiGross(){ var t = 0, i; for (i = 0; i < FI_CHARGES.length; i++) if (!FI_CHARGES[i].base) t += FI_CHARGES[i].v; return t; }
+function fiProducts(){ var t = 0, i; for (i = 0; i < FI_CHARGES.length; i++) if (!FI_CHARGES[i].base) t += FI_CHARGES[i].u; return t; }
+
+function renderFI(){
+  var html = '', i;
+  for (i = 0; i < FI_CHARGES.length; i++) {
+    var r = FI_CHARGES[i];
+    var pen = '<span class="dim">\u2014</span>';
+    if (r.den) {
+      var d = r.den === 'financed' ? FI_BASE.financed : FI_BASE.units;
+      pen = pct1(r.u / d * 100);
+    }
+    var note = r.base ? '<span class="src">sales, not F&amp;I gross</span>'
+                      : (r.den === 'financed' ? '<span class="src">of financed</span>' : '');
+    html += '<tr class="' + (r.base ? 'vehicles' : (r.u === 0 && r.v === 0 ? 'zero' : '')) + '">' +
+      '<td class="l">' + r.n + note + '</td><td>' + commas(r.u) + '</td>' +
+      '<td>' + pen + '</td><td>' + money(r.v) + '</td></tr>';
+  }
+  html += '<tr class="band tot"><td>F&amp;I PPV</td><td># Units sold</td><td>F&amp;I gross profit</td><td>PPV</td></tr>' +
+    '<tr class="totrow endband"><td class="l"></td><td>' + commas(FI_BASE.units) + '</td>' +
+    '<td>' + money(fiGross()) + '</td><td>' + money(fiGross() / FI_BASE.units) + '</td></tr>';
+  document.getElementById('fibody').innerHTML = html;
+
+  var calc = [
+    {n:'Back End Fees per Copy', band:'derived',   v:money(fiGross() / FI_BASE.units),      base:'28 units sold'},
+    {n:'Deals',                  band:'counted',   v:commas(FI_BASE.deals),                 base:'\u2014'},
+    {n:'Products sold',          band:'counted',   v:commas(fiProducts()),                  base:'\u2014'},
+    {n:'Total back end $',       band:'statement', v:money(fiGross()),                      base:'\u2014'},
+    {n:'Products Sold per Deal', band:'derived',   v:(fiProducts() / FI_BASE.deals).toFixed(1), base:'27 deals'},
+    {n:'Reserve % of Back End',  band:'derived',   v:pct1(fiFind('Finance Income').v / fiGross() * 100), base:'\u2014', last:true}
+  ];
+  html = '';
+  for (i = 0; i < calc.length; i++) {
+    html += '<tr class="' + (calc[i].last ? 'endband' : '') + '">' +
+      '<td class="l">' + calc[i].n + '<span class="src">' + calc[i].band + '</span></td>' +
+      '<td></td><td>' + calc[i].v + '</td><td class="base">' + calc[i].base + '</td></tr>';
+  }
+  document.getElementById('fikpibody').innerHTML = html;
+}
+
+/* ---------- Inventory ---------- */
+var INV = [
+  {style:'None',n:35,u:74,o:48}, {style:'Touring',n:40,u:66,o:46}, {style:'Street',n:1,u:4,o:4},
+  {style:'Dyna',n:0,u:10,o:7},  {style:'V-Rod',n:0,u:1,o:1},      {style:'Trike',n:1,u:0,o:0}
+];
+var zoom = 'all';
+function renderInv(){
+  var t = {n:0,u:0,o:0}, i, html = '';
+  for (i = 0; i < INV.length; i++) { t.n += INV[i].n; t.u += INV[i].u; t.o += INV[i].o; }
+  var dN = zoom === 'used' ? ' class="muted"' : '', dU = zoom === 'new' ? ' class="muted"' : '';
+  for (i = 0; i < INV.length; i++) {
+    html += '<tr><td class="l">' + INV[i].style + '</td><td' + dN + '>' + INV[i].n + '</td><td' + dU + '>' +
+            INV[i].u + '</td><td' + dU + '>' + INV[i].o + '</td><td>0</td><td>0</td></tr>';
+  }
+  html += '<tr class="totrow"><td class="l">Totals</td><td' + dN + '>' + t.n + '</td><td' + dU + '>' + t.u +
+          '</td><td' + dU + '>' + t.o + '</td><td>0</td><td>0</td></tr>';
+  document.getElementById('invbody').innerHTML = html;
+}
+function setZoom(z){
+  zoom = z;
+  document.getElementById('zoomNew').setAttribute('aria-pressed',  z === 'new'  ? 'true' : 'false');
+  document.getElementById('zoomUsed').setAttribute('aria-pressed', z === 'used' ? 'true' : 'false');
+  document.getElementById('zoomOff').setAttribute('aria-pressed',  z === 'all'  ? 'true' : 'false');
+  renderInv();
+}
+document.getElementById('zoomNew').onclick  = function(){ setZoom('new'); };
+document.getElementById('zoomUsed').onclick = function(){ setZoom('used'); };
+document.getElementById('zoomOff').onclick  = function(){ setZoom('all'); };
+
+/* ---------- Per deal ---------- */
+var COLS = [
+  {k:'d',t:'Deal #',a:'l'}, {k:'c',t:'Customer',a:'l'}, {k:'dt',t:'Deal date',a:'l'}, {k:'st',t:'St',a:'l'},
+  {k:'v',t:'VIN',a:'l',cls:'vin'}, {k:'nu',t:'New / Used',a:'l',cls:'nu'}, {k:'p',t:'Payment',a:'l'},
+  {k:'s',t:'Total sale',fmt:money}, {k:'fe',t:'Front-end gross',fmt:money}, {k:'be',t:'Back end gross',fmt:money},
+  {k:'m',t:'Margin',fmt:pct1}, {k:'tr',t:'Trade \u2013 ACV',fmt:money},
+  {k:'fi',t:'F&I manager',a:'l',name:true}, {k:'sp',t:'Salesperson',a:'l',name:true}
+];
+/* Talon stores names as LAST, FIRST in caps, which is the widest thing in the row.
+   Displayed as Last, F. with the full name on hover so all 14 columns fit unscrolled. */
+function shortName(v){
+  var s = String(v);
+  if (s === 'None' || s.indexOf(',') === -1) return s;
+  var p = s.split(','), last = p[0].replace(/\s+$/,''), first = p[1].replace(/^\s+/,'');
+  /* casing is left exactly as Talon stores it - title-casing would turn MCCORMICK
+     into Mccormick. Only the first name is abbreviated. */
+  return last + ', ' + first.charAt(0) + '.';
+}
+var DEALS = [
+  {d:'20689',c:'Kearns, Alicia B',dt:'09/01/2026',st:'C',v:'1HD18GDSNVCG6BE6Y',nu:'Used',p:'Financed',s:24462,fe:7984,be:4931,tr:0,fi:'THOMAS, BRENT',sp:'ALDRICH, PHILLIP'},
+  {d:'20752',c:'Mercer, Dallas W',dt:'09/01/2026',st:'C',v:'1HD12F8VNSAFTFK3C',nu:'Used',p:'Financed',s:20450,fe:3621,be:2978,tr:3100,fi:'WHITLOCK, WILLIAM',sp:'HARMON, BRADY'},
+  {d:'20555',c:'Patterson, Reese L',dt:'09/02/2026',st:'O',v:'1HD1P6LHZDGAKG1BE',nu:'New',p:'Financed',s:38765,fe:1740,be:3029,tr:0,fi:'THOMAS, BRENT',sp:'MCCORMICK, NICK'},
+  {d:'20675',c:'Salas, Ingrid M',dt:'09/02/2026',st:'C',v:'1HD1K80KJBAGJ5NPB',nu:'Used',p:'Cash',s:17842,fe:5340,be:2916,tr:5400,fi:'WHITLOCK, WILLIAM',sp:'WHITLOCK, WILLIAM'},
+  {d:'20654',c:'Ellis, Marta K',dt:'09/03/2026',st:'O',v:'1HD1BXFT1L0RZRNS3',nu:'Used',p:'Financed',s:26800,fe:5466,be:2061,tr:5400,fi:'None',sp:'MCCORMICK, NICK'},
+  {d:'20682',c:'Hoyt, Preston E',dt:'09/03/2026',st:'C',v:'1HD14JD074JKB6MAK',nu:'Used',p:'Financed',s:16382,fe:4696,be:4575,tr:5400,fi:'WHITLOCK, WILLIAM',sp:'WHITLOCK, WILLIAM'},
+  {d:'20534',c:'Vance, Marcus T',dt:'09/04/2026',st:'O',v:'1HD1DX6W20B70LH9D',nu:'New',p:'Financed',s:27892,fe:2064,be:1217,tr:6800,fi:'WHITLOCK, WILLIAM',sp:'ALDRICH, PHILLIP'},
+  {d:'20541',c:'Delgado, Ana R',dt:'09/04/2026',st:'C',v:'1HD1FL63VJ5V402RK',nu:'New',p:'Financed',s:25650,fe:1611,be:1379,tr:0,fi:'WHITLOCK, WILLIAM',sp:'HARMON, BRADY'},
+  {d:'20548',c:'Whitfield, Cole D',dt:'09/04/2026',st:'O',v:'1HD1TWAK41YJD7333',nu:'New',p:'Financed',s:30807,fe:1316,be:3802,tr:6800,fi:'None',sp:'HARMON, BRADY'},
+  {d:'20527',c:'Brown, James A',dt:'09/05/2026',st:'O',v:'1HD1H4LZK94CEYZ09',nu:'New',p:'Financed',s:33886,fe:2752,be:773,tr:9500,fi:'WHITLOCK, WILLIAM',sp:'MCCORMICK, NICK'},
+  {d:'20647',c:'Cook, Steven W',dt:'09/05/2026',st:'C',v:'1HD18HH9788XFKGZT',nu:'Used',p:'Financed',s:22007,fe:4877,be:4967,tr:0,fi:'WHITLOCK, WILLIAM',sp:'WHITLOCK, WILLIAM'},
+  {d:'20668',c:'Barrett, Dwayne O',dt:'09/05/2026',st:'O',v:'1HD180FH2N8M5ZF37',nu:'Used',p:'Financed',s:20587,fe:4184,be:1684,tr:0,fi:'WHITLOCK, WILLIAM',sp:'HARMON, BRADY'},
+  {d:'20696',c:'McBride, Terrence L',dt:'09/05/2026',st:'C',v:'1HD1STN6J4H36YES5',nu:'Used',p:'Financed',s:14562,fe:5339,be:3007,tr:9500,fi:'WHITLOCK, WILLIAM',sp:'GARSHASB, SHAWN'},
+  {d:'20724',c:'Lindqvist, Erik N',dt:'09/05/2026',st:'O',v:'1HD1ETH7AZ4VJCSHL',nu:'Used',p:'Financed',s:18026,fe:3872,be:1888,tr:0,fi:'THOMAS, BRENT',sp:'MCCORMICK, NICK'},
+  {d:'20731',c:'Dawson, Harriet J',dt:'09/05/2026',st:'O',v:'1HD1W6MV0BTCABN8S',nu:'Used',p:'Financed',s:30375,fe:7456,be:1201,tr:6800,fi:'None',sp:'ALDRICH, PHILLIP'},
+  {d:'20738',c:'Pike, Rowan A',dt:'09/05/2026',st:'C',v:'1HD1XPRZNJ30DJAET',nu:'Used',p:'Financed',s:21126,fe:4892,be:733,tr:0,fi:'None',sp:'WHITLOCK, WILLIAM'},
+  {d:'20759',c:'Underwood, Noel P',dt:'09/05/2026',st:'O',v:'1HD12Y9KWKC5JBRFB',nu:'Used',p:'Cash',s:13987,fe:4620,be:3539,tr:0,fi:'None',sp:'ALDRICH, PHILLIP'},
+  {d:'20766',c:'Boyd, Simone T',dt:'09/05/2026',st:'O',v:'1HD1BS9TA7EFE8TET',nu:'Used',p:'Cash',s:17528,fe:5272,be:2345,tr:6800,fi:'None',sp:'ALDRICH, PHILLIP'},
+  {d:'20661',c:'Nguyen, Thao P',dt:'09/06/2026',st:'O',v:'1HD1BV8TN0601FRGR',nu:'Used',p:'Financed',s:21847,fe:5194,be:3328,tr:0,fi:'None',sp:'WHITLOCK, WILLIAM'},
+  {d:'20703',c:'Falk, Jonah R',dt:'09/06/2026',st:'C',v:'1HD1KTJ7RG39LRL53',nu:'Used',p:'Financed',s:19444,fe:7223,be:2023,tr:3100,fi:'THOMAS, BRENT',sp:'HARMON, BRADY'},
+  {d:'20710',c:'Reyes, Camila S',dt:'09/06/2026',st:'C',v:'1HD1BZ76B2ZWEHRGF',nu:'Used',p:'Financed',s:18094,fe:5874,be:588,tr:9500,fi:'WHITLOCK, WILLIAM',sp:'MCCORMICK, NICK'},
+  {d:'20745',c:'Castellano, Gia F',dt:'09/06/2026',st:'C',v:'1HD1SWC7MLV6AT1ZY',nu:'Used',p:'Financed',s:17707,fe:3729,be:3069,tr:0,fi:'THOMAS, BRENT',sp:'GARSHASB, SHAWN'},
+  {d:'20717',c:'Ortega, Bruno V',dt:'09/07/2026',st:'O',v:'1HD15T3K9YFVDM5EV',nu:'Used',p:'Cash',s:30442,fe:3569,be:1038,tr:9500,fi:'THOMAS, BRENT',sp:'HARMON, BRADY'},
+  {d:'20773',c:'Iverson, Hank C',dt:'09/07/2026',st:'C',v:'1HD1E8WCNEKZTXJA8',nu:'Used',p:'Financed',s:14332,fe:7805,be:2694,tr:6800,fi:'WHITLOCK, WILLIAM',sp:'GARSHASB, SHAWN'},
+  {d:'21019',c:'Rodriguez, Liliana A',dt:'09/08/2026',st:'O',v:'1HD1EDP95Y771XSMS',nu:'Used',p:'Financed',s:19300,fe:5100,be:3090,tr:3100,fi:'None',sp:'MCCORMICK, NICK'},
+  {d:'21027',c:'Simmons, Ronald J',dt:'09/08/2026',st:'C',v:'1HD1K3DEG1DPCF54E',nu:'New',p:'Financed',s:32629,fe:1656,be:1933,tr:4200,fi:'WHITLOCK, WILLIAM',sp:'WHITLOCK, WILLIAM'},
+  {d:'21034',c:'Crivineau, Spencer C',dt:'09/08/2026',st:'O',v:'1HD1RD3DRCJW4KHXM',nu:'New',p:'Financed',s:30171,fe:2644,be:1967,tr:6800,fi:'WHITLOCK, WILLIAM',sp:'MCCORMICK, NICK'}
+];
+function dateKey(s){ var p = String(s).split('/'); return p.length === 3 ? Number(p[2])*10000 + Number(p[0])*100 + Number(p[1]) : 0; }
+var TODAY = '09/08/2026';
+var DS = {scope:'mtd', nu:'All', sort:'dt', dir:-1};
+
+function renderDeals(){
+  var rows = [], i, r;
+  for (i = 0; i < DEALS.length; i++) {
+    r = DEALS[i];
+    if (DS.scope === 'day' && r.dt !== '09/08/2026') continue;
+    if (DS.nu !== 'All' && r.nu !== DS.nu) continue;
+    rows.push({d:r.d,c:r.c,dt:r.dt,st:r.st,v:r.v,nu:r.nu,p:r.p,s:r.s,fe:r.fe,be:r.be,tr:r.tr,fi:r.fi,sp:r.sp,
+               m: r.s ? r.fe / r.s * 100 : 0});
+  }
+  if (DS.sort) rows.sort(function(a,b){
+    var A = a[DS.sort], B = b[DS.sort], v;
+    if (DS.sort === 'dt') v = dateKey(A) - dateKey(B);
+    else if (typeof A === 'number') v = A - B;
+    else v = String(A).localeCompare(String(B));
+    return v * DS.dir;
+  });
+
+  var head = document.getElementById('dealhead'), html = '';
+  for (i = 0; i < COLS.length; i++) {
+    var arrow = DS.sort === COLS[i].k ? ' <span class="ar">' + (DS.dir === 1 ? '\u25B2' : '\u25BC') + '</span>' : '';
+    html += '<th class="' + (COLS[i].a === 'l' ? 'l' : '') + '" data-k="' + COLS[i].k + '">' + COLS[i].t + arrow + '</th>';
+  }
+  head.innerHTML = html;
+  var ths = head.getElementsByTagName('th');
+  for (i = 0; i < ths.length; i++) (function(th){
+    th.onclick = function(){
+      var k = th.getAttribute('data-k');
+      if (DS.sort === k) DS.dir = -DS.dir; else { DS.sort = k; DS.dir = 1; }
+      renderDeals();
+    };
+  })(ths[i]);
+
+  html = '';
+  var expanded = document.getElementById('dealScroll').className.indexOf('open') > -1;
+  var T = {s:0,fe:0,be:0,tr:0,n:0};
+  for (i = 0; i < rows.length; i++) {
+    r = rows[i]; T.s += r.s; T.fe += r.fe; T.be += r.be; T.tr += r.tr; if (r.nu === 'New') T.n++;
+    /* in the month view, today's deals are shaded so they read apart from the rest */
+    html += '<tr' + (DS.scope === 'mtd' && r.dt === TODAY ? ' class="today"' : '') + '>';
+    for (var j = 0; j < COLS.length; j++) {
+      var col = COLS[j], val = col.fmt ? col.fmt(r[col.k]) : r[col.k], attr = '';
+      if (col.k === 'v' && !expanded) {
+        /* collapsed: last 8 of the VIN, full number on hover and on Show all */
+        attr = ' title="' + r.v + '"';
+        val = '\u2026' + String(r.v).slice(-8);
+      } else if (col.name) {
+        attr = ' title="' + r[col.k] + '"';
+        val = shortName(r[col.k]);
+      }
+      html += '<td class="' + (col.a === 'l' ? 'l ' : '') + (col.cls || '') + '"' + attr + '>' + val + '</td>';
+    }
+    html += '</tr>';
+  }
+  html += '<tr class="tot"><td class="l">Totals</td><td class="l">' + rows.length + ' deals</td>' +
+    '<td class="l"></td><td class="l"></td><td class="l"></td>' +
+    '<td class="l">' + T.n + ' new \u00b7 ' + (rows.length - T.n) + ' used</td><td class="l"></td>' +
+    '<td>' + money(T.s) + '</td><td>' + money(T.fe) + '</td><td>' + money(T.be) + '</td>' +
+    '<td>' + (T.s ? pct1(T.fe / T.s * 100) : '\u2014') + '</td><td>' + money(T.tr) + '</td>' +
+    '<td class="l"></td><td class="l"></td></tr>';
+  document.getElementById('dealbody').innerHTML = html;
+
+  document.getElementById('dealTitle').innerHTML = DS.scope === 'day'
+    ? 'September 08, 2026 \u2014 all sales' : 'Month thru September 08, 2026 \u2014 all sales';
+  document.getElementById('dealcnt').innerHTML =
+    rows.length + (DS.nu === 'All' ? '' : ' ' + DS.nu.toLowerCase()) + ' deals \u00b7 newest first' +
+    (expanded || rows.length <= 6 ? '' : ' \u00b7 scroll for older') +
+    (DS.scope === 'mtd' ? ' \u00b7 <span class="legend"></span>today' : '');
+}
+(function(){
+  var sc = document.querySelectorAll('[data-scope]'), i;
+  for (i = 0; i < sc.length; i++) (function(b){
+    b.onclick = function(){
+      for (var j = 0; j < sc.length; j++) sc[j].setAttribute('aria-pressed','false');
+      b.setAttribute('aria-pressed','true'); DS.scope = b.getAttribute('data-scope'); renderDeals();
+    };
+  })(sc[i]);
+  var rd = document.getElementsByName('nu');
+  for (i = 0; i < rd.length; i++) (function(x){ x.onchange = function(){ DS.nu = x.value; renderDeals(); }; })(rd[i]);
+  var box = document.getElementById('dealScroll'), btn = document.getElementById('dealToggle');
+  btn.onclick = function(){
+    var open = box.className.indexOf('open') > -1;
+    box.className = open ? 'tscroll' : 'tscroll open';
+    btn.innerHTML = open ? 'Show all' : 'Show 6';
+    btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+    renderDeals();
+  };
+})();
+
+/* ---------- Section menu ---------- */
+var SECTIONS = [
+  {id:'sec-kpi',   t:'Bike Sales KPIs',  s:'15 figures \u00b7 3 segments'},
+  {id:'sec-trans', t:'Transactions',     s:'traffic \u00b7 conversion'},
+  {id:'sec-fi',    t:'F & I',            s:'deal charges'},
+  {id:'sec-inv',   t:'Current Inventory',s:'77 new \u00b7 155 used'},
+  {id:'sec-deals', t:'Per Deal',         s:'27 deals \u00b7 14 columns'},
+  {id:'sec-notes', t:'Build Notes',      s:'changes'}
+];
+(function(){
+  var nav = document.getElementById('seclinks'), html = '', i;
+  for (i = 0; i < SECTIONS.length; i++)
+    html += '<a href="#' + SECTIONS[i].id + '" data-id="' + SECTIONS[i].id + '"><span class="t">' +
+            SECTIONS[i].t + '</span><span class="s">' + SECTIONS[i].s + '</span></a>';
+  nav.innerHTML = html;
+  var links = nav.getElementsByTagName('a');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  for (i = 0; i < links.length; i++) (function(a){
+    a.onclick = function(e){
+      var el = document.getElementById(a.getAttribute('data-id'));
+      if (!el || !el.scrollIntoView) return;
+      if (e && e.preventDefault) e.preventDefault();
+      if (reduce) el.scrollIntoView(true);
+      else { try { el.scrollIntoView({behavior:'smooth', block:'start'}); } catch (err) { el.scrollIntoView(true); } }
+    };
+  })(links[i]);
+  function spy(){
+    var y = (window.pageYOffset || document.documentElement.scrollTop) + 130, act = SECTIONS[0].id, j, el;
+    for (j = 0; j < SECTIONS.length; j++) { el = document.getElementById(SECTIONS[j].id); if (el && el.offsetTop <= y) act = SECTIONS[j].id; }
+    for (j = 0; j < links.length; j++) links[j].className = links[j].getAttribute('data-id') === act ? 'on' : '';
+  }
+  if (window.addEventListener) window.addEventListener('scroll', spy, false);
+  spy();
+})();
+
+(function(){
+  var b = document.getElementById('notesToggle');
+  b.onclick = function(){
+    var off = document.body.className.indexOf('notes-off') > -1;
+    document.body.className = off ? '' : 'notes-off';
+    b.innerHTML = off ? 'Hide notes' : 'Show notes';
+    b.setAttribute('aria-pressed', off ? 'false' : 'true');
+  };
+})();
+
+renderKPI(); renderTrans(); renderFI(); renderInv(); renderDeals();
+</script>
+</body>
+</html>
