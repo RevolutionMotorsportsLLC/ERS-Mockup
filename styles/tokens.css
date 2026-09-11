@@ -1,0 +1,11 @@
+/* ERS design system — defined once, never redefined per page. See CLAUDE.md. */
+:root{
+  --paper:#FBFAF8; --rail:#1A1B1E; --rail-ink:#B8BCC2;
+  --ink:#17181A; --ink-mid:#5A5F66; --ink-low:#9BA0A7;
+  --rule:#E4E3DF; --rule-hard:#C9C8C3;
+  --accent:#D9541F; --accent-soft:#FAEDE7;
+  --up:#2C6E4C; --down:#B23A2B;
+  --disp:'Barlow Condensed','Arial Narrow',sans-serif;
+  --body:'Inter',-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',Menlo,monospace;
+}

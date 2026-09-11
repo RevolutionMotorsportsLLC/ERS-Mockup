@@ -7,120 +7,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-:root{
-  --paper:#FBFAF8; --rail:#1A1B1E; --rail-ink:#B8BCC2;
-  --ink:#17181A; --ink-mid:#5A5F66; --ink-low:#9BA0A7;
-  --rule:#E4E3DF; --rule-hard:#C9C8C3;
-  --accent:#D9541F; --accent-soft:#FAEDE7;
-  --up:#2C6E4C; --down:#B23A2B;
-  --disp:'Barlow Condensed','Arial Narrow',sans-serif;
-  --body:'Inter',-apple-system,'Segoe UI',sans-serif;
-  --mono:'IBM Plex Mono',Menlo,monospace;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:13px;line-height:1.4}
-body.notes-off .note-el{display:none}
-.app{display:grid;grid-template-columns:190px minmax(0,1fr);min-height:100vh}
-
-.rail{background:var(--rail);color:var(--rail-ink);padding:18px 0 24px;position:sticky;top:0;height:100vh;overflow-y:auto}
-.rail .mark{font-family:var(--disp);font-weight:700;font-size:23px;letter-spacing:.15em;text-transform:uppercase;color:#fff;padding:0 18px 2px;line-height:1}
-.rail .mark em{font-style:normal;color:var(--accent)}
-.rail .sub{font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:#6E747C;padding:0 18px 16px;text-transform:uppercase}
-.rail h3{font-family:var(--disp);font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#6E747C;padding:13px 18px 6px}
-.rail a{display:block;padding:5px 18px;color:var(--rail-ink);text-decoration:none;font-size:12.5px}
-.rail a:hover{background:#242629;color:#fff}
-.rail a.on{color:#fff;box-shadow:inset 3px 0 0 var(--accent);background:#242629}
-
-main{padding:18px 26px 40px;max-width:1320px}
-.mockbar{background:var(--accent-soft);border-left:3px solid var(--accent);color:#8A3510;font-family:var(--mono);font-size:10.5px;padding:8px 11px;margin-bottom:16px;line-height:1.55}
-.mockbar b{font-weight:600}
-
-.head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;padding-bottom:12px;border-bottom:2px solid var(--ink)}
-.head h1{font-family:var(--disp);font-size:26px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;line-height:1}
-.head .meta{font-family:var(--mono);font-size:11px;color:var(--ink-mid);margin-top:5px}
-.head .meta b{color:var(--ink)}
-.acts{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
-.btn{font-family:var(--body);font-size:11.5px;padding:5px 10px;border:1px solid var(--rule-hard);background:#fff;border-radius:2px;cursor:pointer;color:var(--ink)}
-.btn:hover{border-color:var(--ink-mid)}
-select.btn,input.btn{font-family:var(--mono);font-size:11px;padding:4px 7px}
-.chip{font-family:var(--mono);font-size:10px;letter-spacing:.05em;padding:3px 8px;border-radius:2px;border:1px solid var(--rule-hard);background:#fff;cursor:pointer;color:var(--ink-mid)}
-.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
-
-.headline{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--rule);margin-top:13px;padding-top:15px}
-.hl{padding-right:16px}
-.hl .k{font-family:var(--disp);font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-low);display:block;margin-bottom:3px}
-.hl .v{font-family:var(--mono);font-size:23px;font-weight:500;letter-spacing:-.03em;display:block;line-height:1.1}
-.hl .d{font-family:var(--mono);font-size:10.5px;color:var(--ink-mid);display:block;margin-top:5px}
-.hl .d b{color:var(--ink);font-weight:500}
-
-.progress{margin:16px 0 4px;padding:10px 0 0;border-top:1px solid var(--rule)}
-.progress .row{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;color:var(--ink-mid);margin-bottom:6px}
-.progress .row b{color:var(--ink)}
-.ptrack{height:7px;background:#EDECE8;position:relative}
-.pfill{position:absolute;inset:0 auto 0 0;background:var(--accent)}
-.ptick{position:absolute;top:-3px;bottom:-3px;width:1px;background:var(--ink)}
-
-section{display:grid;grid-template-columns:100px minmax(0,1fr);gap:22px;border-top:1px solid var(--rule-hard);padding:16px 0 4px;margin-top:16px}
-.gutter h2{font-family:var(--disp);font-size:12.5px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;line-height:1.25}
-.gutter p{font-size:10.5px;color:var(--ink-low);margin-top:5px;line-height:1.4}
-
-.bases{display:flex;border-bottom:1px solid var(--rule);flex-wrap:wrap}
-.bases button{font-family:var(--disp);font-size:12.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;background:none;border:0;border-bottom:3px solid transparent;color:var(--ink-low);padding:6px 14px 6px 0;margin-right:18px;cursor:pointer;line-height:1.3}
-.bases button:hover{color:var(--ink)}
-.bases button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
-.basisnote{font-family:var(--mono);font-size:10.5px;color:var(--ink-mid);margin-top:7px}
-.basisnote b{color:var(--ink)}
-
-table{width:100%;border-collapse:collapse}
-thead th{font-family:var(--disp);font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-low);text-align:right;padding:0 10px 5px 0;border-bottom:1px solid var(--ink);white-space:nowrap}
-thead th.l{text-align:left}
-thead th:last-child{padding-right:0}
-thead tr.grp th{border-bottom:1px solid var(--rule-hard);padding-bottom:3px;text-align:center;color:var(--ink);letter-spacing:.16em;font-size:10px}
-thead tr.grp th.blank{border-bottom:0}
-thead tr.grp th.cmp{color:var(--accent)}
-tbody td{font-family:var(--mono);font-size:11.5px;text-align:right;padding:4px 10px 4px 0;border-bottom:1px solid var(--rule);white-space:nowrap}
-tbody td.l{font-family:var(--body);font-size:12px;text-align:left}
-tbody td:last-child{padding-right:0}
-tbody tr.tot td{border-top:1px solid var(--ink);border-bottom:0;font-weight:600;padding-top:7px}
-tbody tr.tot td.l{font-family:var(--disp);font-size:12.5px;letter-spacing:.1em;text-transform:uppercase}
-.up{color:var(--up)}.down{color:var(--down)}.dim{color:var(--ink-low)}
-.mini{font-size:10.5px;color:var(--ink-low);margin-top:8px;line-height:1.55}
-.mini b{color:var(--ink-mid)}
-
-.spec{border-left:3px solid var(--accent);background:var(--accent-soft);padding:9px 12px;font-size:11.5px;color:#7A3011;margin-top:12px;line-height:1.6}
-.spec b.h{font-family:var(--disp);font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;display:block;margin-bottom:5px;color:#8A3510}
-.spec ul{margin:5px 0 0;padding-left:16px}
-.spec li{margin-bottom:3px}
-.spec code{font-family:var(--mono);font-size:11px;background:#fff;border:1px solid #EBD6CB;padding:1px 5px;color:#5A2408}
-
-
-.foot{margin-top:20px;padding-top:12px;border-top:1px solid var(--rule-hard);font-family:var(--mono);font-size:10.5px;color:var(--ink-low);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-
-@media (max-width:1180px){
-  .app{grid-template-columns:1fr}
-  .rail{position:static;height:auto;display:grid;grid-template-columns:1fr 1fr;padding-bottom:16px}
-  .rail .mark,.rail .sub{grid-column:1/-1}
-  main{padding:18px 16px 34px}
-  .headline{grid-template-columns:repeat(2,1fr);gap:16px 0}
-  section{grid-template-columns:1fr;gap:12px}
-  .scroller{overflow-x:auto}
-}
-@media (max-width:560px){.headline{grid-template-columns:1fr}}
-</style>
+<link rel="stylesheet" href="../styles/tokens.css">
+<link rel="stylesheet" href="../styles/app.css">
 </head>
 <body>
 <div class="app">
 
-<nav class="rail">
-  <div class="mark">ER<em>S</em></div>
-  <div class="sub">Executive Review System</div>
-  <h3>Overview</h3><a href="#" class="on">Store Overview</a>
-  <h3>Departments</h3><a href="#">Bike Sales</a><a href="#">Parts Sales</a>
-  <a href="#">Motorclothes</a><a href="#">Service</a>
-  <h3>Management</h3><a href="#">Scorecards</a><a href="#">CRM</a><a href="#">Riding Academy</a>
-  <h3>Admin</h3><a href="#">Maintenance</a>
-</nav>
+<nav id="navRail" class="rail"></nav>
 
 <main>
 <div class="mockbar">
@@ -232,6 +125,9 @@ tbody tr.tot td.l{font-family:var(--disp);font-size:12.5px;letter-spacing:.1em;t
 </main>
 </div>
 
+<script>var ERS_PAGE = 'store-overview';</script>
+<script src="../scripts/format.js"></script>
+<script src="../scripts/nav.js"></script>
 <script>
 /* Two day counts, on purpose.
    DISPLAY  - the accounting period as the page states it, e.g. 10 of 30. Drives the
@@ -240,18 +136,10 @@ tbody tr.tot td.l{font-family:var(--disp);font-size:12.5px;letter-spacing:.1em;t
               understates by design. See the Projected month-end note. Collapse these
               into one number once a real per-store open-day calendar exists.
    Every sample figure on this page - these counts included - lives in
-   /data/store-overview.json and is loaded by the fetch() at the bottom of this script. */
+   /data/store-overview.json and is loaded by the fetch() at the bottom of this script.
+   commas/money/pct1/sgn come from ../scripts/format.js, shared by every page. */
 var DATA;
 var ELAPSED, TOTAL, PROJ_ELAPSED, PROJ_TOTAL, PACE, PF;
-
-function commas(n){
-  var s = String(Math.abs(Math.round(n))), o = '', c = 0, i;
-  for (i = s.length - 1; i >= 0; i--) { o = s.charAt(i) + o; if (++c % 3 === 0 && i > 0) o = ',' + o; }
-  return (n < 0 ? '\u2212' : '') + o;
-}
-function money(n){ return '$' + commas(n); }
-function pct1(n){ return n.toFixed(1) + '%'; }
-function sgnPct(n){ return (n >= 0 ? '+' : '\u2212') + Math.abs(n).toFixed(1) + '%'; }
 
 /* s/g are month to date. ds/dg are the day. lm* is ALL of last month, ly* is ALL of
    the same month last year - complete months, not the same days of them. */
@@ -334,13 +222,6 @@ function render(){
       b.setAttribute('aria-selected','true'); basis = b.getAttribute('data-basis'); render();
     };
   })(t[i]);
-  var n = document.getElementById('notesToggle');
-  n.onclick = function(){
-    var off = document.body.className.indexOf('notes-off') > -1;
-    document.body.className = off ? '' : 'notes-off';
-    n.innerHTML = off ? 'Hide notes' : 'Show notes';
-    n.setAttribute('aria-pressed', off ? 'false' : 'true');
-  };
 })();
 
 /* ---------- Header, headline ribbon, progress bar ---------- */
@@ -369,7 +250,7 @@ function renderHeader(){
 }
 
 /* ---------- Load every sample figure from /data, then render ---------- */
-fetch('data/store-overview.json')
+fetch('../data/store-overview.json')
   .then(function(res){ return res.json(); })
   .then(function(json){
     DATA = json;
@@ -383,7 +264,7 @@ fetch('data/store-overview.json')
   })
   .catch(function(err){
     document.querySelector('main').insertAdjacentHTML('afterbegin',
-      '<div class="spec" style="border-left-color:#B23A2B"><b class="h">Could not load data/store-overview.json</b>' +
+      '<div class="spec" style="border-left-color:#B23A2B"><b class="h">Could not load ../data/store-overview.json</b>' +
       'This page reads its sample figures from a JSON file, so it needs to be served over http(s) rather than ' +
       'opened directly as a file. Start a local server in this folder and open the page from there.<br>' +
       '<code>' + err + '</code></div>');
