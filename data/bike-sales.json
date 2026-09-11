@@ -1,0 +1,80 @@
+{
+  "store": "Emerald Coast",
+  "date": { "label": "Tuesday, September 08, 2026", "iso": "2026-09-08" },
+  "openDays": { "elapsed": 8, "total": 30 },
+  "projectionDays": { "elapsed": 7, "total": 26 },
+  "footer": { "sweepTime": "4:12 AM", "throughDate": "September 08" },
+
+  "kpi": {
+    "mtd":       { "New": { "u": 7,  "s": 219800,  "g": 13783  }, "Used": { "u": 21, "s": 405300,  "g": 106113 } },
+    "day":       { "New": { "u": 2,  "s": 62800,   "g": 4300   }, "Used": { "u": 1,  "s": 19300,   "g": 5100   } },
+    "lastmonth": { "New": { "u": 32, "s": 1000000, "g": 64000  }, "Used": { "u": 66, "s": 1280000, "g": 330000 } },
+    "lastyear":  { "New": { "u": 31, "s": 948000,  "g": 64200  }, "Used": { "u": 63, "s": 1185000, "g": 296000 } }
+  },
+
+  "transactions": {
+    "parts":    { "day": 11, "mtd": 61 },
+    "mc":       { "day": 38, "mtd": 224 },
+    "service":  { "day": 9,  "mtd": 63 },
+    "greets":   { "day": 29, "mtd": 174 },
+    "sitdowns": { "day": 14, "mtd": 68 },
+    "units":    { "day": 3,  "mtd": 28 },
+    "missed":   { "day": -1, "mtd": -14 }
+  },
+
+  "fi": {
+    "base": { "units": 28, "financed": 23, "deals": 27 },
+    "charges": [
+      { "n": "Vehicles",           "den": null,       "base": true, "u": 28, "v": 625100 },
+      { "n": "Finance Income",     "den": "units",    "u": 23, "v": 18900 },
+      { "n": "ESP Contracts",      "den": "units",    "u": 14, "v": 22400 },
+      { "n": "GAP Insurance",      "den": "financed", "u": 2,  "v": 1850 },
+      { "n": "Payment Protection", "den": "units",    "u": 0,  "v": 0 },
+      { "n": "PPM",                "den": "units",    "u": 9,  "v": 12300 },
+      { "n": "Cycle Insurance",    "den": "units",    "u": 0,  "v": 0 },
+      { "n": "Debt Protection",    "den": "units",    "u": 0,  "v": 0 },
+      { "n": "Other F&I Products", "den": "units",    "u": 25, "v": 9600 },
+      { "n": "OTC ESP",            "den": "financed", "u": 1,  "v": 1705 },
+      { "n": "OTC PPM",            "den": "units",    "u": 0,  "v": 0 }
+    ]
+  },
+
+  "inventory": [
+    { "style": "None",    "n": 35, "u": 74, "o": 48, "noPdi": 0, "noSafety": 0 },
+    { "style": "Touring", "n": 40, "u": 66, "o": 46, "noPdi": 0, "noSafety": 0 },
+    { "style": "Street",  "n": 1,  "u": 4,  "o": 4,  "noPdi": 0, "noSafety": 0 },
+    { "style": "Dyna",    "n": 0,  "u": 10, "o": 7,  "noPdi": 0, "noSafety": 0 },
+    { "style": "V-Rod",   "n": 0,  "u": 1,  "o": 1,  "noPdi": 0, "noSafety": 0 },
+    { "style": "Trike",   "n": 1,  "u": 0,  "o": 0,  "noPdi": 0, "noSafety": 0 }
+  ],
+
+  "deals": [
+    { "d": "20689", "c": "Kearns, Alicia B",     "dt": "09/01/2026", "st": "C", "v": "1HD18GDSNVCG6BE6Y", "nu": "Used", "p": "Financed", "s": 24462, "fe": 7984, "be": 4931, "tr": 0,    "fi": "THOMAS, BRENT",     "sp": "ALDRICH, PHILLIP" },
+    { "d": "20752", "c": "Mercer, Dallas W",     "dt": "09/01/2026", "st": "C", "v": "1HD12F8VNSAFTFK3C", "nu": "Used", "p": "Financed", "s": 20450, "fe": 3621, "be": 2978, "tr": 3100, "fi": "WHITLOCK, WILLIAM", "sp": "HARMON, BRADY" },
+    { "d": "20555", "c": "Patterson, Reese L",   "dt": "09/02/2026", "st": "O", "v": "1HD1P6LHZDGAKG1BE", "nu": "New",  "p": "Financed", "s": 38765, "fe": 1740, "be": 3029, "tr": 0,    "fi": "THOMAS, BRENT",     "sp": "MCCORMICK, NICK" },
+    { "d": "20675", "c": "Salas, Ingrid M",      "dt": "09/02/2026", "st": "C", "v": "1HD1K80KJBAGJ5NPB", "nu": "Used", "p": "Cash",     "s": 17842, "fe": 5340, "be": 2916, "tr": 5400, "fi": "WHITLOCK, WILLIAM", "sp": "WHITLOCK, WILLIAM" },
+    { "d": "20654", "c": "Ellis, Marta K",       "dt": "09/03/2026", "st": "O", "v": "1HD1BXFT1L0RZRNS3", "nu": "Used", "p": "Financed", "s": 26800, "fe": 5466, "be": 2061, "tr": 5400, "fi": "None",              "sp": "MCCORMICK, NICK" },
+    { "d": "20682", "c": "Hoyt, Preston E",      "dt": "09/03/2026", "st": "C", "v": "1HD14JD074JKB6MAK", "nu": "Used", "p": "Financed", "s": 16382, "fe": 4696, "be": 4575, "tr": 5400, "fi": "WHITLOCK, WILLIAM", "sp": "WHITLOCK, WILLIAM" },
+    { "d": "20534", "c": "Vance, Marcus T",      "dt": "09/04/2026", "st": "O", "v": "1HD1DX6W20B70LH9D", "nu": "New",  "p": "Financed", "s": 27892, "fe": 2064, "be": 1217, "tr": 6800, "fi": "WHITLOCK, WILLIAM", "sp": "ALDRICH, PHILLIP" },
+    { "d": "20541", "c": "Delgado, Ana R",       "dt": "09/04/2026", "st": "C", "v": "1HD1FL63VJ5V402RK", "nu": "New",  "p": "Financed", "s": 25650, "fe": 1611, "be": 1379, "tr": 0,    "fi": "WHITLOCK, WILLIAM", "sp": "HARMON, BRADY" },
+    { "d": "20548", "c": "Whitfield, Cole D",    "dt": "09/04/2026", "st": "O", "v": "1HD1TWAK41YJD7333", "nu": "New",  "p": "Financed", "s": 30807, "fe": 1316, "be": 3802, "tr": 6800, "fi": "None",              "sp": "HARMON, BRADY" },
+    { "d": "20527", "c": "Brown, James A",       "dt": "09/05/2026", "st": "O", "v": "1HD1H4LZK94CEYZ09", "nu": "New",  "p": "Financed", "s": 33886, "fe": 2752, "be": 773,  "tr": 9500, "fi": "WHITLOCK, WILLIAM", "sp": "MCCORMICK, NICK" },
+    { "d": "20647", "c": "Cook, Steven W",       "dt": "09/05/2026", "st": "C", "v": "1HD18HH9788XFKGZT", "nu": "Used", "p": "Financed", "s": 22007, "fe": 4877, "be": 4967, "tr": 0,    "fi": "WHITLOCK, WILLIAM", "sp": "WHITLOCK, WILLIAM" },
+    { "d": "20668", "c": "Barrett, Dwayne O",    "dt": "09/05/2026", "st": "O", "v": "1HD180FH2N8M5ZF37", "nu": "Used", "p": "Financed", "s": 20587, "fe": 4184, "be": 1684, "tr": 0,    "fi": "WHITLOCK, WILLIAM", "sp": "HARMON, BRADY" },
+    { "d": "20696", "c": "McBride, Terrence L",  "dt": "09/05/2026", "st": "C", "v": "1HD1STN6J4H36YES5", "nu": "Used", "p": "Financed", "s": 14562, "fe": 5339, "be": 3007, "tr": 9500, "fi": "WHITLOCK, WILLIAM", "sp": "GARSHASB, SHAWN" },
+    { "d": "20724", "c": "Lindqvist, Erik N",    "dt": "09/05/2026", "st": "O", "v": "1HD1ETH7AZ4VJCSHL", "nu": "Used", "p": "Financed", "s": 18026, "fe": 3872, "be": 1888, "tr": 0,    "fi": "THOMAS, BRENT",     "sp": "MCCORMICK, NICK" },
+    { "d": "20731", "c": "Dawson, Harriet J",    "dt": "09/05/2026", "st": "O", "v": "1HD1W6MV0BTCABN8S", "nu": "Used", "p": "Financed", "s": 30375, "fe": 7456, "be": 1201, "tr": 6800, "fi": "None",              "sp": "ALDRICH, PHILLIP" },
+    { "d": "20738", "c": "Pike, Rowan A",        "dt": "09/05/2026", "st": "C", "v": "1HD1XPRZNJ30DJAET", "nu": "Used", "p": "Financed", "s": 21126, "fe": 4892, "be": 733,  "tr": 0,    "fi": "None",              "sp": "WHITLOCK, WILLIAM" },
+    { "d": "20759", "c": "Underwood, Noel P",    "dt": "09/05/2026", "st": "O", "v": "1HD12Y9KWKC5JBRFB", "nu": "Used", "p": "Cash",     "s": 13987, "fe": 4620, "be": 3539, "tr": 0,    "fi": "None",              "sp": "ALDRICH, PHILLIP" },
+    { "d": "20766", "c": "Boyd, Simone T",       "dt": "09/05/2026", "st": "O", "v": "1HD1BS9TA7EFE8TET", "nu": "Used", "p": "Cash",     "s": 17528, "fe": 5272, "be": 2345, "tr": 6800, "fi": "None",              "sp": "ALDRICH, PHILLIP" },
+    { "d": "20661", "c": "Nguyen, Thao P",       "dt": "09/06/2026", "st": "O", "v": "1HD1BV8TN0601FRGR", "nu": "Used", "p": "Financed", "s": 21847, "fe": 5194, "be": 3328, "tr": 0,    "fi": "None",              "sp": "WHITLOCK, WILLIAM" },
+    { "d": "20703", "c": "Falk, Jonah R",        "dt": "09/06/2026", "st": "C", "v": "1HD1KTJ7RG39LRL53", "nu": "Used", "p": "Financed", "s": 19444, "fe": 7223, "be": 2023, "tr": 3100, "fi": "THOMAS, BRENT",     "sp": "HARMON, BRADY" },
+    { "d": "20710", "c": "Reyes, Camila S",      "dt": "09/06/2026", "st": "C", "v": "1HD1BZ76B2ZWEHRGF", "nu": "Used", "p": "Financed", "s": 18094, "fe": 5874, "be": 588,  "tr": 9500, "fi": "WHITLOCK, WILLIAM", "sp": "MCCORMICK, NICK" },
+    { "d": "20745", "c": "Castellano, Gia F",    "dt": "09/06/2026", "st": "C", "v": "1HD1SWC7MLV6AT1ZY", "nu": "Used", "p": "Financed", "s": 17707, "fe": 3729, "be": 3069, "tr": 0,    "fi": "THOMAS, BRENT",     "sp": "GARSHASB, SHAWN" },
+    { "d": "20717", "c": "Ortega, Bruno V",      "dt": "09/07/2026", "st": "O", "v": "1HD15T3K9YFVDM5EV", "nu": "Used", "p": "Cash",     "s": 30442, "fe": 3569, "be": 1038, "tr": 9500, "fi": "THOMAS, BRENT",     "sp": "HARMON, BRADY" },
+    { "d": "20773", "c": "Iverson, Hank C",      "dt": "09/07/2026", "st": "C", "v": "1HD1E8WCNEKZTXJA8", "nu": "Used", "p": "Financed", "s": 14332, "fe": 7805, "be": 2694, "tr": 6800, "fi": "WHITLOCK, WILLIAM", "sp": "GARSHASB, SHAWN" },
+    { "d": "21019", "c": "Rodriguez, Liliana A", "dt": "09/08/2026", "st": "O", "v": "1HD1EDP95Y771XSMS", "nu": "Used", "p": "Financed", "s": 19300, "fe": 5100, "be": 3090, "tr": 3100, "fi": "None",              "sp": "MCCORMICK, NICK" },
+    { "d": "21027", "c": "Simmons, Ronald J",    "dt": "09/08/2026", "st": "C", "v": "1HD1K3DEG1DPCF54E", "nu": "New",  "p": "Financed", "s": 32629, "fe": 1656, "be": 1933, "tr": 4200, "fi": "WHITLOCK, WILLIAM", "sp": "WHITLOCK, WILLIAM" },
+    { "d": "21034", "c": "Crivineau, Spencer C", "dt": "09/08/2026", "st": "O", "v": "1HD1RD3DRCJW4KHXM", "nu": "New",  "p": "Financed", "s": 30171, "fe": 2644, "be": 1967, "tr": 6800, "fi": "WHITLOCK, WILLIAM", "sp": "MCCORMICK, NICK" }
+  ]
+}

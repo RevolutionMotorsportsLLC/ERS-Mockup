@@ -188,30 +188,30 @@ table.deals tbody tr.tot td.l{font-family:var(--disp);font-size:11px;letter-spac
 <div class="head">
   <div>
     <h1>Bike Sales</h1>
-    <div class="meta">Emerald Coast &middot; Tuesday, September 08, 2026 &middot; open day <b>8</b> of <b>30</b></div>
+    <div class="meta" id="pageMeta"></div>
   </div>
   <div class="acts">
     <select class="btn" aria-label="Store"><option>Emerald Coast</option><option>Haven</option><option>Honky Tonk</option><option>M.C.H.D.</option><option>Madhouse</option><option>Moonshine</option><option>Music City</option></select>
-    <input class="btn" type="date" value="2026-09-08" aria-label="Overview of date">
+    <input class="btn" type="date" id="dateInput" aria-label="Overview of date">
     <button class="btn">Print page</button>
     <button class="btn">Export to Excel</button>
   </div>
 </div>
 
 <div class="headline">
-  <div class="hl"><span class="k">Total sales</span><span class="v">$625,100</span><span class="d">month to date</span></div>
-  <div class="hl"><span class="k">Gross profit</span><span class="v">$119,896</span><span class="d">front end, month to date</span></div>
-  <div class="hl"><span class="k">Gross margin</span><span class="v">19.2%</span><span class="d">front end gross &divide; sales</span></div>
-  <div class="hl"><span class="k">Bike units</span><span class="v">28</span><span class="d">New <b>7</b> &nbsp;&middot;&nbsp; Used <b>21</b></span></div>
-  <div class="hl"><span class="k">Open days</span><span class="v">8 <span style="font-size:15px;color:var(--ink-low)">of 30</span></span><span class="d"><b>22</b> remaining</span></div>
+  <div class="hl"><span class="k">Total sales</span><span class="v" id="hlSales"></span><span class="d">month to date</span></div>
+  <div class="hl"><span class="k">Gross profit</span><span class="v" id="hlGross"></span><span class="d">front end, month to date</span></div>
+  <div class="hl"><span class="k">Gross margin</span><span class="v" id="hlMargin"></span><span class="d">front end gross &divide; sales</span></div>
+  <div class="hl"><span class="k">Bike units</span><span class="v" id="hlUnitsTotal"></span><span class="d">New <b id="hlUnitsNew"></b> &nbsp;&middot;&nbsp; Used <b id="hlUnitsUsed"></b></span></div>
+  <div class="hl"><span class="k">Open days</span><span class="v" id="hlOpenDays"></span><span class="d"><b id="hlOpenRemaining"></b> remaining</span></div>
 </div>
 
 <div class="progress">
   <div class="row">
-    <span>Month progress &mdash; <b>8</b> of 30 open days used, <b>22</b> remaining</span>
-    <span>26.7% of month elapsed</span>
+    <span>Month progress &mdash; <b id="progElapsed"></b> of <span id="progTotal"></span> open days used, <b id="progRemaining"></b> remaining</span>
+    <span id="progPct"></span>
   </div>
-  <div class="ptrack"><div class="pfill" style="width:26.7%"></div><div class="ptick" style="left:26.7%"></div></div>
+  <div class="ptrack"><div class="pfill" id="pfill"></div><div class="ptick" id="ptick"></div></div>
 </div>
 
 <nav class="secnav" aria-label="Sections on this page">
@@ -301,7 +301,7 @@ table.deals tbody tr.tot td.l{font-family:var(--disp);font-size:11px;letter-spac
   <div>
     <div class="tbl-title">
       <h4>F &amp; I Deal Charges</h4>
-      <span class="cnt">month to date &middot; 28 units sold, 23 financed</span>
+      <span class="cnt" id="fiCnt"></span>
     </div>
     <table><thead><tr>
       <th class="l">Deal charge</th><th># Units</th><th>Penetration</th><th>Total</th>
@@ -421,7 +421,7 @@ table.deals tbody tr.tot td.l{font-family:var(--disp);font-size:11px;letter-spac
 </section>
 
 <div class="foot">
-  <span>Nightly sweep completed 4:12 AM &middot; post-sale adjustments through September 08 applied</span>
+  <span id="footSweep"></span>
   <span>ERS Bike Sales tab &middot; build reference &middot; Revolution Motorsports, L.L.C.</span>
 </div>
 </main>
@@ -429,14 +429,14 @@ table.deals tbody tr.tot td.l{font-family:var(--disp);font-size:11px;letter-spac
 
 <script>
 /* Two day counts, on purpose.
-   DISPLAY    - the accounting period as the page states it: 8 of 30. Drives the
+   DISPLAY    - the accounting period as the page states it, e.g. 8 of 30. Drives the
                 header, the progress bar and the pace colour on the comparison column.
-   PROJECTION - a six-day trading week: 7 elapsed of 26. Drives the month-end
-                projection only, which understates by design. */
-var OPEN_ELAPSED = 8, OPEN_TOTAL = 30;
-var PROJ_ELAPSED = 7, PROJ_TOTAL = 26;
-var PACE = OPEN_ELAPSED / OPEN_TOTAL * 100;
-var PF   = PROJ_TOTAL / PROJ_ELAPSED;
+   PROJECTION - a six-day trading week. Drives the month-end projection only, which
+                understates by design.
+   Every sample figure on this page - these counts included - lives in
+   /data/bike-sales.json and is loaded by loadData() at the bottom of this script. */
+var DATA;
+var OPEN_ELAPSED, OPEN_TOTAL, PROJ_ELAPSED, PROJ_TOTAL, PACE, PF;
 
 function commas(n){
   var s = String(Math.abs(Math.round(n))), o = '', c = 0, i;
@@ -448,16 +448,13 @@ function pct1(n){ return n.toFixed(1) + '%'; }
 function sgn(n, f){ return (n >= 0 ? '+' : '\u2212') + f(Math.abs(n)); }
 
 /* ---------- Bike Sales KPIs ---------- */
-var K = {
-  /* mtd and day are this period. lastmonth is ALL of August 2026 and lastyear is
-     ALL of September 2025 - complete months, not the same days of them. */
-  mtd:      {New:{u:7,  s:219800,  g:13783},  Used:{u:21, s:405300,   g:106113}},
-  day:      {New:{u:2,  s:62800,   g:4300},   Used:{u:1,  s:19300,    g:5100}},
-  lastmonth:{New:{u:32, s:1000000, g:64000},  Used:{u:66, s:1280000,  g:330000}},
-  lastyear: {New:{u:31, s:948000,  g:64200},  Used:{u:63, s:1185000,  g:296000}}
-};
-for (var pk in K) if (K.hasOwnProperty(pk)) {
-  K[pk].Total = {u:K[pk].New.u + K[pk].Used.u, s:K[pk].New.s + K[pk].Used.s, g:K[pk].New.g + K[pk].Used.g};
+/* mtd and day are this period. lastmonth is ALL of the prior month and lastyear is
+   ALL of the same month last year - complete months, not the same days of them. */
+var K;
+function addTotals(k){
+  for (var pk in k) if (k.hasOwnProperty(pk)) {
+    k[pk].Total = {u:k[pk].New.u + k[pk].Used.u, s:k[pk].New.s + k[pk].Used.s, g:k[pk].New.g + k[pk].Used.g};
+  }
 }
 function proj(d){ return {u:Math.round(d.u * PF), s:Math.round(d.s * PF), g:Math.round(d.g * PF)}; }
 
@@ -557,8 +554,7 @@ function renderKPI(){
 })();
 
 /* ---------- Transactions ---------- */
-var TX = {parts:{day:11,mtd:61}, mc:{day:38,mtd:224}, service:{day:9,mtd:63},
-          greets:{day:29,mtd:174}, sitdowns:{day:14,mtd:68}, units:{day:3,mtd:28}, missed:{day:-1,mtd:-14}};
+var TX;
 function txTotal(p){ return TX.parts[p] + TX.mc[p] + TX.service[p]; }
 var TXROWS = [
   {block:'Store traffic \u2014 what came through the door'},
@@ -602,20 +598,7 @@ function renderTrans(){
 }
 
 /* ---------- F & I (month to date) ---------- */
-var FI_BASE = {units:28, financed:23, deals:27};
-var FI_CHARGES = [
-  {n:'Vehicles',           den:null,       base:true, u:28, v:625100},
-  {n:'Finance Income',     den:'units',    u:23, v:18900},
-  {n:'ESP Contracts',      den:'units',    u:14, v:22400},
-  {n:'GAP Insurance',      den:'financed', u:2,  v:1850},
-  {n:'Payment Protection', den:'units',    u:0,  v:0},
-  {n:'PPM',                den:'units',    u:9,  v:12300},
-  {n:'Cycle Insurance',    den:'units',    u:0,  v:0},
-  {n:'Debt Protection',    den:'units',    u:0,  v:0},
-  {n:'Other F&I Products', den:'units',    u:25, v:9600},
-  {n:'OTC ESP',            den:'financed', u:1,  v:1705},
-  {n:'OTC PPM',            den:'units',    u:0,  v:0}
-];
+var FI_BASE, FI_CHARGES;
 function fiFind(n){ for (var i = 0; i < FI_CHARGES.length; i++) if (FI_CHARGES[i].n === n) return FI_CHARGES[i]; }
 function fiGross(){ var t = 0, i; for (i = 0; i < FI_CHARGES.length; i++) if (!FI_CHARGES[i].base) t += FI_CHARGES[i].v; return t; }
 function fiProducts(){ var t = 0, i; for (i = 0; i < FI_CHARGES.length; i++) if (!FI_CHARGES[i].base) t += FI_CHARGES[i].u; return t; }
@@ -658,21 +641,20 @@ function renderFI(){
 }
 
 /* ---------- Inventory ---------- */
-var INV = [
-  {style:'None',n:35,u:74,o:48}, {style:'Touring',n:40,u:66,o:46}, {style:'Street',n:1,u:4,o:4},
-  {style:'Dyna',n:0,u:10,o:7},  {style:'V-Rod',n:0,u:1,o:1},      {style:'Trike',n:1,u:0,o:0}
-];
+var INV;
 var zoom = 'all';
 function renderInv(){
-  var t = {n:0,u:0,o:0}, i, html = '';
-  for (i = 0; i < INV.length; i++) { t.n += INV[i].n; t.u += INV[i].u; t.o += INV[i].o; }
+  var t = {n:0,u:0,o:0,noPdi:0,noSafety:0}, i, html = '';
+  for (i = 0; i < INV.length; i++) {
+    t.n += INV[i].n; t.u += INV[i].u; t.o += INV[i].o; t.noPdi += INV[i].noPdi; t.noSafety += INV[i].noSafety;
+  }
   var dN = zoom === 'used' ? ' class="muted"' : '', dU = zoom === 'new' ? ' class="muted"' : '';
   for (i = 0; i < INV.length; i++) {
     html += '<tr><td class="l">' + INV[i].style + '</td><td' + dN + '>' + INV[i].n + '</td><td' + dU + '>' +
-            INV[i].u + '</td><td' + dU + '>' + INV[i].o + '</td><td>0</td><td>0</td></tr>';
+            INV[i].u + '</td><td' + dU + '>' + INV[i].o + '</td><td>' + INV[i].noPdi + '</td><td>' + INV[i].noSafety + '</td></tr>';
   }
   html += '<tr class="totrow"><td class="l">Totals</td><td' + dN + '>' + t.n + '</td><td' + dU + '>' + t.u +
-          '</td><td' + dU + '>' + t.o + '</td><td>0</td><td>0</td></tr>';
+          '</td><td' + dU + '>' + t.o + '</td><td>' + t.noPdi + '</td><td>' + t.noSafety + '</td></tr>';
   document.getElementById('invbody').innerHTML = html;
 }
 function setZoom(z){
@@ -704,35 +686,7 @@ function shortName(v){
      into Mccormick. Only the first name is abbreviated. */
   return last + ', ' + first.charAt(0) + '.';
 }
-var DEALS = [
-  {d:'20689',c:'Kearns, Alicia B',dt:'09/01/2026',st:'C',v:'1HD18GDSNVCG6BE6Y',nu:'Used',p:'Financed',s:24462,fe:7984,be:4931,tr:0,fi:'THOMAS, BRENT',sp:'ALDRICH, PHILLIP'},
-  {d:'20752',c:'Mercer, Dallas W',dt:'09/01/2026',st:'C',v:'1HD12F8VNSAFTFK3C',nu:'Used',p:'Financed',s:20450,fe:3621,be:2978,tr:3100,fi:'WHITLOCK, WILLIAM',sp:'HARMON, BRADY'},
-  {d:'20555',c:'Patterson, Reese L',dt:'09/02/2026',st:'O',v:'1HD1P6LHZDGAKG1BE',nu:'New',p:'Financed',s:38765,fe:1740,be:3029,tr:0,fi:'THOMAS, BRENT',sp:'MCCORMICK, NICK'},
-  {d:'20675',c:'Salas, Ingrid M',dt:'09/02/2026',st:'C',v:'1HD1K80KJBAGJ5NPB',nu:'Used',p:'Cash',s:17842,fe:5340,be:2916,tr:5400,fi:'WHITLOCK, WILLIAM',sp:'WHITLOCK, WILLIAM'},
-  {d:'20654',c:'Ellis, Marta K',dt:'09/03/2026',st:'O',v:'1HD1BXFT1L0RZRNS3',nu:'Used',p:'Financed',s:26800,fe:5466,be:2061,tr:5400,fi:'None',sp:'MCCORMICK, NICK'},
-  {d:'20682',c:'Hoyt, Preston E',dt:'09/03/2026',st:'C',v:'1HD14JD074JKB6MAK',nu:'Used',p:'Financed',s:16382,fe:4696,be:4575,tr:5400,fi:'WHITLOCK, WILLIAM',sp:'WHITLOCK, WILLIAM'},
-  {d:'20534',c:'Vance, Marcus T',dt:'09/04/2026',st:'O',v:'1HD1DX6W20B70LH9D',nu:'New',p:'Financed',s:27892,fe:2064,be:1217,tr:6800,fi:'WHITLOCK, WILLIAM',sp:'ALDRICH, PHILLIP'},
-  {d:'20541',c:'Delgado, Ana R',dt:'09/04/2026',st:'C',v:'1HD1FL63VJ5V402RK',nu:'New',p:'Financed',s:25650,fe:1611,be:1379,tr:0,fi:'WHITLOCK, WILLIAM',sp:'HARMON, BRADY'},
-  {d:'20548',c:'Whitfield, Cole D',dt:'09/04/2026',st:'O',v:'1HD1TWAK41YJD7333',nu:'New',p:'Financed',s:30807,fe:1316,be:3802,tr:6800,fi:'None',sp:'HARMON, BRADY'},
-  {d:'20527',c:'Brown, James A',dt:'09/05/2026',st:'O',v:'1HD1H4LZK94CEYZ09',nu:'New',p:'Financed',s:33886,fe:2752,be:773,tr:9500,fi:'WHITLOCK, WILLIAM',sp:'MCCORMICK, NICK'},
-  {d:'20647',c:'Cook, Steven W',dt:'09/05/2026',st:'C',v:'1HD18HH9788XFKGZT',nu:'Used',p:'Financed',s:22007,fe:4877,be:4967,tr:0,fi:'WHITLOCK, WILLIAM',sp:'WHITLOCK, WILLIAM'},
-  {d:'20668',c:'Barrett, Dwayne O',dt:'09/05/2026',st:'O',v:'1HD180FH2N8M5ZF37',nu:'Used',p:'Financed',s:20587,fe:4184,be:1684,tr:0,fi:'WHITLOCK, WILLIAM',sp:'HARMON, BRADY'},
-  {d:'20696',c:'McBride, Terrence L',dt:'09/05/2026',st:'C',v:'1HD1STN6J4H36YES5',nu:'Used',p:'Financed',s:14562,fe:5339,be:3007,tr:9500,fi:'WHITLOCK, WILLIAM',sp:'GARSHASB, SHAWN'},
-  {d:'20724',c:'Lindqvist, Erik N',dt:'09/05/2026',st:'O',v:'1HD1ETH7AZ4VJCSHL',nu:'Used',p:'Financed',s:18026,fe:3872,be:1888,tr:0,fi:'THOMAS, BRENT',sp:'MCCORMICK, NICK'},
-  {d:'20731',c:'Dawson, Harriet J',dt:'09/05/2026',st:'O',v:'1HD1W6MV0BTCABN8S',nu:'Used',p:'Financed',s:30375,fe:7456,be:1201,tr:6800,fi:'None',sp:'ALDRICH, PHILLIP'},
-  {d:'20738',c:'Pike, Rowan A',dt:'09/05/2026',st:'C',v:'1HD1XPRZNJ30DJAET',nu:'Used',p:'Financed',s:21126,fe:4892,be:733,tr:0,fi:'None',sp:'WHITLOCK, WILLIAM'},
-  {d:'20759',c:'Underwood, Noel P',dt:'09/05/2026',st:'O',v:'1HD12Y9KWKC5JBRFB',nu:'Used',p:'Cash',s:13987,fe:4620,be:3539,tr:0,fi:'None',sp:'ALDRICH, PHILLIP'},
-  {d:'20766',c:'Boyd, Simone T',dt:'09/05/2026',st:'O',v:'1HD1BS9TA7EFE8TET',nu:'Used',p:'Cash',s:17528,fe:5272,be:2345,tr:6800,fi:'None',sp:'ALDRICH, PHILLIP'},
-  {d:'20661',c:'Nguyen, Thao P',dt:'09/06/2026',st:'O',v:'1HD1BV8TN0601FRGR',nu:'Used',p:'Financed',s:21847,fe:5194,be:3328,tr:0,fi:'None',sp:'WHITLOCK, WILLIAM'},
-  {d:'20703',c:'Falk, Jonah R',dt:'09/06/2026',st:'C',v:'1HD1KTJ7RG39LRL53',nu:'Used',p:'Financed',s:19444,fe:7223,be:2023,tr:3100,fi:'THOMAS, BRENT',sp:'HARMON, BRADY'},
-  {d:'20710',c:'Reyes, Camila S',dt:'09/06/2026',st:'C',v:'1HD1BZ76B2ZWEHRGF',nu:'Used',p:'Financed',s:18094,fe:5874,be:588,tr:9500,fi:'WHITLOCK, WILLIAM',sp:'MCCORMICK, NICK'},
-  {d:'20745',c:'Castellano, Gia F',dt:'09/06/2026',st:'C',v:'1HD1SWC7MLV6AT1ZY',nu:'Used',p:'Financed',s:17707,fe:3729,be:3069,tr:0,fi:'THOMAS, BRENT',sp:'GARSHASB, SHAWN'},
-  {d:'20717',c:'Ortega, Bruno V',dt:'09/07/2026',st:'O',v:'1HD15T3K9YFVDM5EV',nu:'Used',p:'Cash',s:30442,fe:3569,be:1038,tr:9500,fi:'THOMAS, BRENT',sp:'HARMON, BRADY'},
-  {d:'20773',c:'Iverson, Hank C',dt:'09/07/2026',st:'C',v:'1HD1E8WCNEKZTXJA8',nu:'Used',p:'Financed',s:14332,fe:7805,be:2694,tr:6800,fi:'WHITLOCK, WILLIAM',sp:'GARSHASB, SHAWN'},
-  {d:'21019',c:'Rodriguez, Liliana A',dt:'09/08/2026',st:'O',v:'1HD1EDP95Y771XSMS',nu:'Used',p:'Financed',s:19300,fe:5100,be:3090,tr:3100,fi:'None',sp:'MCCORMICK, NICK'},
-  {d:'21027',c:'Simmons, Ronald J',dt:'09/08/2026',st:'C',v:'1HD1K3DEG1DPCF54E',nu:'New',p:'Financed',s:32629,fe:1656,be:1933,tr:4200,fi:'WHITLOCK, WILLIAM',sp:'WHITLOCK, WILLIAM'},
-  {d:'21034',c:'Crivineau, Spencer C',dt:'09/08/2026',st:'O',v:'1HD1RD3DRCJW4KHXM',nu:'New',p:'Financed',s:30171,fe:2644,be:1967,tr:6800,fi:'WHITLOCK, WILLIAM',sp:'MCCORMICK, NICK'}
-];
+var DEALS;
 function dateKey(s){ var p = String(s).split('/'); return p.length === 3 ? Number(p[2])*10000 + Number(p[0])*100 + Number(p[1]) : 0; }
 var TODAY = '09/08/2026';
 var DS = {scope:'mtd', nu:'All', sort:'dt', dir:-1};
@@ -826,15 +780,20 @@ function renderDeals(){
 })();
 
 /* ---------- Section menu ---------- */
-var SECTIONS = [
-  {id:'sec-kpi',   t:'Bike Sales KPIs',  s:'15 figures \u00b7 3 segments'},
-  {id:'sec-trans', t:'Transactions',     s:'traffic \u00b7 conversion'},
-  {id:'sec-fi',    t:'F & I',            s:'deal charges'},
-  {id:'sec-inv',   t:'Current Inventory',s:'77 new \u00b7 155 used'},
-  {id:'sec-deals', t:'Per Deal',         s:'27 deals \u00b7 14 columns'},
-  {id:'sec-notes', t:'Build Notes',      s:'changes'}
-];
-(function(){
+var SECTIONS;
+function invCount(k){ var t = 0, i; for (i = 0; i < INV.length; i++) t += INV[i][k]; return t; }
+function buildSections(){
+  return [
+    {id:'sec-kpi',   t:'Bike Sales KPIs',  s:'15 figures \u00b7 3 segments'},
+    {id:'sec-trans', t:'Transactions',     s:'traffic \u00b7 conversion'},
+    {id:'sec-fi',    t:'F & I',            s:'deal charges'},
+    {id:'sec-inv',   t:'Current Inventory',s: commas(invCount('n')) + ' new \u00b7 ' + commas(invCount('u')) + ' used'},
+    {id:'sec-deals', t:'Per Deal',         s: commas(DEALS.length) + ' deals \u00b7 ' + COLS.length + ' columns'},
+    {id:'sec-notes', t:'Build Notes',      s:'changes'}
+  ];
+}
+function renderSectionNav(){
+  SECTIONS = buildSections();
   var nav = document.getElementById('seclinks'), html = '', i;
   for (i = 0; i < SECTIONS.length; i++)
     html += '<a href="#' + SECTIONS[i].id + '" data-id="' + SECTIONS[i].id + '"><span class="t">' +
@@ -858,7 +817,7 @@ var SECTIONS = [
   }
   if (window.addEventListener) window.addEventListener('scroll', spy, false);
   spy();
-})();
+}
 
 (function(){
   var b = document.getElementById('notesToggle');
@@ -870,7 +829,66 @@ var SECTIONS = [
   };
 })();
 
-renderKPI(); renderTrans(); renderFI(); renderInv(); renderDeals();
+/* ---------- Header, headline ribbon, progress bar, footer ---------- */
+function renderHeader(){
+  var kt = K.mtd.Total;
+  document.getElementById('pageMeta').innerHTML =
+    DATA.store + ' &middot; ' + DATA.date.label + ' &middot; open day <b>' + OPEN_ELAPSED + '</b> of <b>' + OPEN_TOTAL + '</b>';
+  document.getElementById('dateInput').value = DATA.date.iso;
+
+  document.getElementById('hlSales').innerHTML      = money(kt.s);
+  document.getElementById('hlGross').innerHTML      = money(kt.g);
+  document.getElementById('hlMargin').innerHTML     = pct1(kt.s ? kt.g / kt.s * 100 : 0);
+  document.getElementById('hlUnitsTotal').innerHTML = commas(kt.u);
+  document.getElementById('hlUnitsNew').innerHTML   = commas(K.mtd.New.u);
+  document.getElementById('hlUnitsUsed').innerHTML  = commas(K.mtd.Used.u);
+  document.getElementById('hlOpenDays').innerHTML =
+    OPEN_ELAPSED + ' <span style="font-size:15px;color:var(--ink-low)">of ' + OPEN_TOTAL + '</span>';
+  document.getElementById('hlOpenRemaining').innerHTML = OPEN_TOTAL - OPEN_ELAPSED;
+
+  document.getElementById('progElapsed').innerHTML   = OPEN_ELAPSED;
+  document.getElementById('progTotal').innerHTML     = OPEN_TOTAL;
+  document.getElementById('progRemaining').innerHTML = OPEN_TOTAL - OPEN_ELAPSED;
+  document.getElementById('progPct').innerHTML = pct1(PACE) + ' of month elapsed';
+  document.getElementById('pfill').style.width = PACE + '%';
+  document.getElementById('ptick').style.left  = PACE + '%';
+
+  document.getElementById('fiCnt').innerHTML =
+    'month to date &middot; ' + FI_BASE.units + ' units sold, ' + FI_BASE.financed + ' financed';
+
+  document.getElementById('footSweep').innerHTML =
+    'Nightly sweep completed ' + DATA.footer.sweepTime + ' &middot; post-sale adjustments through ' +
+    DATA.footer.throughDate + ' applied';
+}
+
+/* ---------- Load every sample figure from /data, then render ---------- */
+function renderAll(){
+  renderHeader();
+  renderKPI(); renderTrans(); renderFI(); renderInv(); renderDeals();
+  renderSectionNav();
+}
+fetch('data/bike-sales.json')
+  .then(function(res){ return res.json(); })
+  .then(function(json){
+    DATA = json;
+    OPEN_ELAPSED = DATA.openDays.elapsed;       OPEN_TOTAL = DATA.openDays.total;
+    PROJ_ELAPSED = DATA.projectionDays.elapsed; PROJ_TOTAL = DATA.projectionDays.total;
+    PACE = OPEN_ELAPSED / OPEN_TOTAL * 100;
+    PF   = PROJ_TOTAL / PROJ_ELAPSED;
+    K = DATA.kpi; addTotals(K);
+    TX = DATA.transactions;
+    FI_BASE = DATA.fi.base; FI_CHARGES = DATA.fi.charges;
+    INV = DATA.inventory;
+    DEALS = DATA.deals;
+    renderAll();
+  })
+  .catch(function(err){
+    document.querySelector('main').insertAdjacentHTML('afterbegin',
+      '<div class="spec" style="border-left-color:#B23A2B"><b class="h">Could not load data/bike-sales.json</b>' +
+      'This page reads its sample figures from a JSON file, so it needs to be served over http(s) rather than ' +
+      'opened directly as a file. Start a local server in this folder and open the page from there.<br>' +
+      '<code>' + err + '</code></div>');
+  });
 </script>
 </body>
 </html>

@@ -132,32 +132,31 @@ tbody tr.tot td.l{font-family:var(--disp);font-size:12.5px;letter-spacing:.1em;t
 
 <div class="head">
   <div>
-    <h1>Madhouse</h1>
-    <div class="meta">Thursday, September 10, 2026<br>
-      Accounting period September 2026 &middot; open day <b>10</b> of <b>30</b></div>
+    <h1 id="pageStore">Madhouse</h1>
+    <div class="meta" id="pageMeta"></div>
   </div>
   <div class="acts">
     <button class="chip" id="notesToggle" aria-pressed="false">Hide notes</button>
     <select class="btn" aria-label="Store"><option>Madhouse</option><option>Emerald Coast</option><option>Haven</option><option>Honky Tonk</option><option>M.C.H.D.</option><option>Moonshine</option><option>Music City</option></select>
-    <input class="btn" type="date" value="2026-09-10" aria-label="Overview of date">
+    <input class="btn" type="date" id="dateInput" aria-label="Overview of date">
     <button class="btn">Print page</button>
   </div>
 </div>
 
 <div class="headline">
-  <div class="hl"><span class="k">Total sales</span><span class="v">$292,971</span><span class="d">month to date</span></div>
-  <div class="hl"><span class="k">Gross profit</span><span class="v">$97,471</span><span class="d">month to date</span></div>
-  <div class="hl"><span class="k">Gross margin</span><span class="v">33.3%</span><span class="d">gross profit &divide; sales</span></div>
-  <div class="hl"><span class="k">Bike units</span><span class="v">9</span><span class="d">New <b>3</b> &nbsp;&middot;&nbsp; Used <b>6</b></span></div>
-  <div class="hl"><span class="k">Repair orders</span><span class="v">78</span><span class="d">month to date</span></div>
+  <div class="hl"><span class="k">Total sales</span><span class="v" id="hlSales"></span><span class="d">month to date</span></div>
+  <div class="hl"><span class="k">Gross profit</span><span class="v" id="hlGross"></span><span class="d">month to date</span></div>
+  <div class="hl"><span class="k">Gross margin</span><span class="v" id="hlMargin"></span><span class="d">gross profit &divide; sales</span></div>
+  <div class="hl"><span class="k">Bike units</span><span class="v" id="hlUnitsTotal"></span><span class="d">New <b id="hlUnitsNew"></b> &nbsp;&middot;&nbsp; Used <b id="hlUnitsUsed"></b></span></div>
+  <div class="hl"><span class="k">Repair orders</span><span class="v" id="hlRepairOrders"></span><span class="d">month to date</span></div>
 </div>
 
 <div class="progress">
   <div class="row">
-    <span>Period progress &mdash; <b>10</b> of 30 open days used, <b>20</b> remaining</span>
-    <span>33.3% of period elapsed</span>
+    <span>Period progress &mdash; <b id="progElapsed"></b> of <span id="progTotal"></span> open days used, <b id="progRemaining"></b> remaining</span>
+    <span id="progPct"></span>
   </div>
-  <div class="ptrack"><div class="pfill" style="width:33.3%"></div><div class="ptick" style="left:33.3%"></div></div>
+  <div class="ptrack"><div class="pfill" id="pfill"></div><div class="ptick" id="ptick"></div></div>
 </div>
 
 <section>
@@ -235,16 +234,15 @@ tbody tr.tot td.l{font-family:var(--disp);font-size:12.5px;letter-spacing:.1em;t
 
 <script>
 /* Two day counts, on purpose.
-   DISPLAY  - the accounting period as the page states it: 10 of 30. Drives the
+   DISPLAY  - the accounting period as the page states it, e.g. 10 of 30. Drives the
               header, the progress bar and the pace colour on the comparison columns.
-   PROJECTION - a six-day trading week: 9 elapsed of 26. Drives the month-end
-              projection only, which understates by design. See the Projected
-              month-end note. Collapse these into one number once a real per-store
-              open-day calendar exists. */
-var ELAPSED = 10, TOTAL = 30;
-var PROJ_ELAPSED = 9, PROJ_TOTAL = 26;
-var PACE = ELAPSED / TOTAL * 100;
-var PF = PROJ_TOTAL / PROJ_ELAPSED;
+   PROJECTION - a six-day trading week. Drives the month-end projection only, which
+              understates by design. See the Projected month-end note. Collapse these
+              into one number once a real per-store open-day calendar exists.
+   Every sample figure on this page - these counts included - lives in
+   /data/store-overview.json and is loaded by the fetch() at the bottom of this script. */
+var DATA;
+var ELAPSED, TOTAL, PROJ_ELAPSED, PROJ_TOTAL, PACE, PF;
 
 function commas(n){
   var s = String(Math.abs(Math.round(n))), o = '', c = 0, i;
@@ -255,26 +253,9 @@ function money(n){ return '$' + commas(n); }
 function pct1(n){ return n.toFixed(1) + '%'; }
 function sgnPct(n){ return (n >= 0 ? '+' : '\u2212') + Math.abs(n).toFixed(1) + '%'; }
 
-/* mtd s/g follow the live preview exactly · day and prior-period gross are illustrative */
-var DEPTS = [
-  /* s/g are month to date and follow the live preview exactly.
-     ds/dg are the day. lm* is ALL of August 2026, ly* is ALL of September 2025 -
-     complete months, not the same days of them. */
-  {n:'Bike Sales',     s:166640, g:24107, ds:21400, dg:3180,
-     lms:505000, lmg:71200, lys:478000, lyg:66000},
-  {n:'F & I',          s:23716,  g:14574, ds:2980,  dg:1840,
-     lms:58500,  lmg:36000, lys:60400,  lyg:36000},
-  {n:'Parts',          s:42032,  g:12785, ds:4460,  dg:1355,
-     lms:98700,  lmg:30000, lys:118500, lyg:35800},
-  {n:'Motorclothes',   s:13789,  g:5616,  ds:1610,  dg:655,
-     lms:41300,  lmg:16800, lys:47600,  lyg:19500},
-  {n:'Service',        s:31653,  g:25248, ds:3720,  dg:2970,
-     lms:106500, lmg:85000, lys:101300, lyg:78000},
-  {n:'Riding Academy', s:3544,   g:3544,  ds:0,     dg:0,
-     lms:9900,   lmg:9900,  lys:8600,   lyg:8600},
-  {n:'Administration', s:11597,  g:11597, ds:1160,  dg:1160,
-     lms:34800,  lmg:34800, lys:33100,  lyg:33100}
-];
+/* s/g are month to date. ds/dg are the day. lm* is ALL of last month, ly* is ALL of
+   the same month last year - complete months, not the same days of them. */
+var DEPTS;
 function totals(){
   var t = {n:'Store', s:0, g:0, ds:0, dg:0, lms:0, lmg:0, lys:0, lyg:0}, i, k;
   for (i = 0; i < DEPTS.length; i++)
@@ -361,7 +342,52 @@ function render(){
     n.setAttribute('aria-pressed', off ? 'false' : 'true');
   };
 })();
-render();
+
+/* ---------- Header, headline ribbon, progress bar ---------- */
+function renderHeader(){
+  document.getElementById('pageStore').innerHTML = DATA.store;
+  document.getElementById('pageMeta').innerHTML =
+    DATA.date.label + '<br>Accounting period ' + DATA.date.accountingPeriod +
+    ' &middot; open day <b>' + ELAPSED + '</b> of <b>' + TOTAL + '</b>';
+  document.getElementById('dateInput').value = DATA.date.iso;
+
+  var t = totals();
+  document.getElementById('hlSales').innerHTML        = money(t.s);
+  document.getElementById('hlGross').innerHTML        = money(t.g);
+  document.getElementById('hlMargin').innerHTML       = pct1(t.s ? t.g / t.s * 100 : 0);
+  document.getElementById('hlUnitsTotal').innerHTML   = commas(DATA.headline.units.total);
+  document.getElementById('hlUnitsNew').innerHTML     = commas(DATA.headline.units.new);
+  document.getElementById('hlUnitsUsed').innerHTML    = commas(DATA.headline.units.used);
+  document.getElementById('hlRepairOrders').innerHTML = commas(DATA.headline.repairOrders);
+
+  document.getElementById('progElapsed').innerHTML   = ELAPSED;
+  document.getElementById('progTotal').innerHTML     = TOTAL;
+  document.getElementById('progRemaining').innerHTML = TOTAL - ELAPSED;
+  document.getElementById('progPct').innerHTML = pct1(PACE) + ' of period elapsed';
+  document.getElementById('pfill').style.width = PACE + '%';
+  document.getElementById('ptick').style.left  = PACE + '%';
+}
+
+/* ---------- Load every sample figure from /data, then render ---------- */
+fetch('data/store-overview.json')
+  .then(function(res){ return res.json(); })
+  .then(function(json){
+    DATA = json;
+    ELAPSED = DATA.openDays.elapsed;             TOTAL = DATA.openDays.total;
+    PROJ_ELAPSED = DATA.projectionDays.elapsed;  PROJ_TOTAL = DATA.projectionDays.total;
+    PACE = ELAPSED / TOTAL * 100;
+    PF   = PROJ_TOTAL / PROJ_ELAPSED;
+    DEPTS = DATA.departments;
+    renderHeader();
+    render();
+  })
+  .catch(function(err){
+    document.querySelector('main').insertAdjacentHTML('afterbegin',
+      '<div class="spec" style="border-left-color:#B23A2B"><b class="h">Could not load data/store-overview.json</b>' +
+      'This page reads its sample figures from a JSON file, so it needs to be served over http(s) rather than ' +
+      'opened directly as a file. Start a local server in this folder and open the page from there.<br>' +
+      '<code>' + err + '</code></div>');
+  });
 </script>
 </body>
 </html>
