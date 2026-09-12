@@ -11,7 +11,7 @@ var ERS_NAV = [
   ]},
   { h: 'Departments', items: [
     { id: 'bike-sales',   t: 'Bike Sales',   href: 'bike-sales.html' },
-    { id: 'parts-sales',  t: 'Parts Sales',  href: '#' },
+    { id: 'parts-sales',  t: 'Parts Sales',  href: 'parts-sales.html' },
     { id: 'motorclothes', t: 'Motorclothes', href: '#' },
     { id: 'service',      t: 'Service',      href: '#' }
   ]},
