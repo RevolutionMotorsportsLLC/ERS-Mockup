@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ERS — Motorclothes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/tokens.css">
+<link rel="stylesheet" href="../styles/app.css">
+</head>
+<body>
+<div class="app">
+
+<nav id="navRail" class="rail"></nav>
+
+<main>
+<div class="mockbar">
+  MOCKUP &mdash; <b>Motorclothes tab, build reference.</b> Converted from the live Motorclothes Sales Summary page,
+  a variation on Parts Sales rather than a new design. All Counter Sales figures below are real, pulled from a
+  live export; comparison periods are fabricated but reconcile across the page.<br>
+  <b>Hide notes</b> in the section bar strips every explanatory box for a clean read of the tables.
+</div>
+
+<div class="head">
+  <div>
+    <h1>Motorclothes</h1>
+    <div class="meta" id="pageMeta"></div>
+  </div>
+  <div class="acts">
+    <select class="btn" aria-label="Store"><option>Emerald Coast</option><option>Haven</option><option>Honky Tonk</option><option>M.C.H.D.</option><option>Madhouse</option><option>Moonshine</option><option>Music City</option></select>
+    <input class="btn" type="date" id="dateInput" aria-label="Overview of date">
+    <button class="btn">Print page</button>
+    <button class="btn">Export to Excel</button>
+  </div>
+</div>
+
+<div class="headline">
+  <div class="hl"><span class="k">Total sales</span><span class="v" id="hlSales"></span><span class="d">month to date</span></div>
+  <div class="hl"><span class="k">Gross profit</span><span class="v" id="hlGross"></span><span class="d">month to date</span></div>
+  <div class="hl"><span class="k">Gross margin</span><span class="v" id="hlMargin"></span><span class="d">gross profit &divide; sales</span></div>
+  <div class="hl"><span class="k">Counter tickets</span><span class="v" id="hlTickets"></span><span class="d"><b id="hlItems"></b> items &middot; month to date</span></div>
+  <div class="hl"><span class="k">Open days</span><span class="v" id="hlOpenDays"></span><span class="d"><b id="hlOpenRemaining"></b> remaining</span></div>
+</div>
+
+<div class="progress">
+  <div class="row">
+    <span>Month progress &mdash; <b id="progElapsed"></b> of <span id="progTotal"></span> open days used, <b id="progRemaining"></b> remaining</span>
+    <span id="progPct"></span>
+  </div>
+  <div class="ptrack"><div class="pfill" id="pfill"></div><div class="ptick" id="ptick"></div></div>
+</div>
+
+<nav class="secnav" aria-label="Sections on this page">
+  <span id="seclinks" style="display:flex;gap:8px;flex-wrap:wrap"></span>
+  <button class="chip" id="notesToggle" aria-pressed="false" style="margin-left:auto;align-self:center">Hide notes</button>
+</nav>
+
+<!-- ============ MOTORCLOTHES KPIS ============ -->
+<section class="anchor" id="sec-kpi">
+  <div class="gutter">
+    <h2>Motorclothes Summary</h2>
+    <p>Every revenue channel, and the totals built from them.</p>
+  </div>
+  <div>
+    <div class="bases" role="tablist" aria-label="Comparison basis">
+      <button role="tab" aria-selected="true"  data-basis="day">Day w/ MTD</button>
+      <button role="tab" aria-selected="false" data-basis="lastmonth">vs. Last Month</button>
+      <button role="tab" aria-selected="false" data-basis="lastyear">vs. Last Year</button>
+    </div>
+    <div class="basisnote" id="basisnote"></div>
+    <table><thead><tr id="kpihead"></tr></thead><tbody id="kpibody"></tbody></table>
+
+    <div class="spec note-el">
+      <b class="h">A variation on Parts Sales, not a new design</b>
+      <ul>
+        <li>Same conversion as Parts: the legacy page's four period tabs and separate Sales/Profits toggle collapse
+          into the standard three-tab pattern, since one table already shows dollars, gross profit and margin
+          together.</li>
+        <li>Motorclothes genuinely has a simpler channel mix than Parts &mdash; no Cust. Pay &ndash; Service,
+          Warranty or Deal Add-On in this store's data, not a trimmed-down copy of Parts' row list. The live page
+          already reflects this: those rows don't appear on its Motorclothes Summary either.</li>
+      </ul>
+    </div>
+
+    <div class="spec note-el">
+      <b class="h">Projected month-end</b>
+      <code>Projected = MTD &divide; open days elapsed &times; total open days</code>
+      <ul>
+        <li>Applied to every dollar row. <b>No projected margin</b> &mdash; both figures scale by the same factor, so
+          it would equal the month-to-date margin on every row. Day w/ MTD tab only.</li>
+        <li>Uses ERS's own six-day trading week, which differs on purpose from the live page's Projected column
+          (straight calendar days elapsed) &mdash; same divergence as Bike Sales, Store Overview and Parts Sales.</li>
+      </ul>
+    </div>
+
+    <div class="spec note-el">
+      <b class="h">Comparison columns</b>
+      <ul>
+        <li>Prior column is a <b>complete month</b> &mdash; all of August, all of September 2025 &mdash; not the
+          same 11 days of it.</li>
+        <li><code>% of prior = MTD &divide; that month's figure</code>. Gross Margin shows a difference instead.
+          Where a channel is genuinely zero in both periods (Employee, Wholesale), the ratio is undefined and shown
+          as a dash, not 0.0%.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COUNTER SALES BY REP ============ -->
+<section class="anchor" id="sec-reps">
+  <div class="gutter">
+    <h2>Counter Sales</h2>
+    <p>Today's sales and month-to-date productivity, by rep.</p>
+  </div>
+  <div>
+    <table class="deals"><thead><tr id="repHead"></tr></thead><tbody id="repBody"></tbody></table>
+
+    <div class="spec note-el">
+      <b class="h">Reduced from 17 columns to 7</b>
+      <ul>
+        <li>Fewer than Parts' 11: Motorclothes has no Cust. Pay, Warranty, Deal Add-On or Internal activity for any
+          rep in this store's data, and Employee / Wholesale are store-wide, not rep-attributed. <b>Counter Sales</b>
+          is the only channel any rep actually has, so it stands alone as the day figure rather than being summed
+          into a separate "Day Sales" column that would just repeat it.</li>
+        <li>Avg Ticket and LIPT are <b>derived</b> (MTD counter sales &divide; tickets, and items &divide; tickets)
+          &mdash; not stored, computed from the counts to the left.</li>
+        <li>Unlike Parts, this export's five reps already sum to the Summary table's totals above &mdash; no sample
+          rows were needed to make this table reconcile.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BUILD NOTES ============ -->
+<section class="anchor" id="sec-notes">
+  <div class="gutter">
+    <h2>Build Notes</h2>
+    <p>Changes against the live page.</p>
+  </div>
+  <div>
+    <div class="notes">
+      <b class="h">What's different from the current Motorclothes page</b>
+      <ul>
+        <li><b>Changed:</b> four period tabs and a Sales/Profits toggle collapsed into the standard three-tab
+          pattern, matching Parts Sales and every other tab in ERS.</li>
+        <li><b>Changed:</b> the per-rep table drops every column that's always zero for Motorclothes (Cust. Pay,
+          Warranty, Deal Add-On, Internal, Employee, Wholesale), keeping only what actually varies by rep.</li>
+        <li><b>Removed:</b> Inventory (bin cycle counts) and Obsolescence. The live page's version of these sections
+          is byte-identical to what's on the Parts Sales page &mdash; same bins, same $117,540 inventory figure,
+          same 12.1% / 5.9% obsolescence &mdash; because it's store-wide inventory data, not specific to
+          Motorclothes. Showing the same numbers under two different tabs invites someone to wonder whether that's
+          intentional or a copy-paste bug; the answer lives on <a href="parts-sales.html">Parts Sales</a> once, not
+          here twice.</li>
+        <li><b>Removed for now:</b> cross-store ranking on this tab. That's what Scorecards' Motorclothes table is
+          for.</li>
+      </ul>
+    </div>
+    <p class="mini"><b>Source bands.</b> The tag beside each row label says where the figure comes from:
+      <b>statement</b> read from the Talon income statement or POS export, <b>counted</b> from unit or ticket
+      records, <b>derived</b> calculated by ERS.</p>
+  </div>
+</section>
+
+<div class="foot">
+  <span>Nightly sweep completed 4:12 AM &middot; post-sale adjustments through September 11 applied</span>
+  <span>ERS Motorclothes tab &middot; build reference &middot; Revolution Motorsports, L.L.C.</span>
+</div>
+</main>
+</div>
+
+<script>var ERS_PAGE = 'motorclothes';</script>
+<script src="../scripts/format.js"></script>
+<script src="../scripts/nav.js"></script>
+<script>
+/* Two day counts, on purpose - see the Projected month-end note above. */
+var DATA;
+var OPEN_ELAPSED, OPEN_TOTAL, PROJ_ELAPSED, PROJ_TOTAL, PACE, PF;
+
+/* ---------- Motorclothes Summary (KPI table) ---------- */
+var ROWS = [
+  { key: 'counter',      label: 'Counter Sales',    band: 'statement' },
+  { key: 'employee',     label: 'Employee Counter', band: 'statement' },
+  { key: 'internal',     label: 'Internal',         band: 'statement' },
+  { key: 'wholesale',    label: 'Wholesale',        band: 'statement' },
+  { key: 'total',        label: 'Total Sales',      band: 'derived',   total: true },
+  { key: 'grossProfit',  label: 'Gross Profit',     band: 'statement' },
+  { key: 'margin',       label: 'Gross Margin',     band: 'derived', ratio: true, last: true }
+];
+function withTotal(d){
+  var t = d.counter + d.employee + d.internal + d.wholesale;
+  return { counter: d.counter, employee: d.employee, internal: d.internal, wholesale: d.wholesale,
+    total: t, grossProfit: d.grossProfit, margin: t ? d.grossProfit / t * 100 : 0 };
+}
+function proj(d){
+  var o = {}, k;
+  for (k in d) if (k !== 'margin') o[k] = d[k] * PF;
+  o.margin = d.margin;
+  return o;
+}
+
+var BASES = {
+  day: { grp: 'Day · Sep 11', src: 'day', kind: 'value',
+    note: 'Today, <b>September 11</b>, beside the month to date.' },
+  lastmonth: { grp: 'August 2026 · complete month', cols: ['Figure', '% of Aug'], src: 'lastmonth', kind: 'prior',
+    note: 'Month to date against <b>all of August 2026</b> — the complete month, not August through day 11.' },
+  lastyear: { grp: 'September 2025 · complete month', cols: ['Figure', '% of Sep 25'], src: 'lastyear', kind: 'prior',
+    note: 'Month to date against <b>all of September 2025</b> — the complete month. Same reading as vs. Last Month.' }
+};
+var basis = 'day';
+
+function ratioCell(diff){
+  var t = sgn(diff, function(n){ return n.toFixed(1) + ' pts'; });
+  return { txt: t, cls: diff >= 0.3 ? 'up' : (diff <= -0.3 ? 'down' : '') };
+}
+function cmpCell(row, cur, src){
+  if (BASES[basis].kind === 'value') return { c1: fmt(row, src[row.key]), c2: null, cls: '' };
+  if (row.ratio) {
+    var d = ratioCell(cur[row.key] - src[row.key]);
+    return { c1: fmt(row, src[row.key]), c2: d.txt, cls: d.cls };
+  }
+  var pv = src[row.key];
+  if (!pv) return { c1: fmt(row, pv), c2: '<span class="dim">—</span>', cls: '' };
+  var p = cur[row.key] / pv * 100;
+  return { c1: fmt(row, pv), c2: pct1(p), cls: p >= PACE + 3 ? 'up' : (p <= PACE - 3 ? 'down' : '') };
+}
+function fmt(row, v){ return row.ratio ? pct1(v) : money(v); }
+
+function renderKPI(){
+  var cfg = BASES[basis], cur = withTotal(DATA.kpi.mtd), pr = proj(cur), i;
+  var showProj = basis === 'day';
+
+  document.getElementById('kpihead').innerHTML =
+    '<th class="l">Line item</th><th>MTD</th>' +
+    (showProj ? '<th>Projected month-end · 26 open days</th>' : '') +
+    (cfg.kind === 'value' ? '<th class="cmp">Sep 11</th>' : '<th class="cmp">' + cfg.grp + '</th><th class="cmp">' + cfg.cols[1] + '</th>');
+
+  var html = '';
+  for (i = 0; i < ROWS.length; i++) {
+    var row = ROWS[i], src = withTotal(DATA.kpi[cfg.src]);
+    var c = cmpCell(row, cur, src);
+    html += '<tr class="' + (row.total ? 'totrow ' : '') + (row.last ? 'endband' : '') + '">' +
+      '<td class="l">' + row.label + '<span class="src">' + row.band + '</span></td>' +
+      '<td>' + fmt(row, cur[row.key]) + '</td>' +
+      (showProj ? '<td>' + fmt(row, pr[row.key]) + '</td>' : '') +
+      '<td>' + c.c1 + '</td>' +
+      (c.c2 === null ? '' : '<td class="' + c.cls + '">' + c.c2 + '</td>') + '</tr>';
+  }
+  document.getElementById('kpibody').innerHTML = html;
+  document.getElementById('basisnote').innerHTML = cfg.note;
+}
+(function(){
+  var t = document.querySelectorAll('.bases button'), i;
+  for (i = 0; i < t.length; i++) (function(b){
+    b.onclick = function(){
+      for (var j = 0; j < t.length; j++) t[j].setAttribute('aria-selected', 'false');
+      b.setAttribute('aria-selected', 'true'); basis = b.getAttribute('data-basis'); renderKPI();
+    };
+  })(t[i]);
+})();
+
+/* ---------- Counter Sales by rep ---------- */
+var REP_COLS = [
+  { k: 'name',    t: 'Salesperson',   a: 'l' },
+  { k: 'counter', t: 'Counter Sales', fmt: money },
+  { k: 'ctrSales',t: 'MTD Ctr Sales', fmt: money },
+  { k: 'items',   t: 'Items',         fmt: commas },
+  { k: 'tickets', t: 'Tickets',       fmt: commas },
+  { k: 'avgTkt',  t: 'Avg Ticket',    fmt: money },
+  { k: 'lipt',    t: 'LIPT',          fmt: function(n){ return n.toFixed(1); } }
+];
+var repSort = { k: null, dir: -1 };
+function repRow(r){
+  return { name: r.name, counter: r.day.counter, ctrSales: r.mtd.ctrSales, items: r.mtd.items,
+    tickets: r.mtd.tickets, avgTkt: r.mtd.tickets ? r.mtd.ctrSales / r.mtd.tickets : 0,
+    lipt: r.mtd.tickets ? r.mtd.items / r.mtd.tickets : 0 };
+}
+function renderReps(){
+  var rows = DATA.reps.map(repRow), i;
+  if (repSort.k) rows.sort(function(a, b){
+    var av = a[repSort.k], bv = b[repSort.k];
+    var v = typeof av === 'string' ? av.localeCompare(bv) : av - bv;
+    return v * repSort.dir;
+  });
+
+  var head = '';
+  for (i = 0; i < REP_COLS.length; i++) {
+    var c = REP_COLS[i], arrow = repSort.k === c.k ? ' <span class="ar">' + (repSort.dir === 1 ? '▲' : '▼') + '</span>' : '';
+    head += '<th class="' + (c.a === 'l' ? 'l' : '') + '" data-k="' + c.k + '">' + c.t + arrow + '</th>';
+  }
+  document.getElementById('repHead').innerHTML = head;
+  var ths = document.getElementById('repHead').getElementsByTagName('th');
+  for (i = 0; i < ths.length; i++) (function(th){
+    th.onclick = function(){
+      var k = th.getAttribute('data-k');
+      if (repSort.k === k) repSort.dir = -repSort.dir; else { repSort.k = k; repSort.dir = -1; }
+      renderReps();
+    };
+  })(ths[i]);
+
+  var T = { counter: 0, ctrSales: 0, items: 0, tickets: 0 }, body = '';
+  for (i = 0; i < rows.length; i++) {
+    var r = rows[i], j;
+    for (var kk in T) T[kk] += r[kk];
+    body += '<tr>';
+    for (j = 0; j < REP_COLS.length; j++) {
+      var col = REP_COLS[j];
+      body += '<td class="' + (col.a === 'l' ? 'l' : '') + '">' + (col.fmt ? col.fmt(r[col.k]) : r[col.k]) + '</td>';
+    }
+    body += '</tr>';
+  }
+  var tAvg = T.tickets ? T.ctrSales / T.tickets : 0, tLipt = T.tickets ? T.items / T.tickets : 0;
+  body += '<tr class="tot"><td class="l">Totals</td><td>' + money(T.counter) + '</td><td>' + money(T.ctrSales) +
+    '</td><td>' + commas(T.items) + '</td><td>' + commas(T.tickets) + '</td><td>' + money(tAvg) +
+    '</td><td>' + tLipt.toFixed(1) + '</td></tr>';
+  document.getElementById('repBody').innerHTML = body;
+}
+
+/* ---------- Header, headline ribbon, progress bar ---------- */
+function renderHeader(){
+  var t = withTotal(DATA.kpi.mtd);
+  document.getElementById('pageMeta').innerHTML =
+    DATA.store + ' &middot; ' + DATA.date.label + ' &middot; open day <b>' + OPEN_ELAPSED + '</b> of <b>' + OPEN_TOTAL + '</b>';
+  document.getElementById('dateInput').value = DATA.date.iso;
+
+  document.getElementById('hlSales').innerHTML  = money(t.total);
+  document.getElementById('hlGross').innerHTML  = money(t.grossProfit);
+  document.getElementById('hlMargin').innerHTML = pct1(t.margin);
+
+  var totItems = 0, totTickets = 0, i;
+  for (i = 0; i < DATA.reps.length; i++) { totItems += DATA.reps[i].mtd.items; totTickets += DATA.reps[i].mtd.tickets; }
+  document.getElementById('hlTickets').innerHTML = commas(totTickets);
+  document.getElementById('hlItems').innerHTML   = commas(totItems);
+
+  document.getElementById('hlOpenDays').innerHTML =
+    OPEN_ELAPSED + ' <span style="font-size:15px;color:var(--ink-low)">of ' + OPEN_TOTAL + '</span>';
+  document.getElementById('hlOpenRemaining').innerHTML = OPEN_TOTAL - OPEN_ELAPSED;
+
+  document.getElementById('progElapsed').innerHTML   = OPEN_ELAPSED;
+  document.getElementById('progTotal').innerHTML     = OPEN_TOTAL;
+  document.getElementById('progRemaining').innerHTML = OPEN_TOTAL - OPEN_ELAPSED;
+  document.getElementById('progPct').innerHTML = pct1(PACE) + ' of month elapsed';
+  document.getElementById('pfill').style.width = PACE + '%';
+  document.getElementById('ptick').style.left  = PACE + '%';
+}
+
+/* ---------- Section menu ---------- */
+var SECTIONS = [
+  { id: 'sec-kpi',   t: 'Motorclothes Summary', s: 'channels · totals' },
+  { id: 'sec-reps',  t: 'Counter Sales',        s: 'by rep' },
+  { id: 'sec-notes', t: 'Build Notes',          s: 'changes' }
+];
+function renderSectionNav(){
+  var nav = document.getElementById('seclinks'), html = '', i;
+  for (i = 0; i < SECTIONS.length; i++)
+    html += '<a href="#' + SECTIONS[i].id + '" data-id="' + SECTIONS[i].id + '"><span class="t">' +
+            SECTIONS[i].t + '</span><span class="s">' + SECTIONS[i].s + '</span></a>';
+  nav.innerHTML = html;
+  var links = nav.getElementsByTagName('a');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  for (i = 0; i < links.length; i++) (function(a){
+    a.onclick = function(e){
+      var el = document.getElementById(a.getAttribute('data-id'));
+      if (!el || !el.scrollIntoView) return;
+      if (e && e.preventDefault) e.preventDefault();
+      if (reduce) el.scrollIntoView(true);
+      else { try { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (err) { el.scrollIntoView(true); } }
+    };
+  })(links[i]);
+  function spy(){
+    var y = (window.pageYOffset || document.documentElement.scrollTop) + 130, act = SECTIONS[0].id, j, el;
+    for (j = 0; j < SECTIONS.length; j++) { el = document.getElementById(SECTIONS[j].id); if (el && el.offsetTop <= y) act = SECTIONS[j].id; }
+    for (j = 0; j < links.length; j++) links[j].className = links[j].getAttribute('data-id') === act ? 'on' : '';
+  }
+  if (window.addEventListener) window.addEventListener('scroll', spy, false);
+  spy();
+}
+
+/* ---------- Load every sample figure from /data, then render ---------- */
+fetch('../data/motorclothes.json')
+  .then(function(res){ return res.json(); })
+  .then(function(json){
+    DATA = json;
+    OPEN_ELAPSED = DATA.openDays.elapsed;       OPEN_TOTAL = DATA.openDays.total;
+    PROJ_ELAPSED = DATA.projectionDays.elapsed; PROJ_TOTAL = DATA.projectionDays.total;
+    PACE = OPEN_ELAPSED / OPEN_TOTAL * 100;
+    PF   = PROJ_TOTAL / PROJ_ELAPSED;
+    renderHeader();
+    renderKPI();
+    renderReps();
+    renderSectionNav();
+  })
+  .catch(function(err){
+    document.querySelector('main').insertAdjacentHTML('afterbegin',
+      '<div class="spec" style="border-left-color:#B23A2B"><b class="h">Could not load ../data/motorclothes.json</b>' +
+      'This page reads its sample figures from a JSON file, so it needs to be served over http(s) rather than ' +
+      'opened directly as a file. Start a local server in this folder and open the page from there.<br>' +
+      '<code>' + err + '</code></div>');
+  });
+</script>
+</body>
+</html>

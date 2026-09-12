@@ -1,0 +1,21 @@
+{
+  "store": "Emerald Coast",
+  "date": { "label": "Friday, September 11, 2026", "iso": "2026-09-11" },
+  "openDays": { "elapsed": 11, "total": 30 },
+  "projectionDays": { "elapsed": 10, "total": 26 },
+
+  "kpi": {
+    "day":       { "counter": 5108.27, "employee": 0, "internal": 0,   "wholesale": 0, "grossProfit": 2830.10 },
+    "mtd":       { "counter": 28523,   "employee": 0, "internal": 0,   "wholesale": 0, "grossProfit": 16542 },
+    "lastmonth": { "counter": 71500,   "employee": 0, "internal": 500, "wholesale": 0, "grossProfit": 41700 },
+    "lastyear":  { "counter": 61600,   "employee": 0, "internal": 400, "wholesale": 0, "grossProfit": 35400 }
+  },
+
+  "reps": [
+    { "name": "Brown, Micah",     "day": { "counter": 0 },       "mtd": { "ctrSales": 24,    "items": 2,   "tickets": 2 } },
+    { "name": "Ecom",             "day": { "counter": 0 },       "mtd": { "ctrSales": 141,   "items": 5,   "tickets": 3 } },
+    { "name": "Gartner, William", "day": { "counter": 0 },       "mtd": { "ctrSales": 336,   "items": 3,   "tickets": 2 } },
+    { "name": "Haygood, Cadence", "day": { "counter": 4928.31 }, "mtd": { "ctrSales": 20371, "items": 525, "tickets": 220 } },
+    { "name": "Kirwan, Jaclynn",  "day": { "counter": 179.96 },  "mtd": { "ctrSales": 7652,  "items": 172, "tickets": 63 } }
+  ]
+}
