@@ -1,0 +1,70 @@
+{
+  "date": { "label": "Tuesday, September 08, 2026", "iso": "2026-09-08" },
+  "projectionDays": { "elapsed": 7, "total": 26 },
+
+  "stores": [
+    {
+      "name": "Emerald Coast",
+      "transactions": { "partsInv": 61, "mcInv": 224, "serviceRo": 63, "greets": 174, "sitdowns": 68, "unitSales": 28, "missedOpp": -14 },
+      "bikeUnits": { "unitsMtd": 28, "newSalesMtd": 219800, "newGrossMtd": 13783, "usedSalesMtd": 405300, "usedGrossMtd": 106113 },
+      "fi": { "beGrossMtd": 66755, "financedMtd": 23, "ppmMtd": 9, "espMtd": 14, "gapMtd": 2 },
+      "parts": { "totalSalesMtd": 21500, "grossProfitMtd": 8370, "avgTicket": 185, "lipt": 2.3, "binCounts": 140, "obsPct": 3.1, "turns": 4.2 },
+      "service": { "laborSalesMtd": 17200, "totalSalesMtd": 29100, "productivityPct": 96, "customerPayPct": 62 },
+      "motorclothes": { "totalSalesMtd": 12500, "grossProfitMtd": 5090, "avgTicket": 70, "lipt": 1.4, "binCounts": 68, "obsPct": 2.5, "turns": 5.1 }
+    },
+    {
+      "name": "Haven",
+      "transactions": { "partsInv": 42, "mcInv": 68, "serviceRo": 38, "greets": 98, "sitdowns": 52, "unitSales": 11, "missedOpp": -2 },
+      "bikeUnits": { "unitsMtd": 11, "newSalesMtd": 52000, "newGrossMtd": 3200, "usedSalesMtd": 71000, "usedGrossMtd": 18500 },
+      "fi": { "beGrossMtd": 5200, "financedMtd": 8, "ppmMtd": 3, "espMtd": 5, "gapMtd": 2 },
+      "parts": { "totalSalesMtd": 11200, "grossProfitMtd": 4090, "avgTicket": 145, "lipt": 1.9, "binCounts": 95, "obsPct": 4.0, "turns": 3.6 },
+      "service": { "laborSalesMtd": 10900, "totalSalesMtd": 18400, "productivityPct": 91, "customerPayPct": 58 },
+      "motorclothes": { "totalSalesMtd": 7600, "grossProfitMtd": 3175, "avgTicket": 56, "lipt": 1.3, "binCounts": 52, "obsPct": 3.0, "turns": 4.4 }
+    },
+    {
+      "name": "Honky Tonk",
+      "transactions": { "partsInv": 14, "mcInv": 20, "serviceRo": 8, "greets": 36, "sitdowns": 15, "unitSales": 3, "missedOpp": 4 },
+      "bikeUnits": { "unitsMtd": 3, "newSalesMtd": 15000, "newGrossMtd": 900, "usedSalesMtd": 12500, "usedGrossMtd": 3200 },
+      "fi": { "beGrossMtd": 1200, "financedMtd": 2, "ppmMtd": 1, "espMtd": 1, "gapMtd": 0 },
+      "parts": { "totalSalesMtd": 2400, "grossProfitMtd": 815, "avgTicket": 64, "lipt": 1.4, "binCounts": 48, "obsPct": 6.2, "turns": 2.1 },
+      "service": { "laborSalesMtd": 3300, "totalSalesMtd": 5450, "productivityPct": 78, "customerPayPct": 70 },
+      "motorclothes": { "totalSalesMtd": 1650, "grossProfitMtd": 690, "avgTicket": 43, "lipt": 1.1, "binCounts": 24, "obsPct": 4.8, "turns": 2.9 }
+    },
+    {
+      "name": "M.C.H.D.",
+      "transactions": { "partsInv": 8, "mcInv": 14, "serviceRo": 13, "greets": 28, "sitdowns": 14, "unitSales": 2, "missedOpp": 1 },
+      "bikeUnits": { "unitsMtd": 2, "newSalesMtd": 0, "newGrossMtd": 0, "usedSalesMtd": 8200, "usedGrossMtd": 2100 },
+      "fi": { "beGrossMtd": 800, "financedMtd": 1, "ppmMtd": 0, "espMtd": 1, "gapMtd": 0 },
+      "parts": { "totalSalesMtd": 2050, "grossProfitMtd": 690, "avgTicket": 60, "lipt": 1.3, "binCounts": 40, "obsPct": 7.0, "turns": 1.9 },
+      "service": { "laborSalesMtd": 2950, "totalSalesMtd": 4750, "productivityPct": 74, "customerPayPct": 66 },
+      "motorclothes": { "totalSalesMtd": 1400, "grossProfitMtd": 575, "avgTicket": 41, "lipt": 1.1, "binCounts": 22, "obsPct": 5.2, "turns": 2.6 }
+    },
+    {
+      "name": "Madhouse",
+      "transactions": { "partsInv": 28, "mcInv": 42, "serviceRo": 21, "greets": 70, "sitdowns": 35, "unitSales": 9, "missedOpp": -3 },
+      "bikeUnits": { "unitsMtd": 9, "newSalesMtd": 58000, "newGrossMtd": 3654, "usedSalesMtd": 108640, "usedGrossMtd": 20453 },
+      "fi": { "beGrossMtd": 14574, "financedMtd": 7, "ppmMtd": 3, "espMtd": 4, "gapMtd": 1 },
+      "parts": { "totalSalesMtd": 42032, "grossProfitMtd": 12785, "avgTicket": 128, "lipt": 2.0, "binCounts": 110, "obsPct": 3.8, "turns": 3.3 },
+      "service": { "laborSalesMtd": 18500, "totalSalesMtd": 31653, "productivityPct": 89, "customerPayPct": 60 },
+      "motorclothes": { "totalSalesMtd": 13789, "grossProfitMtd": 5616, "avgTicket": 59, "lipt": 1.3, "binCounts": 62, "obsPct": 3.2, "turns": 4.0 }
+    },
+    {
+      "name": "Moonshine",
+      "transactions": { "partsInv": 20, "mcInv": 14, "serviceRo": 8, "greets": 42, "sitdowns": 21, "unitSales": 4, "missedOpp": 5 },
+      "bikeUnits": { "unitsMtd": 4, "newSalesMtd": 18000, "newGrossMtd": 1100, "usedSalesMtd": 19000, "usedGrossMtd": 4800 },
+      "fi": { "beGrossMtd": 1500, "financedMtd": 2, "ppmMtd": 1, "espMtd": 1, "gapMtd": 0 },
+      "parts": { "totalSalesMtd": 2950, "grossProfitMtd": 1035, "avgTicket": 72, "lipt": 1.5, "binCounts": 55, "obsPct": 5.5, "turns": 2.4 },
+      "service": { "laborSalesMtd": 3600, "totalSalesMtd": 5950, "productivityPct": 80, "customerPayPct": 65 },
+      "motorclothes": { "totalSalesMtd": 1870, "grossProfitMtd": 765, "avgTicket": 45, "lipt": 1.2, "binCounts": 30, "obsPct": 4.5, "turns": 3.0 }
+    },
+    {
+      "name": "Music City",
+      "transactions": { "partsInv": 16, "mcInv": 30, "serviceRo": 15, "greets": 52, "sitdowns": 22, "unitSales": 6, "missedOpp": -1 },
+      "bikeUnits": { "unitsMtd": 6, "newSalesMtd": 24000, "newGrossMtd": 1500, "usedSalesMtd": 28000, "usedGrossMtd": 7200 },
+      "fi": { "beGrossMtd": 2600, "financedMtd": 4, "ppmMtd": 2, "espMtd": 2, "gapMtd": 1 },
+      "parts": { "totalSalesMtd": 4050, "grossProfitMtd": 1470, "avgTicket": 87, "lipt": 1.7, "binCounts": 70, "obsPct": 4.6, "turns": 2.8 },
+      "service": { "laborSalesMtd": 4750, "totalSalesMtd": 7900, "productivityPct": 84, "customerPayPct": 63 },
+      "motorclothes": { "totalSalesMtd": 2650, "grossProfitMtd": 1110, "avgTicket": 48, "lipt": 1.2, "binCounts": 38, "obsPct": 4.0, "turns": 3.4 }
+    }
+  ]
+}

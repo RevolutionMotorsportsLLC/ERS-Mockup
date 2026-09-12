@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ERS — Scorecards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/tokens.css">
+<link rel="stylesheet" href="../styles/app.css">
+</head>
+<body>
+<div class="app">
+
+<nav id="navRail" class="rail"></nav>
+
+<main>
+<div class="mockbar">
+  MOCKUP &mdash; <b>Scorecards, rebuild.</b> Restores the one Scorecards view dealers actually used &mdash; every
+  store, side by side, on the KPIs the old tool showed &mdash; and drops the other seven legacy sub-tabs (Bike
+  Total Sales, Bike Internet Sales, Individual Sales, and per-department detail duplicated here from the
+  department tabs). <b>Compare Stores</b> in the sidebar is retired in favour of this; the separate Scorecards
+  link under Management is gone too &mdash; there is only one now.<br>
+  <b>Hide notes</b> strips the explanatory boxes for a clean read.
+</div>
+
+<div class="head">
+  <div>
+    <h1>Scorecards</h1>
+    <div class="meta" id="pageMeta"></div>
+  </div>
+  <div class="acts">
+    <button class="chip" id="notesToggle" aria-pressed="false">Hide notes</button>
+    <select class="btn" id="storeSelect" aria-label="Highlight store"></select>
+    <input class="btn" type="date" id="dateInput" aria-label="Scorecards date">
+    <button class="btn">Print page</button>
+  </div>
+</div>
+
+<div class="spec note-el" style="margin-top:14px">
+  <b class="h">Month to date only, for now</b>
+  <ul>
+    <li>The old tool let you switch the period (Day, MTD, and others). This pass ships <b>month to date</b> only
+      &mdash; a single day is too noisy for a fair cross-store comparison at a smaller store (one deal either way
+      swings every ratio), and half the stores would show mostly dashes. MTD gives every store a real number on
+      every column. Day is the natural next pass, for whoever wants to check today specifically.</li>
+    <li>Every store shown here is one of the seven already used elsewhere in this mockup. The live preview of this
+      page also lists an eighth, <i>Pensacola</i> &mdash; worth confirming with Logan whether that's a real store
+      or stale sample data before it goes further.</li>
+  </ul>
+</div>
+
+<!-- ============ BIKE SALES TRANSACTIONS ============ -->
+<section class="anchor">
+  <div class="gutter">
+    <h2>Bike Sales Transactions</h2>
+    <p>Traffic and conversion, every store.</p>
+  </div>
+  <div>
+    <div class="scroller"><table><thead><tr id="txHead"></tr></thead><tbody id="txBody"></tbody></table></div>
+  </div>
+</section>
+
+<!-- ============ BIKE UNIT SALES ============ -->
+<section class="anchor">
+  <div class="gutter">
+    <h2>Bike Unit Sales</h2>
+    <p>Units, projection and margin.</p>
+  </div>
+  <div>
+    <div class="scroller"><table><thead><tr id="buHead"></tr></thead><tbody id="buBody"></tbody></table></div>
+  </div>
+</section>
+
+<!-- ============ F & I ============ -->
+<section class="anchor">
+  <div class="gutter">
+    <h2>F &amp; I</h2>
+    <p>Back end and penetration per bike sold.</p>
+  </div>
+  <div>
+    <div class="scroller"><table><thead><tr id="fiHead"></tr></thead><tbody id="fiBody"></tbody></table></div>
+  </div>
+</section>
+
+<!-- ============ PARTS ============ -->
+<section class="anchor">
+  <div class="gutter">
+    <h2>Parts</h2>
+    <p>Counter performance and inventory health.</p>
+  </div>
+  <div>
+    <div class="scroller"><table><thead><tr id="partsHead"></tr></thead><tbody id="partsBody"></tbody></table></div>
+  </div>
+</section>
+
+<!-- ============ SERVICE ============ -->
+<section class="anchor">
+  <div class="gutter">
+    <h2>Service</h2>
+    <p>Labor, mix and shop productivity.</p>
+  </div>
+  <div>
+    <div class="scroller"><table><thead><tr id="svcHead"></tr></thead><tbody id="svcBody"></tbody></table></div>
+  </div>
+</section>
+
+<!-- ============ MOTORCLOTHES ============ -->
+<section class="anchor">
+  <div class="gutter">
+    <h2>Motorclothes</h2>
+    <p>Counter performance and inventory health.</p>
+  </div>
+  <div>
+    <div class="scroller"><table><thead><tr id="mcHead"></tr></thead><tbody id="mcBody"></tbody></table></div>
+
+    <div class="spec note-el">
+      <b class="h">What's still open</b>
+      <ul>
+        <li>LIPT, Bin Counts, OBS % and # of Turns are carried over as-is from the legacy Scorecards tool. What
+          feeds them, and the exact formula behind each, is Talon mapping and formula-spec work &mdash; outside
+          this project. They're shown so the shape is right; treat the numbers as placeholders until Logan confirms
+          the source.</li>
+        <li>Any column header sorts, high to low then low to high. Click a store's own row to find it fast &mdash;
+          or just use the store picker above, which highlights it across every table on the page.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="foot">
+  <span>ERS Scorecards &middot; rebuild &middot; Revolution Motorsports, L.L.C.</span>
+  <span>Destin, FL</span>
+</div>
+</main>
+</div>
+
+<script>var ERS_PAGE = 'scorecards';</script>
+<script src="../scripts/format.js"></script>
+<script src="../scripts/nav.js"></script>
+<script>
+var DATA, SELECTED = 'Emerald Coast';
+var SORT = {}; /* per-table {col, dir} */
+
+function dash(v){ return v === null || v === undefined ? '<span class="dim">—</span>' : v; }
+function ratio1(n){ return n.toFixed(1); }
+
+/* ---------- Generic sortable table ---------- */
+function renderTable(name, headEl, bodyEl, cols){
+  var st = SORT[name] || (SORT[name] = { col: null, dir: -1 });
+  var rows = DATA.stores.slice();
+
+  if (st.col !== null) {
+    rows.sort(function(a, b){
+      var av = cols[st.col].get(a), bv = cols[st.col].get(b);
+      if (av === null && bv === null) return 0;
+      if (av === null) return 1;   /* dashes sort last regardless of direction */
+      if (bv === null) return -1;
+      if (typeof av === 'string') return av.localeCompare(bv) * st.dir;
+      return (av - bv) * st.dir;
+    });
+  }
+
+  var hh = '', i;
+  for (i = 0; i < cols.length; i++) {
+    var c = cols[i], arrow = st.col === i ? ' <span class="ar">' + (st.dir === 1 ? '▲' : '▼') + '</span>' : '';
+    hh += '<th class="sortable' + (c.l ? ' l' : '') + '" data-i="' + i + '">' + c.t + arrow + '</th>';
+  }
+  document.getElementById(headEl).innerHTML = hh;
+  var ths = document.getElementById(headEl).getElementsByTagName('th');
+  for (i = 0; i < ths.length; i++) (function(idx){
+    ths[idx].onclick = function(){
+      if (st.col === idx) st.dir = -st.dir; else { st.col = idx; st.dir = -1; }
+      renderTable(name, headEl, bodyEl, cols);
+    };
+  })(i);
+
+  var bh = '';
+  for (i = 0; i < rows.length; i++) {
+    var s = rows[i];
+    bh += '<tr' + (s.name === SELECTED ? ' class="me"' : '') + '>';
+    for (var j = 0; j < cols.length; j++) {
+      var c2 = cols[j], v = c2.get(s);
+      bh += '<td class="' + (c2.l ? 'l' : '') + '">' + (v === null ? dash(null) : (c2.fmt ? c2.fmt(v) : v)) + '</td>';
+    }
+    bh += '</tr>';
+  }
+  document.getElementById(bodyEl).innerHTML = bh;
+}
+
+/* ---------- Column definitions ---------- */
+function txTotal(s){ var t = s.transactions; return t.partsInv + t.mcInv + t.serviceRo; }
+function perGreet(s){ var g = s.transactions.greets; return g ? txTotal(s) / g : null; }
+function perSitdown(s){ var g = s.transactions.sitdowns; return g ? txTotal(s) / g : null; }
+function perSale(s){ var u = s.transactions.unitSales; return u ? txTotal(s) / u : null; }
+
+var TX_COLS = [
+  { t: 'Store', l: true, get: function(s){ return s.name; } },
+  { t: 'Parts', get: function(s){ return s.transactions.partsInv; }, fmt: commas },
+  { t: 'MC', get: function(s){ return s.transactions.mcInv; }, fmt: commas },
+  { t: 'Service', get: function(s){ return s.transactions.serviceRo; }, fmt: commas },
+  { t: 'Transactions', get: txTotal, fmt: commas },
+  { t: 'Trans / Greet', get: perGreet, fmt: ratio1 },
+  { t: 'Trans / Sit-Down', get: perSitdown, fmt: ratio1 },
+  { t: 'Trans / Sale', get: perSale, fmt: ratio1 },
+  { t: 'Units Sold', get: function(s){ return s.transactions.unitSales; }, fmt: commas },
+  { t: 'Missed Opp.', get: function(s){ return s.transactions.missedOpp; }, fmt: commas }
+];
+
+function projUnits(s){ return Math.round(s.bikeUnits.unitsMtd / DATA.projectionDays.elapsed * DATA.projectionDays.total); }
+function newMargin(s){ var b = s.bikeUnits; return b.newSalesMtd ? b.newGrossMtd / b.newSalesMtd * 100 : null; }
+function usedMargin(s){ var b = s.bikeUnits; return b.usedSalesMtd ? b.usedGrossMtd / b.usedSalesMtd * 100 : null; }
+
+var BU_COLS = [
+  { t: 'Store', l: true, get: function(s){ return s.name; } },
+  { t: 'Units Sold', get: function(s){ return s.transactions.unitSales; }, fmt: commas },
+  { t: 'Projected Month-End · 26 open days', get: projUnits, fmt: commas },
+  { t: 'New Margin', get: newMargin, fmt: pct1 },
+  { t: 'Used Margin', get: usedMargin, fmt: pct1 }
+];
+
+function bePus(s){ var u = s.transactions.unitSales; return u ? s.fi.beGrossMtd / u * 1 : null; }
+function pctOfUnits(field){ return function(s){ var u = s.transactions.unitSales; return u ? s.fi[field] / u * 100 : null; }; }
+function gapPct(s){ var f = s.fi.financedMtd; return f ? s.fi.gapMtd / f * 100 : null; }
+
+var FI_COLS = [
+  { t: 'Store', l: true, get: function(s){ return s.name; } },
+  { t: 'BE PUS', get: bePus, fmt: money },
+  { t: 'PPM %', get: pctOfUnits('ppmMtd'), fmt: pct1 },
+  { t: 'ESP %', get: pctOfUnits('espMtd'), fmt: pct1 },
+  { t: 'Financed %', get: pctOfUnits('financedMtd'), fmt: pct1 },
+  { t: 'GAP % · of financed', get: gapPct, fmt: pct1 }
+];
+
+function retailCols(dept){
+  return [
+    { t: 'Store', l: true, get: function(s){ return s.name; } },
+    { t: 'Total Sales', get: function(s){ return s[dept].totalSalesMtd; }, fmt: money },
+    { t: 'GM %', get: function(s){ var d = s[dept]; return d.totalSalesMtd ? d.grossProfitMtd / d.totalSalesMtd * 100 : null; }, fmt: pct1 },
+    { t: 'PUS', get: function(s){ var u = s.transactions.unitSales; return u ? s[dept].grossProfitMtd / u : null; }, fmt: money },
+    { t: 'Avg Ticket', get: function(s){ return s[dept].avgTicket; }, fmt: money },
+    { t: 'LIPT', get: function(s){ return s[dept].lipt; }, fmt: ratio1 },
+    { t: 'Bin Counts', get: function(s){ return s[dept].binCounts; }, fmt: commas },
+    { t: 'OBS %', get: function(s){ return s[dept].obsPct; }, fmt: pct1 },
+    { t: '# of Turns', get: function(s){ return s[dept].turns; }, fmt: ratio1 }
+  ];
+}
+var PARTS_COLS = retailCols('parts');
+var MC_COLS = retailCols('motorclothes');
+
+var SVC_COLS = [
+  { t: 'Store', l: true, get: function(s){ return s.name; } },
+  { t: 'Labor Sales', get: function(s){ return s.service.laborSalesMtd; }, fmt: money },
+  { t: 'Labor PUS', get: function(s){ var u = s.transactions.unitSales; return u ? s.service.laborSalesMtd / u : null; }, fmt: money },
+  { t: 'Parts %', get: function(s){ var v = s.service; return v.totalSalesMtd ? (v.totalSalesMtd - v.laborSalesMtd) / v.totalSalesMtd * 100 : null; }, fmt: pct1 },
+  { t: 'Productivity %', get: function(s){ return s.service.productivityPct; }, fmt: pct1 },
+  { t: 'Customer Pay %', get: function(s){ return s.service.customerPayPct; }, fmt: pct1 }
+];
+
+/* ---------- Header + store picker ---------- */
+function renderHeader(){
+  document.getElementById('pageMeta').innerHTML = DATA.date.label + ' &middot; Month to date';
+  document.getElementById('dateInput').value = DATA.date.iso;
+
+  var sel = document.getElementById('storeSelect'), html = '', i;
+  for (i = 0; i < DATA.stores.length; i++) html += '<option>' + DATA.stores[i].name + '</option>';
+  sel.innerHTML = html;
+  sel.value = SELECTED;
+  sel.onchange = function(){ SELECTED = sel.value; renderAll(); };
+}
+
+function renderAll(){
+  renderTable('tx',    'txHead',    'txBody',    TX_COLS);
+  renderTable('bu',    'buHead',    'buBody',    BU_COLS);
+  renderTable('fi',    'fiHead',    'fiBody',    FI_COLS);
+  renderTable('parts', 'partsHead', 'partsBody', PARTS_COLS);
+  renderTable('svc',   'svcHead',   'svcBody',   SVC_COLS);
+  renderTable('mc',    'mcHead',    'mcBody',    MC_COLS);
+}
+
+/* ---------- Load every sample figure from /data, then render ---------- */
+fetch('../data/scorecards.json')
+  .then(function(res){ return res.json(); })
+  .then(function(json){
+    DATA = json;
+    renderHeader();
+    renderAll();
+  })
+  .catch(function(err){
+    document.querySelector('main').insertAdjacentHTML('afterbegin',
+      '<div class="spec" style="border-left-color:#B23A2B"><b class="h">Could not load ../data/scorecards.json</b>' +
+      'This page reads its sample figures from a JSON file, so it needs to be served over http(s) rather than ' +
+      'opened directly as a file. Start a local server in this folder and open the page from there.<br>' +
+      '<code>' + err + '</code></div>');
+  });
+</script>
+</body>
+</html>

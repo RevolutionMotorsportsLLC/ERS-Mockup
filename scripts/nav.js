@@ -7,7 +7,7 @@
 var ERS_NAV = [
   { h: 'Overview', items: [
     { id: 'store-overview', t: 'Store Overview', href: 'store-overview.html' },
-    { id: 'compare-stores', t: 'Compare Stores', href: '#' }
+    { id: 'scorecards',     t: 'Scorecards',     href: 'scorecards.html' }
   ]},
   { h: 'Departments', items: [
     { id: 'bike-sales',   t: 'Bike Sales',   href: 'bike-sales.html' },
@@ -16,7 +16,6 @@ var ERS_NAV = [
     { id: 'service',      t: 'Service',      href: '#' }
   ]},
   { h: 'Management', items: [
-    { id: 'scorecards',     t: 'Scorecards',     href: '#' },
     { id: 'crm',             t: 'CRM',             href: '#' },
     { id: 'riding-academy', t: 'Riding Academy', href: '#' }
   ]},

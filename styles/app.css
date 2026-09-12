@@ -129,6 +129,16 @@ td.muted{color:#C9C8C3}
 .filters .fg b{font-family:var(--disp);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink);margin-right:10px}
 .filters label{margin-right:12px;cursor:pointer;white-space:nowrap}
 
+/* Sortable column headers, any table (not just .deals) */
+th.sortable{cursor:pointer}
+th.sortable:hover{color:var(--ink)}
+th.sortable .ar{color:var(--accent);font-size:9px}
+
+/* "This is my store" row highlight, any table - same treatment as .today below */
+tr.me td{background:#FDF2EC}
+tr.me td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+tr.me:hover td{background:#F9E9E0}
+
 /* Sortable, scrolling record lists (e.g. the per-deal table) */
 table.deals thead th{font-size:9.5px;letter-spacing:.06em;padding:0 5px 5px 0;cursor:pointer}
 table.deals thead th:hover{color:var(--ink)}
