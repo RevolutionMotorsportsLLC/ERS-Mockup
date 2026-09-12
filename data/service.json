@@ -1,0 +1,31 @@
+{
+  "store": "Emerald Coast",
+  "date": { "label": "Friday, September 11, 2026", "iso": "2026-09-11" },
+  "openDays": { "elapsed": 11, "total": 30 },
+  "projectionDays": { "elapsed": 10, "total": 26 },
+
+  "kpi": {
+    "day":       { "labor": 2395.28, "parts": 741.63, "sublet": 0, "totalClose": 10 },
+    "mtd":       { "labor": 23982,   "parts": 11169,  "sublet": 0, "totalClose": 86 },
+    "lastmonth": { "labor": 61500,   "parts": 28800,  "sublet": 0, "totalClose": 215 },
+    "lastyear":  { "labor": 52000,   "parts": 24500,  "sublet": 0, "totalClose": 190 }
+  },
+
+  "reps": [
+    { "name": "Anderson, Thomas",
+      "day": { "custClose": 0, "custParts": 0,       "custLabor": 0,      "warrClose": 0, "warrParts": 0,      "warrLabor": 0,      "intParts": 0,      "intLabor": 0,       "totalClose": 0 },
+      "mtd": { "custClose": 0, "custParts": 35.96,    "custLabor": 245.25, "warrClose": 0, "warrParts": 0,      "warrLabor": 0,      "intParts": 140.92, "intLabor": 2076.46, "totalClose": 19 } },
+    { "name": "Brown, Micah",
+      "day": { "custClose": 0, "custParts": 0,       "custLabor": 0,      "warrClose": 0, "warrParts": 0,      "warrLabor": 0,      "intParts": 0,      "intLabor": 0,       "totalClose": 0 },
+      "mtd": { "custClose": 0, "custParts": 1211.13, "custLabor": 3270.00,"warrClose": 0, "warrParts": 2137.71,"warrLabor": 503.58, "intParts": 0,      "intLabor": 0,       "totalClose": 10 } },
+    { "name": "Gartner, William",
+      "day": { "custClose": 0, "custParts": 0,       "custLabor": 0,      "warrClose": 0, "warrParts": 0,      "warrLabor": 0,      "intParts": 0,      "intLabor": 0,       "totalClose": 0 },
+      "mtd": { "custClose": 0, "custParts": 2955.80, "custLabor": 4241.61,"warrClose": 0, "warrParts": 285.60, "warrLabor": 261.60, "intParts": 0,      "intLabor": 0,       "totalClose": 10 } },
+    { "name": "Hughes, Travis",
+      "day": { "custClose": 0, "custParts": 33.98,   "custLabor": 163.50, "warrClose": 0, "warrParts": 219.95, "warrLabor": 1618.65,"intParts": 487.70, "intLabor": 449.63,  "totalClose": 8 },
+      "mtd": { "custClose": 0, "custParts": 2064.57, "custLabor": 6409.75,"warrClose": 0, "warrParts": 460.65, "warrLabor": 2714.10,"intParts": 1116.38,"intLabor": 1185.40, "totalClose": 29 } },
+    { "name": "Smith, Samuel",
+      "day": { "custClose": 0, "custParts": 0,       "custLabor": 0,      "warrClose": 0, "warrParts": 0,      "warrLabor": 0,      "intParts": 0,      "intLabor": 163.50,  "totalClose": 2 },
+      "mtd": { "custClose": 0, "custParts": 0,       "custLabor": 163.50, "warrClose": 0, "warrParts": 139.95, "warrLabor": 2174.55,"intParts": 620.02, "intLabor": 735.75,  "totalClose": 18 } }
+  ]
+}

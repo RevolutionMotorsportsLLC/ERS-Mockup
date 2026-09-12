@@ -13,7 +13,7 @@ var ERS_NAV = [
     { id: 'bike-sales',   t: 'Bike Sales',   href: 'bike-sales.html' },
     { id: 'parts-sales',  t: 'Parts Sales',  href: 'parts-sales.html' },
     { id: 'motorclothes', t: 'Motorclothes', href: 'motorclothes.html' },
-    { id: 'service',      t: 'Service',      href: '#' }
+    { id: 'service',      t: 'Service',      href: 'service.html' }
   ]},
   { h: 'Management', items: [
     { id: 'crm',             t: 'CRM',             href: '#' },
