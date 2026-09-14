@@ -5,7 +5,7 @@ operating dashboard Revolution Motorsports is building for Harley-Davidson deale
 on top of Talon data.
 
 **This mockup is the specification.** Every table, column, formula and piece of copy
-here is meant to be built as shown, not treated as a rough sketch to improvise from. If
+here is meant to be built as shown. If
 something looks wrong or ambiguous, ask before guessing — see "Open questions" below.
 
 ## Viewing it
