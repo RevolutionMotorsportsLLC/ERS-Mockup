@@ -5,7 +5,6 @@
   "projectionDays": { "elapsed": 10, "total": 26 },
 
   "kpi": {
-    "day":       { "labor": 2395.28, "parts": 741.63, "sublet": 0, "totalClose": 10 },
     "mtd":       { "labor": 23982,   "parts": 11169,  "sublet": 0, "totalClose": 86 },
     "lastmonth": { "labor": 61500,   "parts": 28800,  "sublet": 0, "totalClose": 215 },
     "lastyear":  { "labor": 52000,   "parts": 24500,  "sublet": 0, "totalClose": 190 }

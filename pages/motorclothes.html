@@ -65,7 +65,7 @@
   </div>
   <div>
     <div class="bases" role="tablist" aria-label="Comparison basis">
-      <button role="tab" aria-selected="true"  data-basis="day">Day w/ MTD</button>
+      <button role="tab" aria-selected="true"  data-basis="mtd">MTD</button>
       <button role="tab" aria-selected="false" data-basis="lastmonth">vs. Last Month</button>
       <button role="tab" aria-selected="false" data-basis="lastyear">vs. Last Year</button>
     </div>
@@ -81,6 +81,10 @@
         <li>Motorclothes genuinely has a simpler channel mix than Parts &mdash; no Cust. Pay &ndash; Service,
           Warranty or Deal Add-On in this store's data, not a trimmed-down copy of Parts' row list. The live page
           already reflects this: those rows don't appear on its Motorclothes Summary either.</li>
+        <li>No Day column on this table &mdash; accurate day-of data was more complexity than the near-term scope
+          could absorb. <b>MTD is the default tab</b>, not Day w/ MTD. The Counter Sales table below is the
+          exception and keeps its Day figures, since each row there is a rep's day, not a comparison basis on a
+          store-wide metric.</li>
       </ul>
     </div>
 
@@ -89,7 +93,7 @@
       <code>Projected = MTD &divide; open days elapsed &times; total open days</code>
       <ul>
         <li>Applied to every dollar row. <b>No projected margin</b> &mdash; both figures scale by the same factor, so
-          it would equal the month-to-date margin on every row. Day w/ MTD tab only.</li>
+          it would equal the month-to-date margin on every row. MTD tab only.</li>
         <li>Uses ERS's own six-day trading week, which differs on purpose from the live page's Projected column
           (straight calendar days elapsed) &mdash; same divergence as Bike Sales, Store Overview and Parts Sales.</li>
       </ul>
@@ -145,6 +149,8 @@
       <ul>
         <li><b>Changed:</b> four period tabs and a Sales/Profits toggle collapsed into the standard three-tab
           pattern, matching Parts Sales and every other tab in ERS.</li>
+        <li><b>Changed:</b> the Summary table's Day column and Day w/ MTD tab are gone &mdash; MTD is the default
+          tab now. The Counter Sales table below keeps its Day figures, since each row there is a rep's day.</li>
         <li><b>Changed:</b> the per-rep table drops every column that's always zero for Motorclothes (Cust. Pay,
           Warranty, Deal Add-On, Internal, Employee, Wholesale), keeping only what actually varies by rep.</li>
         <li><b>Removed:</b> Inventory (bin cycle counts) and Obsolescence. The live page's version of these sections
@@ -201,21 +207,20 @@ function proj(d){
 }
 
 var BASES = {
-  day: { grp: 'Day · Sep 11', src: 'day', kind: 'value',
-    note: 'Today, <b>September 11</b>, beside the month to date.' },
+  mtd: { kind: 'value',
+    note: 'Projected month-end, beside the month to date.' },
   lastmonth: { grp: 'August 2026 · complete month', cols: ['Figure', '% of Aug'], src: 'lastmonth', kind: 'prior',
     note: 'Month to date against <b>all of August 2026</b> — the complete month, not August through day 11.' },
   lastyear: { grp: 'September 2025 · complete month', cols: ['Figure', '% of Sep 25'], src: 'lastyear', kind: 'prior',
     note: 'Month to date against <b>all of September 2025</b> — the complete month. Same reading as vs. Last Month.' }
 };
-var basis = 'day';
+var basis = 'mtd';
 
 function ratioCell(diff){
   var t = sgn(diff, function(n){ return n.toFixed(1) + ' pts'; });
   return { txt: t, cls: diff >= 0.3 ? 'up' : (diff <= -0.3 ? 'down' : '') };
 }
 function cmpCell(row, cur, src){
-  if (BASES[basis].kind === 'value') return { c1: fmt(row, src[row.key]), c2: null, cls: '' };
   if (row.ratio) {
     var d = ratioCell(cur[row.key] - src[row.key]);
     return { c1: fmt(row, src[row.key]), c2: d.txt, cls: d.cls };
@@ -229,23 +234,26 @@ function fmt(row, v){ return row.ratio ? pct1(v) : money(v); }
 
 function renderKPI(){
   var cfg = BASES[basis], cur = withTotal(DATA.kpi.mtd), pr = proj(cur), i;
-  var showProj = basis === 'day';
+  var showProj = cfg.kind === 'value';
 
   document.getElementById('kpihead').innerHTML =
     '<th class="l">Line item</th><th>MTD</th>' +
-    (showProj ? '<th>Projected month-end · 26 open days</th>' : '') +
-    (cfg.kind === 'value' ? '<th class="cmp">Sep 11</th>' : '<th class="cmp">' + cfg.grp + '</th><th class="cmp">' + cfg.cols[1] + '</th>');
+    (showProj ? '<th>Projected month-end · 26 open days</th>' : '<th class="cmp">' + cfg.grp + '</th><th class="cmp">' + cfg.cols[1] + '</th>');
 
   var html = '';
   for (i = 0; i < ROWS.length; i++) {
-    var row = ROWS[i], src = withTotal(DATA.kpi[cfg.src]);
-    var c = cmpCell(row, cur, src);
+    var row = ROWS[i];
     html += '<tr class="' + (row.total ? 'totrow ' : '') + (row.last ? 'endband' : '') + '">' +
       '<td class="l">' + row.label + '<span class="src">' + row.band + '</span></td>' +
-      '<td>' + fmt(row, cur[row.key]) + '</td>' +
-      (showProj ? '<td>' + fmt(row, pr[row.key]) + '</td>' : '') +
-      '<td>' + c.c1 + '</td>' +
-      (c.c2 === null ? '' : '<td class="' + c.cls + '">' + c.c2 + '</td>') + '</tr>';
+      '<td>' + fmt(row, cur[row.key]) + '</td>';
+    if (showProj) {
+      html += '<td>' + fmt(row, pr[row.key]) + '</td>';
+    } else {
+      var src = withTotal(DATA.kpi[cfg.src]);
+      var c = cmpCell(row, cur, src);
+      html += '<td>' + c.c1 + '</td><td class="' + c.cls + '">' + c.c2 + '</td>';
+    }
+    html += '</tr>';
   }
   document.getElementById('kpibody').innerHTML = html;
   document.getElementById('basisnote').innerHTML = cfg.note;

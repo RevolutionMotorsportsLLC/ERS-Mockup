@@ -5,7 +5,6 @@
   "projectionDays": { "elapsed": 10, "total": 26 },
 
   "kpi": {
-    "day":       { "counter": 5108.27, "employee": 0, "internal": 0,   "wholesale": 0, "grossProfit": 2830.10 },
     "mtd":       { "counter": 28523,   "employee": 0, "internal": 0,   "wholesale": 0, "grossProfit": 16542 },
     "lastmonth": { "counter": 71500,   "employee": 0, "internal": 500, "wholesale": 0, "grossProfit": 41700 },
     "lastyear":  { "counter": 61600,   "employee": 0, "internal": 400, "wholesale": 0, "grossProfit": 35400 }

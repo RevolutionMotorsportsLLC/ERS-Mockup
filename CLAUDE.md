@@ -179,12 +179,12 @@ CLAUDE.md              this file
 month-to-date only), Bike Sales, Parts Sales, Motorclothes, Service. Shared kit (nav,
 styles, number formatting) in place across all of them.
 
-**In progress:** removing the Day column from the remaining KPI/summary tables in favour
-of MTD by default — Store Overview's Departments and Department Detail, and the Parts,
-Motorclothes and Service Summary tables. Bike Sales is done: its KPI table is rebuilt to
-the segment-column layout described in Time tabs, above, and its Transactions table has
-lost its Day column. Record-level tables (Per Deal, Counter Sales, Closed ROs) are exempt
-throughout and keep their Day scope.
+**Done:** the Day column is gone from every KPI/summary table — Bike Sales (KPI table
+rebuilt to the segment-column layout described in Time tabs, above, plus Transactions),
+Store Overview (Departments and Department Detail), and the Parts, Motorclothes and
+Service Summary tables. MTD is the default tab everywhere this applies. Record-level
+tables (Per Deal, Counter Sales on Parts and Motorclothes, Closed ROs) are the deliberate
+exception and keep their Day scope.
 
 **Next:** a new Financial Statements tab — the exact statements dealers report to Harley,
 updated with daily data. Materials pending from Seth.

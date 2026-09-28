@@ -19,8 +19,8 @@
 <div class="mockbar">
   MOCKUP &mdash; <b>Store Overview, rebuild guidance.</b> Two areas change: the comparison tabs and the column
   structure of the department table. Everything else on the live page is correct &mdash; leave it as built.<br>
-  Month-to-date figures follow the live preview for Madhouse, September 10 2026. Day and prior-period figures are
-  illustrative.
+  Month-to-date figures follow the live preview for Madhouse, September 10 2026. Prior-period figures are
+  illustrative. No Day column, on this page or anywhere else in ERS &mdash; see CLAUDE.md's Time tabs.
 </div>
 
 <div class="head">
@@ -59,7 +59,7 @@
   </div>
   <div>
     <div class="bases" role="tablist" aria-label="Comparison basis">
-      <button role="tab" aria-selected="true"  data-basis="day">Day w/ MTD</button>
+      <button role="tab" aria-selected="true"  data-basis="mtd">MTD</button>
       <button role="tab" aria-selected="false" data-basis="lastmonth">vs. Last Month</button>
       <button role="tab" aria-selected="false" data-basis="lastyear">vs. Last Year</button>
     </div>
@@ -81,10 +81,10 @@
       <b class="h">What changes</b>
       <ul>
         <li>Month to date is no longer a tab. Its columns are always on screen.</li>
-        <li>Tabs become <b>Day w/ MTD</b> (default), vs. Last Month, vs. Last Year.</li>
-        <li><b>Day w/ MTD</b> adds two columns: the day's sales and gross profit.</li>
-        <li>Comparison tabs add four: the prior month's sales, gross profit, margin, and % of that month.</li>
-        <li><b>Projected month-end</b> is a new group, on Day w/ MTD only.</li>
+        <li>Tabs are <b>MTD</b> (default), vs. Last Month, vs. Last Year &mdash; no Day column. Accurate day-of
+          data was more complexity than the near-term scope of the project can absorb.</li>
+        <li>Comparison tabs add three: the prior month's sales, gross profit, and % of that month.</li>
+        <li><b>Projected month-end</b> is a new group, on the MTD tab only.</li>
       </ul>
     </div>
 
@@ -95,7 +95,7 @@
       <ul>
         <li>Sales and gross profit only. <b>No projected margin</b> &mdash; both scale by the same factor, so it
           would equal the month-to-date margin on every row.</li>
-        <li>Day w/ MTD tab only.</li>
+        <li>MTD tab only.</li>
         <li><b>Two day counts, deliberate. Do not reconcile them.</b> Header, progress bar and comparison colour
           use the accounting period, <b>10 of 30</b>. The projection uses a six-day trading week, <b>9 of 26</b>,
           which understates month-end on purpose.</li>
@@ -112,7 +112,6 @@
         <li><code>% of prior = MTD gross profit &divide; that month's gross profit</code>.</li>
         <li>Colour against <b>33.3%</b> elapsed: green at +3 points or more, red at &minus;3 or worse, otherwise
           plain.</li>
-        <li>Day w/ MTD columns are values, not comparisons &mdash; never coloured.</li>
       </ul>
     </div>
   </div>
@@ -126,7 +125,7 @@
   </div>
   <div>
     <table><thead><tr>
-      <th class="l">Line item</th><th>Sep 10</th><th>MTD</th>
+      <th class="l">Line item</th><th>MTD</th>
     </tr></thead><tbody id="deptDetailBody"></tbody></table>
     <p class="mini note-el">Motorclothes counter sales equal its Total sales above &mdash; no wholesale channel, so
       every dollar is retail. Service's Total labor + Total parts sum to its Total sales above, split.</p>
@@ -169,73 +168,63 @@
 var DATA;
 var ELAPSED, TOTAL, PROJ_ELAPSED, PROJ_TOTAL, PACE, PF;
 
-/* s/g are month to date. ds/dg are the day. lm* is ALL of last month, ly* is ALL of
-   the same month last year - complete months, not the same days of them. */
+/* s/g are month to date. lm* is ALL of last month, ly* is ALL of the same month last
+   year - complete months, not the same days of them. No Day column on this table - see
+   Time tabs in CLAUDE.md. */
 var DEPTS;
 function totals(){
-  var t = {n:'Store', s:0, g:0, ds:0, dg:0, lms:0, lmg:0, lys:0, lyg:0}, i, k;
+  var t = {n:'Store', s:0, g:0, lms:0, lmg:0, lys:0, lyg:0}, i, k;
   for (i = 0; i < DEPTS.length; i++)
     for (k in t) if (k !== 'n') t[k] += DEPTS[i][k];
   return t;
 }
 
 var BASES = {
-  day: {
-    grp:'Day \u00b7 Sep 10', cols:['Sales','Gross profit'], kind:'value',
-    note:'Today, <b>September 10</b>, beside the month to date.'
+  mtd: {
+    kind:'value',
+    note:'Projected month-end, beside the month to date.'
   },
   lastmonth: {
     grp:'August 2026 \u00b7 complete month', cols:['Sales','Gross profit','% of Aug'],
-    kind:'prior', sk:'lms', gk:'lmg', label:'August',
+    kind:'prior', sk:'lms', gk:'lmg',
     note:'Month to date against <b>all of August 2026</b> \u2014 the complete month, not August through day 10. Last column is gross profit as a percentage of it, against <b>33.3%</b> elapsed.'
   },
   lastyear: {
     grp:'September 2025 \u00b7 complete month', cols:['Sales','Gross profit','% of Sep 25'],
-    kind:'prior', sk:'lys', gk:'lyg', label:'September 2025',
+    kind:'prior', sk:'lys', gk:'lyg',
     note:'Month to date against <b>all of September 2025</b> \u2014 the complete month. Same reading as vs. Last Month.'
   }
 };
-var basis = 'day';
-
-function cmpCells(r, cfg){
-  if (cfg.kind === 'value') return [money(r.ds), money(r.dg), ''];
-  var ps = r[cfg.sk], pg = r[cfg.gk];
-  var p = pg ? r.g / pg * 100 : 0;
-  var cls = p >= PACE + 3 ? 'up' : (p <= PACE - 3 ? 'down' : '');
-  return [money(ps), money(pg), pct1(p), cls];
-}
+var basis = 'mtd';
 
 function render(){
-  var cfg = BASES[basis], nc = cfg.cols.length, i;
-  /* the projection only appears on Day w/ MTD. On a comparison tab the reader is
-     looking backwards, and this month's forecast is noise between the two periods. */
-  var showProj = basis === 'day';
+  var cfg = BASES[basis], showProj = basis === 'mtd', i;
 
   document.getElementById('grphead').innerHTML =
     '<th class="l blank"></th>' +
     '<th colspan="3">Month to date</th>' +
     (showProj ? '<th colspan="2">Projected month-end \u00b7 26 open days</th>' : '') +
-    '<th colspan="' + nc + '" class="cmp">' + cfg.grp + '</th>';
+    (cfg.kind === 'prior' ? '<th colspan="' + cfg.cols.length + '" class="cmp">' + cfg.grp + '</th>' : '');
 
   var ch = '<th class="l">Department</th>' +
            '<th>Sales</th><th>Gross profit</th><th>Margin</th>' +
            (showProj ? '<th>Sales</th><th>Gross profit</th>' : '');
-  for (i = 0; i < nc; i++) ch += '<th class="cmp">' + cfg.cols[i] + '</th>';
+  if (cfg.kind === 'prior') for (i = 0; i < cfg.cols.length; i++) ch += '<th class="cmp">' + cfg.cols[i] + '</th>';
   document.getElementById('colhead').innerHTML = ch;
 
   var rows = DEPTS.concat([totals()]), html = '';
   for (i = 0; i < rows.length; i++) {
-    var r = rows[i], last = i === rows.length - 1, c = cmpCells(r, cfg);
+    var r = rows[i], last = i === rows.length - 1;
     html += '<tr' + (last ? ' class="tot"' : '') + '>' +
       '<td class="l">' + r.n + '<span class="src">statement</span></td>' +
       '<td>' + money(r.s) + '</td><td>' + money(r.g) + '</td>' +
       '<td>' + (r.s ? pct1(r.g / r.s * 100) : '\u2014') + '</td>' +
       (showProj ? '<td>' + money(r.s * PF) + '</td><td>' + money(r.g * PF) + '</td>' : '');
-    if (cfg.kind === 'value') {
-      html += '<td>' + c[0] + '</td><td>' + c[1] + '</td>';
-    } else {
-      html += '<td>' + c[0] + '</td><td>' + c[1] + '</td>' +
-              '<td class="' + c[3] + '">' + c[2] + '</td>';
+    if (cfg.kind === 'prior') {
+      var ps = r[cfg.sk], pg = r[cfg.gk];
+      var p = pg ? r.g / pg * 100 : 0;
+      var cls = p >= PACE + 3 ? 'up' : (p <= PACE - 3 ? 'down' : '');
+      html += '<td>' + money(ps) + '</td><td>' + money(pg) + '</td><td class="' + cls + '">' + pct1(p) + '</td>';
     }
     html += '</tr>';
   }
@@ -286,37 +275,35 @@ function renderDeptDetail(){
   var d = DATA.detail;
   var blocks = [
     { label: 'Bike Sales', rows: [
-      { label: 'New unit sales',   band: 'counted', day: commas(d.bikeSales.day.new),   mtd: commas(d.bikeSales.mtd.new) },
-      { label: 'Used unit sales',  band: 'counted', day: commas(d.bikeSales.day.used),  mtd: commas(d.bikeSales.mtd.used) },
-      { label: 'Total unit sales', band: 'counted', day: commas(d.bikeSales.day.total), mtd: commas(d.bikeSales.mtd.total) }
+      { label: 'New unit sales',   band: 'counted', mtd: commas(d.bikeSales.new) },
+      { label: 'Used unit sales',  band: 'counted', mtd: commas(d.bikeSales.used) },
+      { label: 'Total unit sales', band: 'counted', mtd: commas(d.bikeSales.total) }
     ]},
     { label: 'F & I', rows: [
-      { label: 'Units sold', band: 'counted', day: commas(d.fi.day.units),    mtd: commas(d.fi.mtd.units) },
-      { label: 'Financed',   band: 'counted', day: commas(d.fi.day.financed), mtd: commas(d.fi.mtd.financed) },
-      { label: '% Financed', band: 'derived',
-        day: pct1(d.fi.day.units ? d.fi.day.financed / d.fi.day.units * 100 : 0),
-        mtd: pct1(d.fi.mtd.units ? d.fi.mtd.financed / d.fi.mtd.units * 100 : 0) }
+      { label: 'Units sold', band: 'counted', mtd: commas(d.fi.units) },
+      { label: 'Financed',   band: 'counted', mtd: commas(d.fi.financed) },
+      { label: '% Financed', band: 'derived', mtd: pct1(d.fi.units ? d.fi.financed / d.fi.units * 100 : 0) }
     ]},
     { label: 'Parts', rows: [
-      { label: 'Counter sales', band: 'statement', day: money(d.parts.day.counter), mtd: money(d.parts.mtd.counter) }
+      { label: 'Counter sales', band: 'statement', mtd: money(d.parts.counter) }
     ]},
     { label: 'Motorclothes', rows: [
-      { label: 'Counter sales', band: 'statement', day: money(d.motorclothes.day.counter), mtd: money(d.motorclothes.mtd.counter) }
+      { label: 'Counter sales', band: 'statement', mtd: money(d.motorclothes.counter) }
     ]},
     { label: 'Service', rows: [
-      { label: 'Total labor', band: 'statement', day: money(d.service.day.labor),      mtd: money(d.service.mtd.labor) },
-      { label: 'Total parts', band: 'statement', day: money(d.service.day.parts),      mtd: money(d.service.mtd.parts) },
-      { label: 'Closed ROs',  band: 'counted',   day: commas(d.service.day.closedRos), mtd: commas(d.service.mtd.closedRos) }
+      { label: 'Total labor', band: 'statement', mtd: money(d.service.labor) },
+      { label: 'Total parts', band: 'statement', mtd: money(d.service.parts) },
+      { label: 'Closed ROs',  band: 'counted',   mtd: commas(d.service.closedRos) }
     ]}
   ];
   var html = '', i, j;
   for (i = 0; i < blocks.length; i++) {
-    html += '<tr class="band"><td colspan="3">' + blocks[i].label + '</td></tr>';
+    html += '<tr class="band"><td colspan="2">' + blocks[i].label + '</td></tr>';
     for (j = 0; j < blocks[i].rows.length; j++) {
       var r = blocks[i].rows[j];
       html += '<tr' + (j === blocks[i].rows.length - 1 ? ' class="endband"' : '') + '>' +
         '<td class="l">' + r.label + '<span class="src">' + r.band + '</span></td>' +
-        '<td>' + r.day + '</td><td>' + r.mtd + '</td></tr>';
+        '<td>' + r.mtd + '</td></tr>';
     }
   }
   document.getElementById('deptDetailBody').innerHTML = html;

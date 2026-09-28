@@ -8,35 +8,20 @@
     "repairOrders": 78
   },
   "departments": [
-    { "n": "Bike Sales",      "s": 166640, "g": 24107, "ds": 21400, "dg": 3180, "lms": 505000, "lmg": 71200, "lys": 478000, "lyg": 66000 },
-    { "n": "F & I",           "s": 23716,  "g": 14574, "ds": 2980,  "dg": 1840, "lms": 58500,  "lmg": 36000, "lys": 60400,  "lyg": 36000 },
-    { "n": "Parts",           "s": 42032,  "g": 12785, "ds": 4460,  "dg": 1355, "lms": 98700,  "lmg": 30000, "lys": 118500, "lyg": 35800 },
-    { "n": "Motorclothes",    "s": 13789,  "g": 5616,  "ds": 1610,  "dg": 655,  "lms": 41300,  "lmg": 16800, "lys": 47600,  "lyg": 19500 },
-    { "n": "Service",         "s": 31653,  "g": 25248, "ds": 3720,  "dg": 2970, "lms": 106500, "lmg": 85000, "lys": 101300, "lyg": 78000 },
-    { "n": "Riding Academy",  "s": 3544,   "g": 3544,  "ds": 0,     "dg": 0,    "lms": 9900,   "lmg": 9900,  "lys": 8600,   "lyg": 8600 },
-    { "n": "Administration",  "s": 11597,  "g": 11597, "ds": 1160,  "dg": 1160, "lms": 34800,  "lmg": 34800, "lys": 33100,  "lyg": 33100 }
+    { "n": "Bike Sales",      "s": 166640, "g": 24107, "lms": 505000, "lmg": 71200, "lys": 478000, "lyg": 66000 },
+    { "n": "F & I",           "s": 23716,  "g": 14574, "lms": 58500,  "lmg": 36000, "lys": 60400,  "lyg": 36000 },
+    { "n": "Parts",           "s": 42032,  "g": 12785, "lms": 98700,  "lmg": 30000, "lys": 118500, "lyg": 35800 },
+    { "n": "Motorclothes",    "s": 13789,  "g": 5616,  "lms": 41300,  "lmg": 16800, "lys": 47600,  "lyg": 19500 },
+    { "n": "Service",         "s": 31653,  "g": 25248, "lms": 106500, "lmg": 85000, "lys": 101300, "lyg": 78000 },
+    { "n": "Riding Academy",  "s": 3544,   "g": 3544,  "lms": 9900,   "lmg": 9900,  "lys": 8600,   "lyg": 8600 },
+    { "n": "Administration",  "s": 11597,  "g": 11597, "lms": 34800,  "lmg": 34800, "lys": 33100,  "lyg": 33100 }
   ],
 
   "detail": {
-    "bikeSales": {
-      "day": { "new": 0, "used": 1, "total": 1 },
-      "mtd": { "new": 3, "used": 6, "total": 9 }
-    },
-    "fi": {
-      "day": { "units": 1, "financed": 1 },
-      "mtd": { "units": 9, "financed": 7 }
-    },
-    "parts": {
-      "day": { "counter": 2100 },
-      "mtd": { "counter": 19800 }
-    },
-    "motorclothes": {
-      "day": { "counter": 1610 },
-      "mtd": { "counter": 13789 }
-    },
-    "service": {
-      "day": { "labor": 2200, "parts": 1520, "closedRos": 6 },
-      "mtd": { "labor": 18500, "parts": 13153, "closedRos": 71 }
-    }
+    "bikeSales":    { "new": 3, "used": 6, "total": 9 },
+    "fi":           { "units": 9, "financed": 7 },
+    "parts":        { "counter": 19800 },
+    "motorclothes": { "counter": 13789 },
+    "service":      { "labor": 18500, "parts": 13153, "closedRos": 71 }
   }
 }

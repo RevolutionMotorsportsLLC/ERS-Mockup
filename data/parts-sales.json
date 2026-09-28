@@ -5,7 +5,6 @@
   "projectionDays": { "elapsed": 10, "total": 26 },
 
   "kpi": {
-    "day":       { "counter": 1077.58, "custPay": 33.98,  "dealAddOn": 1558.68, "employee": 0, "internal": 394.85, "warranty": 411.13, "wholesale": 0, "grossProfit": 1242.03 },
     "mtd":       { "counter": 9426,    "custPay": 8641,   "dealAddOn": 5355,    "employee": 0, "internal": 1175,   "warranty": 1262,   "wholesale": 0, "grossProfit": 11409 },
     "lastmonth": { "counter": 24100,   "custPay": 22000,  "dealAddOn": 13700,   "employee": 0, "internal": 3000,   "warranty": 3200,   "wholesale": 0, "grossProfit": 28700 },
     "lastyear":  { "counter": 20800,   "custPay": 19000,  "dealAddOn": 11800,   "employee": 0, "internal": 2600,   "warranty": 2800,   "wholesale": 0, "grossProfit": 24500 }
