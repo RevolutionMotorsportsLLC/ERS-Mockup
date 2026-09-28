@@ -44,18 +44,32 @@ Seth is not a developer. Explain technical terms in plain language on first use.
 
 ---
 
-## Time tabs — identical on every table that has them
+## Time tabs — identical on every KPI/summary table that has them
 
 Three tabs, in this order:
 
-| Tab | Adds |
+| Tab | Shows |
 |---|---|
-| **Day w/ MTD** (default) | The day's own figures, and Projected month-end |
-| **vs. Last Month** | The complete prior month, plus % of that month |
-| **vs. Last Year** | The complete same month last year, plus % of that month |
+| **MTD** (default) | Month to date, plus Projected month-end |
+| **vs. Last Month** | Month to date, plus the complete prior month and % of that month |
+| **vs. Last Year** | Month to date, plus the complete same month last year and % of that month |
 
-- **Month to date is never a tab.** Its columns are always on screen; the tab controls only
-  the block on the right.
+- **Month to date is never a tab. Its columns are always on screen.** The tab controls only
+  the block to the right of it.
+- **That block is one slot, not additive.** On the MTD tab it holds Projected month-end.
+  Switching tabs *replaces* that slot with the prior-period figure — it never adds columns,
+  so a table's column count is identical on every tab. This is what makes a segment-column
+  layout (New / Used / New + Used as column groups, not stacked blocks) hold up under a
+  comparison tab without doubling in width.
+- **No Day column on a KPI/summary table.** Getting accurate day-of data reliably was more
+  complexity than the near-term scope of the project can absorb — decided with Logan,
+  September 2026. Applies to KPI/summary tables only.
+- **Record-level tables are the exception, and keep a Day option.** Where each row is an
+  individual dated record — a deal, a repair order, a rep's day — the table may still offer
+  a Day / month-to-date **scope** toggle on that same list. The date there is data on the
+  row, not a comparison basis on an aggregated metric, so the complexity problem above
+  doesn't apply. Bike Sales' Per Deal table, Parts' and Motorclothes' Counter Sales tables,
+  and Service's Closed ROs table are this case — leave them as built.
 - **Prior periods are complete months**, not the same days of them. The income statement
   export reports finished periods — there is no "August as of day 10" to read.
 - `% of prior = month-to-date ÷ that whole month's figure`, read against the percentage of
@@ -63,8 +77,7 @@ Three tabs, in this order:
 - **Ratio rows show a difference, not a percentage** — `+$115`, `−0.3 pts`. A margin at
   100% of last month is flat, not on pace.
 - **Colour only where a judgment is possible.** Pace rows: green at +3 points or more, red
-  at −3 or worse. Ratio differences: ±$25, ±0.3 pts. Day columns are values, not
-  comparisons — never coloured.
+  at −3 or worse. Ratio differences: ±$25, ±0.3 pts.
 
 ---
 
@@ -74,12 +87,14 @@ Three tabs, in this order:
 Projected = MTD ÷ open days elapsed × total open days
 ```
 
-- **Day w/ MTD tab only.** On a comparison tab the reader is looking backwards and a
-  forecast of the current month is clutter between the two periods.
+- **MTD tab only.** On a comparison tab the reader is looking backwards and a forecast of
+  the current month is clutter between the two periods.
 - Applied to **units, sales and gross** only.
 - **No projected margin, ever.** Both figures scale by the same factor, so a projected
   margin always equals the month-to-date margin. Ratio rows are recomputed from the
-  projected rows above them, not projected directly.
+  projected rows above them, not projected directly. Confirmed with Logan as the intended
+  method (straight pace, not units and dollars projected independently) — not an
+  oversight to fix later.
 - **Two day counts, deliberate. Do not reconcile them.**
   - *Display* — the accounting period as the page states it (e.g. 10 of 30). Drives the
     header, the progress bar and the comparison colour.
@@ -157,11 +172,19 @@ CLAUDE.md              this file
 
 ## Status
 
-**Done, and approved:** Bike Sales tab, Store Overview rebuild guidance.
+**Done, and built:** Store Overview (with Department Detail), Scorecards (cross-store,
+month-to-date only), Bike Sales, Parts Sales, Motorclothes, Service. Shared kit (nav,
+styles, number formatting) in place across all of them.
 
-**Next, in order:** shared component kit from the two finished tabs → Parts, Motorclothes
-and Service (variations on Bike Sales, not new designs) → Compare Stores → nightly email.
-Scorecards, CRM, Riding Academy and Maintenance are separate problems; leave them.
+**In progress:** removing the Day column from every KPI/summary table in favour of MTD by
+default, and reworking Bike Sales' KPI table to a segment-column layout. See Time tabs,
+above, for the rule this follows — record-level tables (Per Deal, Counter Sales, Closed
+ROs) are exempt and keep their Day scope.
+
+**Next:** a new Financial Statements tab — the exact statements dealers report to Harley,
+updated with daily data. Materials pending from Seth.
+
+**Not started:** CRM, Riding Academy, Maintenance.
 
 **Not this project's job:** the Talon mapping, the formula specification, the acceptance
 test. The mockup removes ambiguity about what to build. It does not make the numbers right.
@@ -171,6 +194,8 @@ test. The mockup removes ambiguity about what to build. It does not make the num
 ## Repository
 
 This mockup is real intellectual property — the formula specification expressed as a
-working interface. It belongs in a **Revolution-controlled repository with Seth and Logan
-holding admin access**, from the first commit. Revolution previously lost a codebase to a
-departing developer; repo admin access has been an open action item since July 2026.
+working interface. It lives at `github.com/RevolutionMotorsportsLLC/ERS-Mockup`, a
+Revolution-controlled GitHub organization with Seth and Logan as owners. Developers
+(starting with Garon) hold **read-only** collaborator access on the repository itself —
+this is the specification Seth and Logan control, not something the development team
+edits directly.
