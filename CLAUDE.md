@@ -113,7 +113,12 @@ Projected = MTD ÷ open days elapsed × total open days
 ## Table conventions already settled
 
 - **Segment blocks.** Where a table has segments (New / Used / New + Used), they are
-  stacked blocks with a band header, not columns. The total block is last, dark band, bold.
+  normally stacked blocks with a band header, not columns — the total block last, dark
+  band, bold. **Bike Sales' KPI table is the deliberate exception:** segments are column
+  groups instead, so New and Used read on one line — the comparison a sales manager
+  actually makes every day — and five rows fit on screen instead of fifteen. See Time
+  tabs, above, for how that table keeps its column count sane under the comparison tabs.
+  Default to stacked blocks unless a table has the same reason not to.
 - **Row order follows the derivation chain.** Units, then dollars, then gross profit, then
   the ratios built from them — so a derived figure sits directly under its own inputs and a
   dealer can check it without leaving the screen.
@@ -161,15 +166,23 @@ earlier version was rescaled down 15% because a fifteen-row table would not fit 
 ## File layout
 
 ```
-/index.html            navigation shell
+/index.html            redirects to the default tab (Store Overview)
 /pages/                one file per tab
 /styles/tokens.css     the design system above
 /styles/app.css        shared layout and table styles
 /data/*.json           all sample figures, per store and period
-/scripts/              shared table rendering
-OPEN_QUESTIONS.md      for Logan
+/scripts/nav.js        shared sidebar, generated once per page from one nav list
+/scripts/format.js     shared number formatting (money, commas, percentages)
+README.md              entry point for developers implementing this
 CLAUDE.md              this file
 ```
+
+Table rendering itself is still per-page, not shared — each tab's KPI/record logic lives
+in its own `<script>` block. Extracting a shared renderer waits until enough tabs exist to
+show what's actually common, per Hard Rule discipline elsewhere in this file; forcing one
+early risked baking in the wrong abstraction. `OPEN_QUESTIONS.md`, referenced under Notes
+on the page below, doesn't exist yet — deemed mostly redundant with the questions already
+flagged inline on each page, but the file layout leaves room for it if that changes.
 
 ---
 
@@ -177,14 +190,11 @@ CLAUDE.md              this file
 
 **Done, and built:** Store Overview (with Department Detail), Scorecards (cross-store,
 month-to-date only), Bike Sales, Parts Sales, Motorclothes, Service. Shared kit (nav,
-styles, number formatting) in place across all of them.
-
-**Done:** the Day column is gone from every KPI/summary table — Bike Sales (KPI table
-rebuilt to the segment-column layout described in Time tabs, above, plus Transactions),
-Store Overview (Departments and Department Detail), and the Parts, Motorclothes and
-Service Summary tables. MTD is the default tab everywhere this applies. Record-level
-tables (Per Deal, Counter Sales on Parts and Motorclothes, Closed ROs) are the deliberate
-exception and keep their Day scope.
+styles, number formatting) in place across all of them. The Day column is gone from every
+KPI/summary table on all of them — Bike Sales' KPI table is also rebuilt to the
+segment-column layout described in Time tabs, above. MTD is the default tab everywhere
+this applies. Record-level tables (Per Deal, Counter Sales on Parts and Motorclothes,
+Closed ROs) are the deliberate exception and keep their Day scope.
 
 **Next:** a new Financial Statements tab — the exact statements dealers report to Harley,
 updated with daily data. Materials pending from Seth.
