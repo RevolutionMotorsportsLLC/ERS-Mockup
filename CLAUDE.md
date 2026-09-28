@@ -57,10 +57,13 @@ Three tabs, in this order:
 - **Month to date is never a tab. Its columns are always on screen.** The tab controls only
   the block to the right of it.
 - **That block is one slot, not additive.** On the MTD tab it holds Projected month-end.
-  Switching tabs *replaces* that slot with the prior-period figure — it never adds columns,
-  so a table's column count is identical on every tab. This is what makes a segment-column
-  layout (New / Used / New + Used as column groups, not stacked blocks) hold up under a
-  comparison tab without doubling in width.
+  Switching tabs *replaces* that slot with the prior-period figure — it never adds columns
+  per segment, so a table's column count stays essentially flat across tabs rather than
+  doubling. **One exception, deliberate:** on a table with segment columns (New / Used /
+  New + Used, e.g. Bike Sales' KPI table), the comparison tabs add exactly one trailing
+  column — the pace judgment for the combined total only. Each segment still just swaps
+  Projected for its own prior-period figure; showing that same pace signal separately for
+  every segment would put the table right back at the width this layout exists to avoid.
 - **No Day column on a KPI/summary table.** Getting accurate day-of data reliably was more
   complexity than the near-term scope of the project can absorb — decided with Logan,
   September 2026. Applies to KPI/summary tables only.
@@ -176,10 +179,12 @@ CLAUDE.md              this file
 month-to-date only), Bike Sales, Parts Sales, Motorclothes, Service. Shared kit (nav,
 styles, number formatting) in place across all of them.
 
-**In progress:** removing the Day column from every KPI/summary table in favour of MTD by
-default, and reworking Bike Sales' KPI table to a segment-column layout. See Time tabs,
-above, for the rule this follows — record-level tables (Per Deal, Counter Sales, Closed
-ROs) are exempt and keep their Day scope.
+**In progress:** removing the Day column from the remaining KPI/summary tables in favour
+of MTD by default — Store Overview's Departments and Department Detail, and the Parts,
+Motorclothes and Service Summary tables. Bike Sales is done: its KPI table is rebuilt to
+the segment-column layout described in Time tabs, above, and its Transactions table has
+lost its Day column. Record-level tables (Per Deal, Counter Sales, Closed ROs) are exempt
+throughout and keep their Day scope.
 
 **Next:** a new Financial Statements tab — the exact statements dealers report to Harley,
 updated with daily data. Materials pending from Seth.

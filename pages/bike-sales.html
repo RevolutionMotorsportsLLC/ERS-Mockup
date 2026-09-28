@@ -64,45 +64,63 @@
 <section class="anchor" id="sec-kpi">
   <div class="gutter">
     <h2>Bike Sales KPIs</h2>
-    <p>Fifteen scorecard tables in one.</p>
+    <p>Fifteen figures, five rows across New, Used and New + Used.</p>
   </div>
   <div>
     <div class="bases" role="tablist" aria-label="Comparison basis">
-      <button role="tab" aria-selected="true"  data-basis="day">Day w/ MTD</button>
+      <button role="tab" aria-selected="true"  data-basis="mtd">MTD</button>
       <button role="tab" aria-selected="false" data-basis="lastmonth">vs. Last Month</button>
       <button role="tab" aria-selected="false" data-basis="lastyear">vs. Last Year</button>
     </div>
     <div class="basisnote" id="basisnote"></div>
-    <table><thead><tr id="kpihead"></tr></thead><tbody id="kpibody"></tbody></table>
+    <div class="scroller">
+      <table><thead>
+        <tr class="grp" id="kpigrphead"></tr>
+        <tr id="kpicolhead"></tr>
+      </thead><tbody id="kpibody"></tbody></table>
+    </div>
+
+    <div class="spec note-el">
+      <b class="h">Segment columns, not segment blocks</b>
+      <ul>
+        <li>New, Used and New + Used were fifteen stacked rows (five metrics &times; three segments). They're
+          three column groups now, five rows total &mdash; New against Used reads on one line, which is how a
+          sales manager compares the floor.</li>
+        <li>No Day column, on this table or the Transactions table below &mdash; getting accurate day-of data
+          reliably was more complexity than the near-term scope of the project can absorb. <b>MTD is the default
+          tab now</b>, not Day w/ MTD. Record-level tables (Per Deal, below) are the exception and keep theirs.</li>
+      </ul>
+    </div>
 
     <div class="spec note-el">
       <b class="h">Projected month-end</b>
       <code>Projected = MTD &divide; open days elapsed &times; total open days</code> &mdash; here
       <code>MTD &divide; 7 &times; 26</code>, factor 3.71.
       <ul>
-        <li>Applied to <b>units, sales and gross</b>. The two ratio rows are recomputed from the projected rows
-          above them, not projected directly. Units round to whole bikes after projecting.</li>
-        <li>Day w/ MTD tab only.</li>
-        <li><b>Two day counts, deliberate. Do not reconcile them.</b> Header, progress bar and comparison colour
-          use the accounting period, <b>8 of 30</b>. The projection uses a six-day trading week, <b>7 of 26</b>,
-          which understates month-end on purpose.</li>
-        <li>The column heading must state the projection basis &mdash; <i>&middot; 26 open days</i> &mdash; so the
-          two counts are not read as an error.</li>
+        <li>Applied to <b>units, sales and gross</b>, per segment &mdash; labelled <b>Proj.</b> for space. The two
+          ratio rows are recomputed from the projected rows above them, not projected directly, and always equal
+          the MTD figure, confirmed as intended rather than a formula to fix. Units round to whole bikes.</li>
+        <li>MTD tab only.</li>
+        <li><b>Two day counts, deliberate. Do not reconcile them.</b> Header and progress bar use the accounting
+          period, <b>8 of 30</b>. The projection uses a six-day trading week, <b>7 of 26</b>, which understates
+          month-end on purpose &mdash; see Projected month-end in <code>CLAUDE.md</code> for the full basis.</li>
       </ul>
     </div>
 
     <div class="spec note-el">
-      <b class="h">Comparison columns</b>
+      <b class="h">Comparison columns replace, they don't add</b>
       <ul>
-        <li>Prior column is a <b>complete month</b> &mdash; all of August, all of September 2025 &mdash; not the
-          same 8 days of it. The export only reports finished periods.</li>
-        <li><code>% of prior = MTD &divide; that month's figure</code>, on unit, sales and gross rows.</li>
-        <li><b>Ratio rows show a difference instead</b> &mdash; +$115, &minus;0.3 pts. A margin at 100% of last
+        <li>Switching to <b>vs. Last Month</b> or <b>vs. Last Year</b> swaps each segment's Proj. column for that
+          segment's own <b>complete prior month</b> figure &mdash; all of August, all of September 2025, not the
+          same 8 days of it. Same six columns as the MTD tab, just a different second column.</li>
+        <li>One column is added at the very end, not three: <b>New + Used vs. Aug 2026</b> (or vs. Sep 2025)
+          carries the pace judgment for the combined total only &mdash; New and Used individually show their prior
+          figure for reference, without a separate pace signal each, which is what keeps this table at seven
+          columns instead of nine.</li>
+        <li>On that column, unit/sales/gross rows show <code>% of prior = MTD &divide; that month's figure</code>,
+          coloured at &plusmn;3 points against the period elapsed. The two ratio rows show a difference instead
+          &mdash; +$115, &minus;0.3 pts, coloured at &plusmn;$25 / &plusmn;0.3 pts &mdash; a margin at 100% of last
           month is flat, not on pace.</li>
-        <li>Colour against <b>26.7%</b> elapsed: green at +3 points or more, red at &minus;3 or worse. Ratio rows
-          colour on the difference: &plusmn;$25, &plusmn;0.3 pts.</li>
-        <li>Day w/ MTD adds one column, the day's own figure. It is a value, not a comparison &mdash; never
-          coloured.</li>
       </ul>
     </div>
   </div>
@@ -116,7 +134,7 @@
   </div>
   <div>
     <table><thead><tr>
-      <th class="l">Line item</th><th>Sep 08</th><th>MTD</th>
+      <th class="l">Line item</th><th>MTD</th>
       <th class="cmp">Goal</th><th class="cmp">MTD vs goal</th>
     </tr></thead><tbody id="transbody"></tbody></table>
 
@@ -238,14 +256,19 @@
       <b class="h">What is different from the current Bike Sales page</b>
       <ul>
         <li><b>New:</b> KPI ribbon, and a sticky section menu.</li>
-        <li><b>New:</b> the Bike Sales KPI table &mdash; fifteen scorecard tables in one, in New / Used / New + Used
-          blocks, with Projected month-end as a standing column.</li>
+        <li><b>New:</b> the Bike Sales KPI table &mdash; fifteen scorecard tables in one, five rows with New / Used /
+          New + Used as column groups rather than stacked blocks, with Projected month-end as a standing column on
+          the MTD tab.</li>
         <li><b>New:</b> Transactions, replacing the old KPI Metrics table, and an F&amp;I section built on the Talon
           deal-charge export.</li>
         <li><b>Changed:</b> the deal list drops from 32 columns to 14, and the two tables become one with a date
           scope toggle.</li>
-        <li><b>Changed:</b> the four time filters add two comparison columns to the KPI table rather than switching
-          the page. Building all four is a separate task-list line, not part of the base table.</li>
+        <li><b>Changed:</b> the KPI and Transactions tables lost their Day column and their default tab is now MTD,
+          not Day w/ MTD &mdash; accurate day-of data was more complexity than the near-term scope could absorb.
+          The comparison tabs replace the Projected column with that segment's prior-period figure rather than
+          adding columns, with a single trailing column carrying the pace judgment for New + Used only. The Per
+          Deal table below is the exception and keeps its Day scope, since each row there is a dated record, not a
+          comparison basis on a metric.</li>
         <li><b>Moved:</b> Current Inventory, above the deal list.</li>
         <li><b>Removed:</b> the Sale type and Deal type selectors on the deal list. Almost every deal is in-store,
           and dropping them simplifies the first build.</li>
@@ -282,98 +305,93 @@
 var DATA;
 var OPEN_ELAPSED, OPEN_TOTAL, PROJ_ELAPSED, PROJ_TOTAL, PACE, PF;
 
-/* ---------- Bike Sales KPIs ---------- */
-/* mtd and day are this period. lastmonth is ALL of the prior month and lastyear is
-   ALL of the same month last year - complete months, not the same days of them. */
+/* ---------- Bike Sales KPIs ----------
+   Segment columns, not segment blocks: New / Used / New + Used are column groups now,
+   five metric rows instead of fifteen stacked ones. See CLAUDE.md's Time tabs section
+   for the general rule this follows. */
 var K;
 function addTotals(k){
   for (var pk in k) if (k.hasOwnProperty(pk)) {
     k[pk].Total = {u:k[pk].New.u + k[pk].Used.u, s:k[pk].New.s + k[pk].Used.s, g:k[pk].New.g + k[pk].Used.g};
   }
 }
-function proj(d){ return {u:Math.round(d.u * PF), s:Math.round(d.s * PF), g:Math.round(d.g * PF)}; }
+function projSeg(d){ return {u:Math.round(d.u * PF), s:Math.round(d.s * PF), g:Math.round(d.g * PF)}; }
+function metrics(d){ return {u:d.u, s:d.s, g:d.g, pc: d.u ? d.g / d.u : 0, gm: d.s ? d.g / d.s * 100 : 0}; }
 
 var ROWS = [
-  {key:'u',  band:'counted',   val:function(d){ return d.u; }, fmt:commas, ratio:false},
-  {key:'s',  band:'statement', val:function(d){ return d.s; }, fmt:money,  ratio:false},
-  {key:'g',  band:'statement', val:function(d){ return d.g; }, fmt:money,  ratio:false},
-  {key:'pc', band:'derived',   val:function(d){ return d.u ? d.g / d.u : 0; }, fmt:money, ratio:'money'},
-  {key:'gm', band:'derived',   val:function(d){ return d.s ? d.g / d.s * 100 : 0; }, fmt:pct1, ratio:'pct'}
+  {key:'u',  label:'Unit Sales',          band:'counted',   fmt:commas, ratio:false},
+  {key:'s',  label:'Total $ Sales',       band:'statement', fmt:money,  ratio:false},
+  {key:'g',  label:'FE Gross Profit',     band:'statement', fmt:money,  ratio:false},
+  {key:'pc', label:'Front End per Copy',  band:'derived',   fmt:money,  ratio:'money'},
+  {key:'gm', label:'Gross Margin',        band:'derived',   fmt:pct1,   ratio:'pct', last:true}
 ];
-var SEGS = [
-  {seg:'New',  label:'New',        prefix:'New Unit'},
-  {seg:'Used', label:'Used',       prefix:'Used Unit'},
-  {seg:'Total',label:'New + Used', prefix:'New + Used Unit'}
-];
-function rowLabel(seg, row){
-  var p = seg === 'New' ? 'New Unit' : (seg === 'Used' ? 'Used Unit' : 'New + Used Unit');
-  if (row.key === 'u')  return p + ' Sales';
-  if (row.key === 's')  return p + ' \u2013 Total $ Sales';
-  if (row.key === 'g')  return p + ' FE Gross Profit';
-  if (row.key === 'pc') return p + ' Front End per Copy';
-  return seg === 'Total' ? 'New + Used Gross Margin' : p + ' Gross Margin';
-}
+var SEGS = ['New', 'Used', 'Total'];
+var SEGLABEL = {New:'New', Used:'Used', Total:'New + Used'};
 
 var BASES = {
-  day: {
-    grp:'Day \u00b7 Sep 08', src:'day', kind:'value',
-    note:'Today, <b>September 08</b>, beside the month to date.'
+  mtd: {
+    grp:'Projected month-end \u00b7 26 open days', kind:'value',
+    note:'Projected month-end, beside the month to date, for each segment.'
   },
   lastmonth: {
-    grp:'August 2026 \u00b7 complete month', cols:['Figure','% of Aug'], src:'lastmonth', kind:'prior',
-    note:'Month to date against <b>all of August 2026</b> \u2014 the complete month, not August through day 8. Last column is this month as a percentage of it, against <b>26.7%</b> elapsed.'
+    grp:'August 2026', src:'lastmonth', kind:'prior',
+    note:'Month to date against <b>all of August 2026</b> \u2014 the complete month, not August through day 8. The trailing column is New + Used against <b>26.7%</b> elapsed.'
   },
   lastyear: {
-    grp:'September 2025 \u00b7 complete month', cols:['Figure','% of Sep 25'], src:'lastyear', kind:'prior',
+    grp:'September 2025', src:'lastyear', kind:'prior',
     note:'Month to date against <b>all of September 2025</b> \u2014 the complete month. Same reading as vs. Last Month.'
   }
 };
-var basis = 'day';
+var basis = 'mtd';
 
-function ratioCell(row, diff){
-  var txt = row.ratio === 'pct' ? sgn(diff, function(n){ return n.toFixed(1) + ' pts'; }) : sgn(diff, money);
-  var t   = row.ratio === 'pct' ? 0.3 : 25;
-  return {txt:txt, cls: diff >= t ? 'up' : (diff <= -t ? 'down' : '')};
-}
-function cmpCell(row, seg, cfg){
-  var cur = K.mtd[seg], src = K[cfg.src][seg];
-  if (cfg.kind === 'value') return {c1:row.fmt(row.val(src)), c2:null, cls:''};
-  /* ratio rows show a difference - a margin at 100% of last month is flat, not on pace */
+function paceCell(row, cfg){
+  var cur = metrics(K.mtd.Total), src = metrics(K[cfg.src].Total);
   if (row.ratio) {
-    var d = ratioCell(row, row.val(cur) - row.val(src));
-    return {c1:row.fmt(row.val(src)), c2:d.txt, cls:d.cls};
+    var diff = cur[row.key] - src[row.key];
+    var txt = row.ratio === 'pct' ? sgn(diff, function(n){ return n.toFixed(1) + ' pts'; }) : sgn(diff, money);
+    var t   = row.ratio === 'pct' ? 0.3 : 25;
+    return {txt:txt, cls: diff >= t ? 'up' : (diff <= -t ? 'down' : '')};
   }
-  var pv = row.val(src), p = pv ? row.val(cur) / pv * 100 : 0;
-  return {c1:row.fmt(pv), c2:pct1(p), cls: p >= PACE + 3 ? 'up' : (p <= PACE - 3 ? 'down' : '')};
+  var pv = src[row.key], p = pv ? cur[row.key] / pv * 100 : 0;
+  return {txt:pct1(p), cls: p >= PACE + 3 ? 'up' : (p <= PACE - 3 ? 'down' : '')};
 }
 
 function renderKPI(){
-  var cfg = BASES[basis], html = '', si, ri;
-  /* the projection only appears on Day w/ MTD - on a comparison tab the reader is
-     looking backwards and this month's forecast is noise between the two periods */
-  var showProj = basis === 'day';
-  var span = 2 + (showProj ? 1 : 0) + (cfg.kind === 'value' ? 1 : 2);
+  var cfg = BASES[basis], showPace = cfg.kind === 'prior', si, ri;
 
-  document.getElementById('kpihead').innerHTML =
-    '<th class="l">Line item</th><th>MTD</th>' +
-    (showProj ? '<th>Projected month-end \u00b7 26 open days</th>' : '') +
-    (cfg.kind === 'value'
-      ? '<th class="cmp">Sep 08</th>'
-      : '<th class="cmp">' + cfg.grp + '</th><th class="cmp">' + cfg.cols[1] + '</th>');
-
+  var grpHtml = '<th class="l blank"></th>';
   for (si = 0; si < SEGS.length; si++) {
-    var S = SEGS[si], cur = K.mtd[S.seg], pr = proj(cur);
-    html += '<tr class="band' + (S.seg === 'Total' ? ' tot' : '') + '"><td colspan="' + span + '">' +
-            S.label + '</td></tr>';
-    for (ri = 0; ri < ROWS.length; ri++) {
-      var row = ROWS[ri], c = cmpCell(row, S.seg, cfg);
-      html += '<tr class="' + (S.seg === 'Total' ? 'totrow ' : '') + (ri === ROWS.length - 1 ? 'endband' : '') + '">' +
-        '<td class="l">' + rowLabel(S.seg, row) + '<span class="src">' + row.band + '</span></td>' +
-        '<td>' + row.fmt(row.val(cur)) + '</td>' +
-        (showProj ? '<td>' + row.fmt(row.val(pr)) + '</td>' : '') +
-        '<td>' + c.c1 + '</td>' +
-        (c.c2 === null ? '' : '<td class="' + c.cls + '">' + c.c2 + '</td>') + '</tr>';
+    var isTotal = SEGS[si] === 'Total', span = (showPace && isTotal) ? 3 : 2;
+    grpHtml += '<th class="segstart' + (isTotal ? ' segtot' : '') + '" colspan="' + span + '">' + SEGLABEL[SEGS[si]] + '</th>';
+  }
+  document.getElementById('kpigrphead').innerHTML = grpHtml;
+
+  var secondLabel = cfg.kind === 'value' ? 'Proj.' : cfg.grp;
+  var colHtml = '<th class="l">Line Item</th>';
+  for (si = 0; si < SEGS.length; si++) {
+    var isTotal = SEGS[si] === 'Total';
+    colHtml += '<th class="segstart' + (isTotal ? ' segtot' : '') + '">MTD</th><th class="cmp' + (isTotal ? ' segtot' : '') + '">' + secondLabel + '</th>';
+    if (showPace && isTotal) colHtml += '<th class="cmp segtot">vs. ' + cfg.grp + '</th>';
+  }
+  document.getElementById('kpicolhead').innerHTML = colHtml;
+
+  var html = '';
+  for (ri = 0; ri < ROWS.length; ri++) {
+    var row = ROWS[ri];
+    html += '<tr' + (row.last ? ' class="endband"' : '') + '>' +
+      '<td class="l">' + row.label + '<span class="src">' + row.band + '</span></td>';
+    for (si = 0; si < SEGS.length; si++) {
+      var seg = SEGS[si], isTotal = seg === 'Total';
+      var cur = metrics(K.mtd[seg]);
+      var second = cfg.kind === 'value' ? row.fmt(metrics(projSeg(K.mtd[seg]))[row.key]) : row.fmt(metrics(K[cfg.src][seg])[row.key]);
+      html += '<td class="segstart' + (isTotal ? ' segtot' : '') + '">' + row.fmt(cur[row.key]) + '</td>' +
+        '<td class="' + (isTotal ? 'segtot' : '') + '">' + second + '</td>';
+      if (showPace && isTotal) {
+        var pc = paceCell(row, cfg);
+        html += '<td class="segtot ' + pc.cls + '">' + pc.txt + '</td>';
+      }
     }
+    html += '</tr>';
   }
   document.getElementById('kpibody').innerHTML = html;
   document.getElementById('basisnote').innerHTML = cfg.note;
@@ -390,32 +408,32 @@ function renderKPI(){
 
 /* ---------- Transactions ---------- */
 var TX;
-function txTotal(p){ return TX.parts[p] + TX.mc[p] + TX.service[p]; }
+function txTotal(){ return TX.parts + TX.mc + TX.service; }
 var TXROWS = [
   {block:'Store traffic \u2014 what came through the door'},
-  {n:'Parts invoices',        band:'counted', get:function(p){ return TX.parts[p]; },    fmt:commas},
-  {n:'Motorclothes invoices', band:'counted', get:function(p){ return TX.mc[p]; },       fmt:commas},
-  {n:'Service repair orders', band:'counted', get:function(p){ return TX.service[p]; },  fmt:commas},
+  {n:'Parts invoices',        band:'counted', get:function(){ return TX.parts; },   fmt:commas},
+  {n:'Motorclothes invoices', band:'counted', get:function(){ return TX.mc; },      fmt:commas},
+  {n:'Service repair orders', band:'counted', get:function(){ return TX.service; }, fmt:commas},
   {n:'Total transactions',    band:'counted', get:txTotal, fmt:commas, total:true},
   {block:'Sales floor activity'},
-  {n:'Greets',                band:'entered', get:function(p){ return TX.greets[p]; },   fmt:commas},
-  {n:'Sit-downs',             band:'entered', get:function(p){ return TX.sitdowns[p]; }, fmt:commas},
-  {n:'Unit sales',            band:'counted', get:function(p){ return TX.units[p]; },    fmt:commas},
-  {n:'Missed opportunities',  band:'entered', get:function(p){ return TX.missed[p]; },   fmt:commas, goal:0, dir:'zero'},
+  {n:'Greets',                band:'entered', get:function(){ return TX.greets; },   fmt:commas},
+  {n:'Sit-downs',             band:'entered', get:function(){ return TX.sitdowns; }, fmt:commas},
+  {n:'Unit sales',            band:'counted', get:function(){ return TX.units; },    fmt:commas},
+  {n:'Missed opportunities',  band:'entered', get:function(){ return TX.missed; },   fmt:commas, goal:0, dir:'zero'},
   {block:'Conversion \u2014 transactions per'},
-  {n:'Transactions per greet',    band:'derived', get:function(p){ var g = TX.greets[p];   return g ? txTotal(p)/g : 0; }, fmt:function(n){ return n.toFixed(1); }, goal:3,  dir:'ceiling'},
-  {n:'Transactions per sit-down', band:'derived', get:function(p){ var g = TX.sitdowns[p]; return g ? txTotal(p)/g : 0; }, fmt:function(n){ return n.toFixed(1); }, goal:7,  dir:'ceiling'},
-  {n:'Transactions per sale',     band:'derived', get:function(p){ var g = TX.units[p];    return g ? txTotal(p)/g : 0; }, fmt:function(n){ return n.toFixed(1); }, goal:25, dir:'ceiling', last:true}
+  {n:'Transactions per greet',    band:'derived', get:function(){ return TX.greets ? txTotal()/TX.greets : 0; },     fmt:function(n){ return n.toFixed(1); }, goal:3,  dir:'ceiling'},
+  {n:'Transactions per sit-down', band:'derived', get:function(){ return TX.sitdowns ? txTotal()/TX.sitdowns : 0; }, fmt:function(n){ return n.toFixed(1); }, goal:7,  dir:'ceiling'},
+  {n:'Transactions per sale',     band:'derived', get:function(){ return TX.units ? txTotal()/TX.units : 0; },       fmt:function(n){ return n.toFixed(1); }, goal:25, dir:'ceiling', last:true}
 ];
 function renderTrans(){
   var html = '', i;
   for (i = 0; i < TXROWS.length; i++) {
     var r = TXROWS[i];
-    if (r.block) { html += '<tr class="band"><td colspan="5">' + r.block + '</td></tr>'; continue; }
+    if (r.block) { html += '<tr class="band"><td colspan="4">' + r.block + '</td></tr>'; continue; }
     var goal = '<span class="dim">\u2014</span>', vs = goal, cls = '';
     if (r.goal !== undefined) {
       goal = r.fmt(r.goal);
-      var diff = r.get('mtd') - r.goal;
+      var diff = r.get() - r.goal;
       if (r.dir === 'ceiling') {
         vs  = (diff <= 0 ? '\u2212' : '+') + r.fmt(Math.abs(diff));
         cls = diff <= -0.05 ? 'up' : (diff >= 0.05 ? 'down' : '');
@@ -426,7 +444,7 @@ function renderTrans(){
     }
     html += '<tr class="' + (r.total ? 'totrow ' : '') + (r.last ? 'endband' : '') + '">' +
       '<td class="l">' + r.n + '<span class="src">' + r.band + '</span></td>' +
-      '<td>' + r.fmt(r.get('day')) + '</td><td>' + r.fmt(r.get('mtd')) + '</td>' +
+      '<td>' + r.fmt(r.get()) + '</td>' +
       '<td>' + goal + '</td><td class="' + cls + '">' + vs + '</td></tr>';
   }
   document.getElementById('transbody').innerHTML = html;

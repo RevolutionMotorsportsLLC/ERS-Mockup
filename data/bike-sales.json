@@ -7,19 +7,13 @@
 
   "kpi": {
     "mtd":       { "New": { "u": 7,  "s": 219800,  "g": 13783  }, "Used": { "u": 21, "s": 405300,  "g": 106113 } },
-    "day":       { "New": { "u": 2,  "s": 62800,   "g": 4300   }, "Used": { "u": 1,  "s": 19300,   "g": 5100   } },
     "lastmonth": { "New": { "u": 32, "s": 1000000, "g": 64000  }, "Used": { "u": 66, "s": 1280000, "g": 330000 } },
     "lastyear":  { "New": { "u": 31, "s": 948000,  "g": 64200  }, "Used": { "u": 63, "s": 1185000, "g": 296000 } }
   },
 
   "transactions": {
-    "parts":    { "day": 11, "mtd": 61 },
-    "mc":       { "day": 38, "mtd": 224 },
-    "service":  { "day": 9,  "mtd": 63 },
-    "greets":   { "day": 29, "mtd": 174 },
-    "sitdowns": { "day": 14, "mtd": 68 },
-    "units":    { "day": 3,  "mtd": 28 },
-    "missed":   { "day": -1, "mtd": -14 }
+    "parts": 61, "mc": 224, "service": 63,
+    "greets": 174, "sitdowns": 68, "units": 28, "missed": -14
   },
 
   "fi": {
