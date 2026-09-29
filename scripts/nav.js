@@ -7,7 +7,8 @@
 var ERS_NAV = [
   { h: 'Overview', items: [
     { id: 'store-overview', t: 'Store Overview', href: 'store-overview.html' },
-    { id: 'scorecards',     t: 'Scorecards',     href: 'scorecards.html' }
+    { id: 'scorecards',     t: 'Scorecards',     href: 'scorecards.html' },
+    { id: 'financial-statements', t: 'Financial Statements', href: 'financial-statements.html' }
   ]},
   { h: 'Departments', items: [
     { id: 'bike-sales',   t: 'Bike Sales',   href: 'bike-sales.html' },

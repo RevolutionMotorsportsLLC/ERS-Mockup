@@ -1,0 +1,1234 @@
+{
+  "store": "Emerald Coast",
+  "period": {
+    "label": "August 2026",
+    "closedDate": "2026-08-31",
+    "ytdLabel": "January - August 2026"
+  },
+  "balanceSheet": {
+    "asOf": "2026-08-31",
+    "assets": {
+      "cashAndContracts": {
+        "rows": [
+          {
+            "label": "CASH",
+            "band": "statement",
+            "amount": 2485.72
+          },
+          {
+            "label": "CASH IN BANK",
+            "band": "statement",
+            "amount": -203951.4
+          },
+          {
+            "label": "CONTRACTS IN TRANSIT",
+            "band": "statement",
+            "amount": 278582.89
+          }
+        ],
+        "total": {
+          "label": "Total Cash and Contracts",
+          "band": "statement",
+          "amount": 77117.21
+        }
+      },
+      "receivables": {
+        "rows": [
+          {
+            "label": "P&A/SERVICE/A&L- AR",
+            "band": "statement",
+            "amount": 48206.48
+          },
+          {
+            "label": "DEALER TRADE RECEIVABLE",
+            "band": "statement",
+            "amount": 0
+          },
+          {
+            "label": "NSF RECEIVABLE",
+            "band": "statement",
+            "amount": 0
+          },
+          {
+            "label": "SERVICE CONTRACTS RECEIVABLE",
+            "band": "statement",
+            "amount": 97650.6
+          },
+          {
+            "label": "EMPLOYEE/OWNERS RECEIVABLE",
+            "band": "statement",
+            "amount": 798.5
+          },
+          {
+            "label": "WARRANTY CLAIMS RECEIVABLE",
+            "band": "statement",
+            "amount": 20834.86
+          },
+          {
+            "label": "HD INCENTIVE RECEIVABLE",
+            "band": "statement",
+            "amount": 43244.68
+          },
+          {
+            "label": "PDI RECEIVABLE",
+            "band": "statement",
+            "amount": -4954.05
+          },
+          {
+            "label": "RETURN CLAIMS RECEIVABLE",
+            "band": "statement",
+            "amount": 1384.35
+          },
+          {
+            "label": "HD POS REWARDS RECEIVABLE",
+            "band": "statement",
+            "amount": 8614.16
+          },
+          {
+            "label": "FINANCE RESERVE RECEIVABLE",
+            "band": "statement",
+            "amount": 12319.05
+          },
+          {
+            "label": "INTERCOMPANY AR- EC Powersports",
+            "band": "statement",
+            "amount": 208622.82
+          },
+          {
+            "label": "INTERCOMPANY AR- CDG Property",
+            "band": "statement",
+            "amount": 30160
+          }
+        ],
+        "total": {
+          "label": "Total Receivables",
+          "band": "statement",
+          "amount": 466881.45
+        }
+      },
+      "inventories": {
+        "majorUnit": {
+          "rows": [
+            {
+              "label": "NEW MOTORCYCLES- HD",
+              "band": "statement",
+              "amount": 1809471.89
+            },
+            {
+              "label": "USED MOTORCYCLES- HD",
+              "band": "statement",
+              "amount": 1072700.25
+            },
+            {
+              "label": "USED MOTORCYCLES- OTHER",
+              "band": "statement",
+              "amount": 52302.72
+            },
+            {
+              "label": "USED VEHICLES- NON MOTORCYCLE",
+              "band": "statement",
+              "amount": 78755.44
+            },
+            {
+              "label": "INTERNAL PARTS ON MAJOR UNITS",
+              "band": "statement",
+              "amount": 114411.28
+            },
+            {
+              "label": "INTERNAL LABOR ON MAJOR UNITS",
+              "band": "statement",
+              "amount": 98350.8
+            }
+          ],
+          "total": {
+            "label": "Total Major Unit Inventories",
+            "band": "statement",
+            "amount": 3225992.38
+          }
+        },
+        "otherInventory": {
+          "rows": [
+            {
+              "label": "P & A INVENTORY",
+              "band": "statement",
+              "amount": 293113.08
+            },
+            {
+              "label": "A & L INVENTORY",
+              "band": "statement",
+              "amount": 116884.05
+            },
+            {
+              "label": "SUBLET WORK-IN-PROCESS",
+              "band": "statement",
+              "amount": 1552.03
+            },
+            {
+              "label": "LABOR WORK-IN-PROCESS",
+              "band": "statement",
+              "amount": 40572.17
+            },
+            {
+              "label": "INVENTORY VARIANCES",
+              "band": "statement",
+              "amount": -1329.5
+            },
+            {
+              "label": "MU COST REDUCTION RESERVE",
+              "band": "statement",
+              "amount": 0
+            }
+          ],
+          "total": {
+            "label": "Total All Inventories",
+            "band": "statement",
+            "amount": 3676784.21
+          }
+        }
+      },
+      "otherCurrentAssets": {
+        "rows": [
+          {
+            "label": "PREPAID OTHER",
+            "band": "statement",
+            "amount": 31547.44
+          },
+          {
+            "label": "PREPAID TAXES",
+            "band": "statement",
+            "amount": 0
+          },
+          {
+            "label": "PREPAID INSURANCE",
+            "band": "statement",
+            "amount": 47574.92
+          },
+          {
+            "label": "PREPAID ADVERTISING",
+            "band": "statement",
+            "amount": 0
+          },
+          {
+            "label": "PREPAID LEGAL",
+            "band": "statement",
+            "amount": 0
+          }
+        ],
+        "total": {
+          "label": "Total Other Current Assets",
+          "band": "statement",
+          "amount": 79122.36
+        }
+      },
+      "otherVehicleAssets": {
+        "rows": [
+          {
+            "label": "Lease Bike Inv Less Accum Deprec",
+            "band": "statement",
+            "amount": 0
+          },
+          {
+            "label": "Rental Bike Inv Less Accum Deprec",
+            "band": "statement",
+            "amount": 0
+          }
+        ],
+        "total": {
+          "label": "Total Other Vehicle Assets",
+          "band": "statement",
+          "amount": 0
+        }
+      },
+      "totalCurrentAssets": {
+        "label": "Total Current Assets",
+        "band": "statement",
+        "amount": 4299905.23
+      },
+      "fixedAssets": {
+        "rows": [
+          {
+            "label": "LAND",
+            "band": "statement",
+            "cost": 0,
+            "accumDeprec": 0,
+            "netValue": 0
+          },
+          {
+            "label": "ROU ASSET",
+            "band": "statement",
+            "cost": 2504987,
+            "accumDeprec": 913300,
+            "netValue": 1591687
+          },
+          {
+            "label": "EQUIPMENT",
+            "band": "statement",
+            "cost": 132346.6,
+            "accumDeprec": 122167.23,
+            "netValue": 10179.37
+          },
+          {
+            "label": "GOODWILL",
+            "band": "statement",
+            "cost": 7362101.33,
+            "accumDeprec": 0,
+            "netValue": 7362101.33
+          },
+          {
+            "label": "FURN & FIXT.",
+            "band": "statement",
+            "cost": 112222.27,
+            "accumDeprec": 84002.55,
+            "netValue": 28219.72
+          },
+          {
+            "label": "COMPANY VEH.",
+            "band": "statement",
+            "cost": 542513.08,
+            "accumDeprec": 205273.01,
+            "netValue": 337240.07
+          },
+          {
+            "label": "LEASEHOLD IMP.",
+            "band": "statement",
+            "cost": 142963.12,
+            "accumDeprec": 45762.29,
+            "netValue": 97200.83
+          }
+        ],
+        "total": {
+          "label": "Total Fixed Assets",
+          "band": "statement",
+          "cost": 10797133.4,
+          "accumDeprec": 1370505.08,
+          "netValue": 9426628.32
+        }
+      },
+      "otherAssets": {
+        "rows": [
+          {
+            "label": "SECURITY DEPOSITS",
+            "band": "statement",
+            "amount": 12330
+          },
+          {
+            "label": "INTEREST RATE SWAP",
+            "band": "statement",
+            "amount": 0
+          },
+          {
+            "label": "OWNERS- NOTES AND AR",
+            "band": "statement",
+            "amount": 0
+          },
+          {
+            "label": "EMPLOYEE ADVANCES",
+            "band": "statement",
+            "amount": 0
+          },
+          {
+            "label": "AMOUNTS DUE FROM AFFILIATED CO.",
+            "band": "statement",
+            "amount": 0
+          },
+          {
+            "label": "INVESTMENT IN AFFILIATED CO (LOANS)",
+            "band": "statement",
+            "amount": 0
+          },
+          {
+            "label": "OTHER LONG TERM ASSETS",
+            "band": "statement",
+            "amount": 0
+          }
+        ],
+        "total": {
+          "label": "Total Other Assets",
+          "band": "statement",
+          "amount": 12330
+        }
+      },
+      "totalAssets": {
+        "label": "TOTAL ASSETS",
+        "band": "statement",
+        "amount": 13738863.55
+      }
+    },
+    "liabilities": {
+      "accountsPayable": {
+        "rows": [
+          {
+            "label": "TRADE PAYABLES",
+            "band": "statement",
+            "amount": 660405.67
+          },
+          {
+            "label": "LIEN PAYOFFS- TRADE IN",
+            "band": "statement",
+            "amount": 60369.24
+          },
+          {
+            "label": "LICENSE AND TITLE FEES- BIKE DEALS",
+            "band": "statement",
+            "amount": 90063.91
+          },
+          {
+            "label": "FINANCE & INSURANCE PRODUCTS PAYABLE",
+            "band": "statement",
+            "amount": 185794.41
+          }
+        ],
+        "total": {
+          "label": "Total Accounts Payable",
+          "band": "statement",
+          "amount": 996633.23
+        }
+      },
+      "accruedLiabilities": {
+        "rows": [
+          {
+            "label": "PREPAID MAINTNEANCE",
+            "band": "statement",
+            "amount": 55153.2
+          },
+          {
+            "label": "USED BIKE RECON. RESERVE",
+            "band": "statement",
+            "amount": -1839.75
+          },
+          {
+            "label": "ACCRUED EMPLOYMENT EXPENSE (401K,EOM, TX)",
+            "band": "statement",
+            "amount": 42581.49
+          },
+          {
+            "label": "ACCRUED INS., LEGAL",
+            "band": "statement",
+            "amount": 8624.35
+          },
+          {
+            "label": "ACCRUED SALES TAX- MERCHANDISE",
+            "band": "statement",
+            "amount": 23826.52
+          },
+          {
+            "label": "ACCRUED SALES TAX- VEHICLES",
+            "band": "statement",
+            "amount": 146281.48
+          },
+          {
+            "label": "ACCRUED REAL ESTATE & PERSONAL PROP TAX",
+            "band": "statement",
+            "amount": 60175.09
+          },
+          {
+            "label": "ACCRUED CC SURCHARGES",
+            "band": "statement",
+            "amount": 2296.4
+          },
+          {
+            "label": "ACCRUED MISCELLANEOUS",
+            "band": "statement",
+            "amount": -41132.56
+          },
+          {
+            "label": "ACCRUED ADVERTISING",
+            "band": "statement",
+            "amount": -4853.32
+          },
+          {
+            "label": "CUST. DEPOSITS/GIFT CARDS/WE OWES",
+            "band": "statement",
+            "amount": 207050.27
+          },
+          {
+            "label": "ACCRUED B/L",
+            "band": "statement",
+            "amount": 100990.95
+          }
+        ],
+        "total": {
+          "label": "Total Accrued Liabilities",
+          "band": "statement",
+          "amount": 599154.12
+        }
+      },
+      "inventoryFinanceLiabilities": {
+        "rows": [
+          {
+            "label": "NEW VEHICLE FLOOR PLAN PAYABLE",
+            "band": "statement",
+            "amount": 2031747.58
+          },
+          {
+            "label": "USED VEHICLE FLOOR PLAN PAYABLE",
+            "band": "statement",
+            "amount": 837391.71
+          },
+          {
+            "label": "RIDING ACADEMY FLOOR PLAN PAYABLE",
+            "band": "statement",
+            "amount": 35850.44
+          },
+          {
+            "label": "DEALER TRADE CLEARING",
+            "band": "statement",
+            "amount": 38733.24
+          }
+        ],
+        "total": {
+          "label": "Total Inventory Finance Liabilities",
+          "band": "statement",
+          "amount": 2943722.97
+        }
+      },
+      "otherCurrentLiabilities": {
+        "rows": [
+          {
+            "label": "FORVIS- CURRENT CHARGEBACK RESERVE",
+            "band": "statement",
+            "amount": 83800
+          },
+          {
+            "label": "LEASE LIABILITY- SHORT TERM",
+            "band": "statement",
+            "amount": 337648
+          },
+          {
+            "label": "NOTES PAYABLE- COMPANY VEHICLES",
+            "band": "statement",
+            "amount": 653733.13
+          },
+          {
+            "label": "CURRENT PORTION OF LONG TERM DEBT",
+            "band": "statement",
+            "amount": 737665
+          }
+        ],
+        "total": {
+          "label": "Total Other Current Liabilities",
+          "band": "statement",
+          "amount": 1812846.13
+        }
+      },
+      "totalCurrentLiabilities": {
+        "label": "Total Current Liabilities",
+        "band": "statement",
+        "amount": 6352356.45
+      },
+      "longTermDebt": {
+        "rows": [
+          {
+            "label": "HD- NOTE WC",
+            "band": "statement",
+            "amount": 12996.15
+          },
+          {
+            "label": "HDFS LOAN",
+            "band": "statement",
+            "amount": 2203911.2
+          },
+          {
+            "label": "EDIL & LOC",
+            "band": "statement",
+            "amount": 359837.53
+          },
+          {
+            "label": "FORVIS- LONG TERM CHARGEBACK RESERVE",
+            "band": "statement",
+            "amount": 56200
+          },
+          {
+            "label": "LEASE LIABILITY- LONG TERM",
+            "band": "statement",
+            "amount": 1254039
+          },
+          {
+            "label": "LOAN- GUSOFF",
+            "band": "statement",
+            "amount": 317460.29
+          }
+        ],
+        "total": {
+          "label": "Total Long-Term Debt",
+          "band": "statement",
+          "amount": 4204444.17
+        }
+      },
+      "totalLiabilities": {
+        "label": "TOTAL LIABILITIES",
+        "band": "statement",
+        "amount": 10556800.62
+      }
+    },
+    "netWorth": {
+      "rows": [
+        {
+          "label": "PAID-IN CAPITAL",
+          "band": "statement",
+          "amount": 2147680.62
+        },
+        {
+          "label": "AUDITORS ADJUSTMENT ACCOUNT",
+          "band": "statement",
+          "amount": 0
+        },
+        {
+          "label": "RETAINED EARNINGS",
+          "band": "statement",
+          "amount": 2525537.36
+        },
+        {
+          "label": "DIVIDENDS - PRIOR YEARS",
+          "band": "statement",
+          "amount": -2251193.92
+        },
+        {
+          "label": "DIVIDENDS - CURRENT YEAR",
+          "band": "statement",
+          "amount": -635.25
+        }
+      ],
+      "netInvestment": {
+        "label": "Net Investment",
+        "band": "statement",
+        "amount": 2422659.31
+      },
+      "netProfitLoss": {
+        "label": "Net Profit (Loss)",
+        "band": "statement",
+        "amount": 759403.62
+      },
+      "totalNetWorth": {
+        "label": "TOTAL NET WORTH",
+        "band": "statement",
+        "amount": 3182062.93
+      }
+    },
+    "totalLiabilitiesAndNetWorth": {
+      "label": "TOTAL LIABILITIES AND NET WORTH",
+      "band": "statement",
+      "amount": 13738863.55
+    }
+  },
+  "incomeStatement": {
+    "current": {
+      "label": "August 2026"
+    },
+    "ytd": {
+      "label": "January - August 2026"
+    },
+    "salesAndGrossProfit": {
+      "rows": [
+        {
+          "label": "TOTAL NEW UNITS",
+          "band": "statement",
+          "current": {
+            "qty": 23,
+            "netSales": 700803.15,
+            "gross": 89053.06
+          },
+          "ytd": {
+            "qty": 157,
+            "netSales": 4544447.69,
+            "gross": 794314.17
+          }
+        },
+        {
+          "label": "TOTAL USED UNITS",
+          "band": "statement",
+          "current": {
+            "qty": 23,
+            "netSales": 272946.16,
+            "gross": 75047.97
+          },
+          "ytd": {
+            "qty": 198,
+            "netSales": 2674181.31,
+            "gross": 831942.04
+          }
+        },
+        {
+          "label": "TOTAL RETAILED UNITS",
+          "band": "statement",
+          "current": {
+            "qty": 46,
+            "netSales": 973749.31,
+            "gross": 164101.03
+          },
+          "ytd": {
+            "qty": 355,
+            "netSales": 7218629,
+            "gross": 1626256.21
+          }
+        },
+        {
+          "label": "F&I",
+          "band": "statement",
+          "current": {
+            "qty": 136,
+            "netSales": 216670.36,
+            "gross": 124895.22
+          },
+          "ytd": {
+            "qty": 812,
+            "netSales": 1220544.2,
+            "gross": 673050.6
+          }
+        },
+        {
+          "label": "DOC FEES",
+          "band": "statement",
+          "current": {
+            "qty": null,
+            "netSales": 44955,
+            "gross": 44337.59
+          },
+          "ytd": {
+            "qty": null,
+            "netSales": 324096,
+            "gross": 308958.01
+          }
+        },
+        {
+          "label": "WHOLESALE",
+          "band": "statement",
+          "current": {
+            "qty": 11,
+            "netSales": 59301,
+            "gross": 4962
+          },
+          "ytd": {
+            "qty": 44,
+            "netSales": 325251,
+            "gross": 13689.05
+          }
+        },
+        {
+          "label": "INVENTORY WRITE-DOWN",
+          "band": "statement",
+          "current": {
+            "qty": null,
+            "netSales": 0,
+            "gross": 0
+          },
+          "ytd": {
+            "qty": 0,
+            "netSales": 0,
+            "gross": 0
+          }
+        }
+      ],
+      "unitDepartmentTotal": {
+        "label": "UNIT DEPARTMENT",
+        "band": "statement",
+        "current": {
+          "qty": null,
+          "netSales": 1294675.67,
+          "gross": 338295.84
+        },
+        "ytd": {
+          "qty": 1211,
+          "netSales": 9088520.2,
+          "gross": 2621953.87
+        }
+      },
+      "departmentRows": [
+        {
+          "label": "P&A DEPARTMENT",
+          "band": "statement",
+          "current": {
+            "qty": 801,
+            "netSales": 169749.37,
+            "gross": 58085.1
+          },
+          "ytd": {
+            "qty": 6042,
+            "netSales": 1060186.66,
+            "gross": 385879.43
+          }
+        },
+        {
+          "label": "SERVICE DEPARTMENT",
+          "band": "statement",
+          "current": {
+            "qty": 282,
+            "netSales": 93872.62,
+            "gross": 79018.95
+          },
+          "ytd": {
+            "qty": 2067,
+            "netSales": 749304.26,
+            "gross": 611374.33
+          }
+        },
+        {
+          "label": "A&L DEPARTMENT",
+          "band": "statement",
+          "current": {
+            "qty": 1033,
+            "netSales": 61928.76,
+            "gross": 33213.43
+          },
+          "ytd": {
+            "qty": 9884,
+            "netSales": 528505.74,
+            "gross": 266400.85
+          }
+        },
+        {
+          "label": "RIDING ACADEMY",
+          "band": "statement",
+          "current": {
+            "qty": 0,
+            "netSales": 11951,
+            "gross": 3025.92
+          },
+          "ytd": {
+            "qty": 0,
+            "netSales": 109569,
+            "gross": 63118.65
+          }
+        },
+        {
+          "label": "E-COMM",
+          "band": "statement",
+          "current": {
+            "qty": 33,
+            "netSales": 6642.58,
+            "gross": 1427.67
+          },
+          "ytd": {
+            "qty": 231,
+            "netSales": 37996.29,
+            "gross": 4118.9
+          }
+        }
+      ],
+      "total": {
+        "label": "TOTALS",
+        "band": "statement",
+        "current": {
+          "qty": 2149,
+          "netSales": 1638820.0,
+          "gross": 513066.91
+        },
+        "ytd": {
+          "qty": 19435,
+          "netSales": 11574082.15,
+          "gross": 3952846.03
+        }
+      }
+    },
+    "departmentalExpenses": {
+      "rows": [
+        {
+          "label": "UNIT DEPARTMENT",
+          "band": "statement",
+          "employment": {
+            "current": 69058.07,
+            "ytd": 451310.33
+          },
+          "operational": {
+            "current": 13096.5,
+            "ytd": 169975.33
+          }
+        },
+        {
+          "label": "P&A DEPARTMENT",
+          "band": "statement",
+          "employment": {
+            "current": 27844.52,
+            "ytd": 172487.48
+          },
+          "operational": {
+            "current": 2379.98,
+            "ytd": 16961.16
+          }
+        },
+        {
+          "label": "SERVICE DEPARTMENT",
+          "band": "statement",
+          "employment": {
+            "current": 23851.17,
+            "ytd": 198369.21
+          },
+          "operational": {
+            "current": 1992.46,
+            "ytd": 31602.76
+          }
+        },
+        {
+          "label": "A&L DEPARTMENT",
+          "band": "statement",
+          "employment": {
+            "current": 14373.26,
+            "ytd": 108837.92
+          },
+          "operational": {
+            "current": 718.23,
+            "ytd": 7582.62
+          }
+        },
+        {
+          "label": "RIDING ACADEMY",
+          "band": "statement",
+          "employment": {
+            "current": 0,
+            "ytd": 0
+          },
+          "operational": {
+            "current": 3730.49,
+            "ytd": 39975.23
+          }
+        }
+      ],
+      "totalExpense": {
+        "label": "TOTAL EXPENSE",
+        "band": "statement",
+        "employment": {
+          "current": 135127.02,
+          "ytd": 931004.94
+        },
+        "operational": {
+          "current": 21917.66,
+          "ytd": 266097.1
+        }
+      },
+      "totalDepartmentalExpenses": {
+        "label": "Total Departmental Expenses",
+        "band": "statement",
+        "current": 157044.68,
+        "ytd": 1197102.04
+      },
+      "profitAfterDepartmentalExpenses": {
+        "label": "Profit After Departmental Expenses",
+        "band": "statement",
+        "current": 356022.23,
+        "ytd": 2755743.99
+      }
+    },
+    "administrationExpense": {
+      "rows": [
+        {
+          "label": "RENT/LEASE EXPENSE",
+          "band": "statement",
+          "current": 38368.58,
+          "ytd": 315954.24
+        },
+        {
+          "label": "SALARIES - ADMINISTRATION",
+          "band": "statement",
+          "current": 46460.8,
+          "ytd": 452915.13
+        },
+        {
+          "label": "SALARIES - GENERAL MANAGER",
+          "band": "statement",
+          "current": 0,
+          "ytd": 0
+        },
+        {
+          "label": "VACATION/SICK/BEREAVEMENT-ADMIN",
+          "band": "statement",
+          "current": 0,
+          "ytd": 0
+        },
+        {
+          "label": "PAYROLL TAXES",
+          "band": "statement",
+          "current": 13965.19,
+          "ytd": 120078.97
+        },
+        {
+          "label": "EMPLOYEE BENEFITS",
+          "band": "statement",
+          "current": 6179.82,
+          "ytd": 50395.83
+        },
+        {
+          "label": "401 K EXPENSE",
+          "band": "statement",
+          "current": 1048.37,
+          "ytd": 1000.08
+        },
+        {
+          "label": "EMPLOYEE TRAINING",
+          "band": "statement",
+          "current": 1405.45,
+          "ytd": 11287.59
+        },
+        {
+          "label": "ADVERTISING",
+          "band": "statement",
+          "current": 949.7,
+          "ytd": 103924.21
+        },
+        {
+          "label": "OFFICE SUPPLIES/GENERAL SUPPLIES",
+          "band": "statement",
+          "current": 1179.65,
+          "ytd": 14276.94
+        },
+        {
+          "label": "DATA PROCESSING/EQUIPMENT",
+          "band": "statement",
+          "current": 15371.76,
+          "ytd": 102056.84
+        },
+        {
+          "label": "BANK FEES",
+          "band": "statement",
+          "current": 3457.8,
+          "ytd": 22766.42
+        },
+        {
+          "label": "PROFESSIONAL FEES",
+          "band": "statement",
+          "current": 1096.08,
+          "ytd": 12727.35
+        },
+        {
+          "label": "CONTRACT LABOR",
+          "band": "statement",
+          "current": 0,
+          "ytd": 11950
+        },
+        {
+          "label": "OUTSIDE SERVICES/LAUNDRY",
+          "band": "statement",
+          "current": 990.09,
+          "ytd": 7960.31
+        },
+        {
+          "label": "COMPANY VEHICLES-ADMIN",
+          "band": "statement",
+          "current": 3092.34,
+          "ytd": 25962.31
+        },
+        {
+          "label": "BUILDING MAINT/WASTE/SECURITY/CLEANING",
+          "band": "statement",
+          "current": 2679.12,
+          "ytd": 28470.77
+        },
+        {
+          "label": "DUES/SUBSCRIPTIONS",
+          "band": "statement",
+          "current": 4425.29,
+          "ytd": 31728.55
+        },
+        {
+          "label": "TELEPHONE/INTERNET",
+          "band": "statement",
+          "current": 4633.11,
+          "ytd": 25971.49
+        },
+        {
+          "label": "LEGAL & AUDITING",
+          "band": "statement",
+          "current": 4000,
+          "ytd": 32000
+        },
+        {
+          "label": "POSTAGE/OVERNIGHT SERVICES",
+          "band": "statement",
+          "current": 0,
+          "ytd": 2265.97
+        },
+        {
+          "label": "TRAVEL/LODGING/ENTERTAINMENT",
+          "band": "statement",
+          "current": 9980.43,
+          "ytd": 40542.55
+        },
+        {
+          "label": "UTILITIES",
+          "band": "statement",
+          "current": 4752.62,
+          "ytd": 28184.05
+        },
+        {
+          "label": "DEPRECIATION",
+          "band": "statement",
+          "current": 8514.66,
+          "ytd": 69790.9
+        },
+        {
+          "label": "INSURANCE- COMMERCIAL",
+          "band": "statement",
+          "current": 27929.33,
+          "ytd": 81730.07
+        },
+        {
+          "label": "WORKERS COMP",
+          "band": "statement",
+          "current": 1476.9,
+          "ytd": 10994.8
+        },
+        {
+          "label": "CAPITAL INVESTMENT",
+          "band": "statement",
+          "current": 0,
+          "ytd": 0
+        },
+        {
+          "label": "OTHER INTEREST",
+          "band": "statement",
+          "current": 2045.39,
+          "ytd": 15585.62
+        },
+        {
+          "label": "LICENSE FEES",
+          "band": "statement",
+          "current": 0,
+          "ytd": 1262.53
+        },
+        {
+          "label": "REAL ESTATE/PERSONAL PROPERTY TAX",
+          "band": "statement",
+          "current": 6000,
+          "ytd": 42000
+        },
+        {
+          "label": "MISC. EXPENSE",
+          "band": "statement",
+          "current": 10.61,
+          "ytd": 161.19
+        },
+        {
+          "label": "MANAGEMENT FEES",
+          "band": "statement",
+          "current": 8500,
+          "ytd": 62000
+        }
+      ],
+      "overheadExpenses": {
+        "label": "OVERHEAD EXPENSES",
+        "band": "statement",
+        "current": 218513.09,
+        "ytd": 1725944.71
+      }
+    },
+    "summary": {
+      "operatingProfitLoss": {
+        "label": "Operating Profit (Loss)",
+        "band": "statement",
+        "current": 137509.14,
+        "ytd": 1029799.28
+      },
+      "netAdditionsAndDeductions": {
+        "label": "Net Additions & Deductions",
+        "band": "statement",
+        "current": -38243.75,
+        "ytd": -81184.92
+      },
+      "netProfitBeforeBonus": {
+        "label": "Net Profit (Before Bonus)",
+        "band": "statement",
+        "current": 99265.39,
+        "ytd": 948614.36
+      },
+      "generalManagerBonus": {
+        "label": "General Manager Bonus",
+        "band": "statement",
+        "current": 18328.92,
+        "ytd": 138062.1
+      },
+      "salariesOwners": {
+        "label": "Salaries - Owners",
+        "band": "statement",
+        "current": 6400,
+        "ytd": 51200
+      },
+      "netProfitBeforeTaxes": {
+        "label": "Net Profit (Loss) Before Taxes",
+        "band": "statement",
+        "current": 74536.47,
+        "ytd": 759352.26
+      }
+    },
+    "additionsAndDeductions": {
+      "additions": {
+        "rows": [
+          {
+            "label": "MISC ADDITIONS",
+            "band": "statement",
+            "current": 1213.03,
+            "ytd": 16333.94
+          },
+          {
+            "label": "PPM FORTFEITURES (ADDS)",
+            "band": "statement",
+            "current": -521,
+            "ytd": 13436.89
+          },
+          {
+            "label": "SALE OF ASSETS (GAIN)",
+            "band": "statement",
+            "current": 0,
+            "ytd": 0
+          },
+          {
+            "label": "USED BIKE ADD-BACK",
+            "band": "statement",
+            "current": 0,
+            "ytd": 0
+          },
+          {
+            "label": "INCENTIVE INCOME",
+            "band": "statement",
+            "current": 14539.91,
+            "ytd": 143646.64
+          }
+        ],
+        "total": {
+          "label": "ADDITIONS TO INCOME",
+          "band": "statement",
+          "current": 15231.94,
+          "ytd": 173417.47
+        }
+      },
+      "deductions": {
+        "rows": [
+          {
+            "label": "MISC DEDUCTIONS",
+            "band": "statement",
+            "current": 35247.49,
+            "ytd": 94481.88
+          },
+          {
+            "label": "PPM FORTFEITURES (DEDUCT)",
+            "band": "statement",
+            "current": 0,
+            "ytd": 0
+          },
+          {
+            "label": "SALE OF ASSETS (LOSS)",
+            "band": "statement",
+            "current": 0,
+            "ytd": 0
+          },
+          {
+            "label": "GOODWILL INTEREST",
+            "band": "statement",
+            "current": 18228.2,
+            "ytd": 160120.51
+          },
+          {
+            "label": "PENALTIES",
+            "band": "statement",
+            "current": 0,
+            "ytd": 0
+          }
+        ],
+        "total": {
+          "label": "ADJUSTMENTS TO INCOME",
+          "band": "statement",
+          "current": 53475.69,
+          "ytd": 254602.39
+        }
+      }
+    }
+  }
+}

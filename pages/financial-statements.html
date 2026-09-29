@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ERS — Financial Statements</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/tokens.css">
+<link rel="stylesheet" href="../styles/app.css">
+<style>
+.bs-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 30px}
+.bs-grid .side{min-width:0}
+.bs-grid .side.r{border-left:1px solid var(--rule-hard);padding-left:30px}
+.bs-grid table{margin-bottom:2px}
+@media (max-width:1180px){.bs-grid{grid-template-columns:1fr}.bs-grid .side.r{border-left:0;padding-left:0;margin-top:18px}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<nav id="navRail" class="rail"></nav>
+
+<main>
+<div class="mockbar">
+  MOCKUP &mdash; <b>Financial Statements tab, first build.</b> Built from a workbook Logan uses today to turn a
+  Talon chart-of-accounts export into the statements dealers report to Harley &mdash; used here only to understand
+  the correct statement shape and line items, not as a source ERS reads from. Figures are Emerald Coast's real
+  August 2026 closed-month statement. Balance Sheet and Income Statement only, in v1 &mdash; per-department detail
+  and the multi-store composite are later phases. <b>Hide notes</b> strips the explanatory boxes for a clean read.
+</div>
+
+<div class="head">
+  <div>
+    <h1>Financial Statements</h1>
+    <div class="meta" id="pageMeta"></div>
+  </div>
+  <div class="acts">
+    <select class="btn" aria-label="Store"><option>Emerald Coast</option><option>Haven</option><option>Honky Tonk</option><option>M.C.H.D.</option><option>Madhouse</option><option>Moonshine</option><option>Music City</option></select>
+    <select class="btn" aria-label="Period"><option>August 2026</option></select>
+    <button class="btn">Print page</button>
+    <button class="btn">Export to Excel</button>
+  </div>
+</div>
+
+<nav class="secnav" aria-label="Sections on this page">
+  <span id="seclinks" style="display:flex;gap:8px;flex-wrap:wrap"></span>
+  <button class="chip" id="notesToggle" aria-pressed="false" style="margin-left:auto;align-self:center">Hide notes</button>
+</nav>
+
+<!-- ============ BALANCE SHEET ============ -->
+<section class="anchor" id="sec-balance-sheet">
+  <div class="gutter">
+    <h2>Balance Sheet</h2>
+    <p>As of the last day of the closed month. Every line, in the order Harley expects them.</p>
+  </div>
+  <div>
+    <div class="bs-grid">
+      <div class="side l">
+        <table><thead><tr><th class="l">Assets</th><th>Amount</th></tr></thead>
+          <tbody id="bsAssets"></tbody>
+        </table>
+      </div>
+      <div class="side r">
+        <table><thead><tr><th class="l">Liabilities and Net Worth</th><th>Amount</th></tr></thead>
+          <tbody id="bsLiab"></tbody>
+        </table>
+      </div>
+    </div>
+    <p class="mini">Every figure on this statement is read directly from the Talon trial balance &mdash; nothing
+      on the Balance Sheet is calculated by ERS. Total Assets reconciles to Total Liabilities and Net Worth.</p>
+
+    <div class="spec note-el">
+      <b class="h">Balance Sheet &mdash; build notes</b>
+      <ul>
+        <li>Full line-item fidelity, deliberately &mdash; every account Harley's statement schema defines, not a
+          curated summary. This is meant to be a document a dealer can rely on, not an at-a-glance dashboard.</li>
+        <li>Fixed Assets is the one section with three amount columns (Cost, Accum. Deprec., Net Value) instead
+          of one &mdash; that's the real statement's own layout, kept as-is rather than flattened to match the
+          rest of the page.</li>
+        <li><b>Access:</b> gate this statement &mdash; cash, debt and equity lines especially &mdash; to owner/GM
+          roles through the permission tooling ERS already has for store-level restriction. Don't build new
+          permission logic; wire into what exists.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INCOME STATEMENT ============ -->
+<section class="anchor" id="sec-income-statement">
+  <div class="gutter">
+    <h2>Income Statement</h2>
+    <p>Sales, gross profit and expense, whole-dealership, current month and year to date.</p>
+  </div>
+  <div>
+    <div class="tbl-title"><h4>Sales &amp; Gross Profit</h4></div>
+    <table>
+      <thead>
+        <tr class="grp" id="isgpGrpHead"></tr>
+        <tr id="isgpColHead"></tr>
+      </thead>
+      <tbody id="isgpBody"></tbody>
+    </table>
+    <p class="mini">Qty, Net Sales and Gross are read from the Talon income statement. Margin is the only
+      calculated value in this table &mdash; <code>Gross &divide; Net Sales</code>.</p>
+
+    <div class="tbl-title" style="margin-top:18px"><h4>Departmental Expenses</h4></div>
+    <table>
+      <thead>
+        <tr class="grp" id="isdeGrpHead"></tr>
+        <tr id="isdeColHead"></tr>
+      </thead>
+      <tbody id="isdeBody"></tbody>
+    </table>
+    <p class="mini"><code>% of Gross = expense &divide; total Gross profit</code> for the same period (Current or
+      YTD), from the Sales &amp; Gross Profit table above &mdash; not each department's own gross.</p>
+
+    <div class="tbl-title" style="margin-top:18px"><h4>Administration Expense</h4></div>
+    <table>
+      <thead><tr><th class="l">Line item</th><th>Current</th><th>% of Sales</th><th>YTD</th><th>% of Sales</th></tr></thead>
+      <tbody id="isadBody"></tbody>
+    </table>
+    <p class="mini"><code>% of Sales = expense &divide; total Net Sales</code> for the same period, from the
+      Sales &amp; Gross Profit table's grand total.</p>
+
+    <div class="tbl-title" style="margin-top:18px"><h4>Operating Summary</h4></div>
+    <table>
+      <thead><tr><th class="l">Line item</th><th>Current</th><th>YTD</th></tr></thead>
+      <tbody id="issumBody"></tbody>
+    </table>
+
+    <div class="bs-grid" style="margin-top:16px">
+      <div class="side l">
+        <div class="tbl-title"><h4>Additions to Income</h4></div>
+        <table><thead><tr><th class="l">Line item</th><th>Current</th><th>YTD</th></tr></thead><tbody id="isaddBody"></tbody></table>
+      </div>
+      <div class="side r">
+        <div class="tbl-title"><h4>Deductions from Income</h4></div>
+        <table><thead><tr><th class="l">Line item</th><th>Current</th><th>YTD</th></tr></thead><tbody id="isdedBody"></tbody></table>
+      </div>
+    </div>
+
+    <div class="spec note-el">
+      <b class="h">Income Statement &mdash; build notes</b>
+      <ul>
+        <li><b>No time tabs, no MTD, no Projected month-end &mdash; this page is the deliberate exception</b> to
+          the Time tabs convention used everywhere else in ERS. A financial statement only exists for a
+          <b>closed month</b>; there's no "August as of day 10" to read, and no forecast belongs on a document
+          that gets submitted as-is. Current + complete Year to Date, always &mdash; no basis tabs.</li>
+        <li><b>This tab runs one closed month behind the rest of ERS on purpose.</b> Every other tab shows
+          today's in-progress month; this shows the most recently closed one (here, August while the rest of
+          the mockup shows September MTD). Not a bug &mdash; flag to Logan whether a live in-progress view is
+          ever wanted alongside the closed-month statement.</li>
+        <li>Every subtotal in the Operating Summary chain (Operating Profit &rarr; Net Profit Before Bonus &rarr;
+          Net Profit Before Taxes) is arithmetic on statement figures, same as the Balance Sheet's section
+          totals &mdash; tagged <code>statement</code>, not <code>derived</code>. Margin and the two %-of columns
+          are the only genuinely calculated figures on this whole tab.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="foot">
+  <span>ERS Financial Statements &middot; first build</span>
+  <span>Revolution Motorsports, L.L.C. &middot; Destin, FL</span>
+</div>
+</main>
+</div>
+
+<script>var ERS_PAGE = 'financial-statements';</script>
+<script src="../scripts/format.js"></script>
+<script src="../scripts/nav.js"></script>
+<script>
+/* Every figure on this page lives in /data/financial-statements.json. Line items and
+   section totals are `statement` band, read straight from Talon via the workbook this
+   was modeled on. Margin, % of Gross and % of Sales are the only `derived` values here
+   - computed below, never stored, so they can't drift from the dollars they describe. */
+var DATA;
+
+function row1(r){
+  return '<tr><td class="l">' + r.label + '<span class="src">' + r.band + '</span></td>' +
+         '<td>' + money(r.amount) + '</td></tr>';
+}
+function totRow1(r, cls){
+  return '<tr class="' + cls + '"><td class="l">' + r.label + '<span class="src">' + r.band + '</span></td>' +
+         '<td>' + money(r.amount) + '</td></tr>';
+}
+function block1(title, rows, totalRow, totCls){
+  var html = '<tr class="band"><td colspan="2">' + title + '</td></tr>', i;
+  for (i = 0; i < rows.length; i++) html += row1(rows[i]);
+  if (totalRow) html += totRow1(totalRow, totCls || 'totrow endband');
+  return html;
+}
+
+function renderBalanceSheet(){
+  var a = DATA.balanceSheet.assets, l = DATA.balanceSheet.liabilities, nw = DATA.balanceSheet.netWorth;
+
+  var ah = '';
+  ah += block1('Cash and Contracts', a.cashAndContracts.rows, a.cashAndContracts.total);
+  ah += block1('Receivables', a.receivables.rows, a.receivables.total);
+  ah += block1('Major Unit Inventories', a.inventories.majorUnit.rows, a.inventories.majorUnit.total);
+  ah += block1('Other Inventory &amp; Work in Process', a.inventories.otherInventory.rows, a.inventories.otherInventory.total);
+  ah += block1('Other Current Assets', a.otherCurrentAssets.rows, a.otherCurrentAssets.total);
+  if (a.otherVehicleAssets.rows.length) ah += block1('Other Vehicle Assets', a.otherVehicleAssets.rows, a.otherVehicleAssets.total);
+  ah += totRow1(a.totalCurrentAssets, 'totrow endband');
+  ah += '<tr class="band"><td colspan="2">Fixed Assets</td></tr>' +
+        '<tr><td class="l">Description<span class="src"></span></td><td>Net Value</td></tr>';
+  for (var i = 0; i < a.fixedAssets.rows.length; i++) {
+    var f = a.fixedAssets.rows[i];
+    ah += '<tr><td class="l">' + f.label + '<span class="src">' + f.band + '</span></td><td>' + money(f.netValue) + '</td></tr>';
+  }
+  ah += '<tr class="totrow endband"><td class="l">' + a.fixedAssets.total.label + '<span class="src">statement</span></td><td>' + money(a.fixedAssets.total.netValue) + '</td></tr>';
+  ah += block1('Other Assets', a.otherAssets.rows, a.otherAssets.total);
+  ah += totRow1(a.totalAssets, 'tot');
+  document.getElementById('bsAssets').innerHTML = ah;
+
+  var lh = '';
+  lh += block1('Accounts Payable', l.accountsPayable.rows, l.accountsPayable.total);
+  lh += block1('Accrued Liabilities', l.accruedLiabilities.rows, l.accruedLiabilities.total);
+  lh += block1('Inventory Finance Liabilities', l.inventoryFinanceLiabilities.rows, l.inventoryFinanceLiabilities.total);
+  lh += block1('Other Current Liabilities', l.otherCurrentLiabilities.rows, l.otherCurrentLiabilities.total);
+  lh += totRow1(l.totalCurrentLiabilities, 'totrow endband');
+  lh += block1('Long-Term Debt', l.longTermDebt.rows, l.longTermDebt.total);
+  lh += totRow1(l.totalLiabilities, 'totrow endband');
+  lh += block1('Net Worth', nw.rows, null);
+  lh += row1(nw.netInvestment);
+  lh += row1(nw.netProfitLoss);
+  lh += totRow1(nw.totalNetWorth, 'totrow endband');
+  lh += totRow1(DATA.balanceSheet.totalLiabilitiesAndNetWorth, 'tot');
+  document.getElementById('bsLiab').innerHTML = lh;
+}
+
+/* ---------- Sales & Gross Profit ---------- */
+function renderSalesGP(){
+  var s = DATA.incomeStatement.salesAndGrossProfit;
+  document.getElementById('isgpGrpHead').innerHTML =
+    '<th class="l blank"></th><th colspan="4">Current</th><th colspan="4" class="segstart">Year to Date</th>';
+  document.getElementById('isgpColHead').innerHTML =
+    '<th class="l">Line item</th><th>Qty</th><th>Net Sales</th><th>Gross</th><th>Margin</th>' +
+    '<th class="segstart">Qty</th><th>Net Sales</th><th>Gross</th><th>Margin</th>';
+
+  function gpRow(r, cls){
+    var mc = r.current.netSales ? r.current.gross / r.current.netSales * 100 : 0;
+    var my = r.ytd.netSales ? r.ytd.gross / r.ytd.netSales * 100 : 0;
+    return '<tr' + (cls ? ' class="' + cls + '"' : '') + '>' +
+      '<td class="l">' + r.label + '<span class="src">' + r.band + '</span></td>' +
+      '<td>' + commas(r.current.qty) + '</td><td>' + money(r.current.netSales) + '</td><td>' + money(r.current.gross) + '</td><td>' + pct1(mc) + '</td>' +
+      '<td class="segstart">' + commas(r.ytd.qty) + '</td><td>' + money(r.ytd.netSales) + '</td><td>' + money(r.ytd.gross) + '</td><td>' + pct1(my) + '</td></tr>';
+  }
+  var html = '', i;
+  for (i = 0; i < s.rows.length; i++) html += gpRow(s.rows[i]);
+  html += gpRow(s.unitDepartmentTotal, 'totrow endband');
+  for (i = 0; i < s.departmentRows.length; i++) html += gpRow(s.departmentRows[i]);
+  html += gpRow(s.total, 'tot');
+  document.getElementById('isgpBody').innerHTML = html;
+}
+
+/* ---------- Departmental Expenses ---------- */
+function renderDeptExpenses(){
+  var d = DATA.incomeStatement.departmentalExpenses;
+  var gp = DATA.incomeStatement.salesAndGrossProfit.total;
+
+  document.getElementById('isdeGrpHead').innerHTML =
+    '<th class="l blank"></th><th colspan="4">Employment</th><th colspan="4" class="segstart">Operational</th>';
+  document.getElementById('isdeColHead').innerHTML =
+    '<th class="l">Department</th><th>Current</th><th>% of Gross</th><th>YTD</th><th>% of Gross</th>' +
+    '<th class="segstart">Current</th><th>% of Gross</th><th>YTD</th><th>% of Gross</th>';
+
+  function deRow(r, cls){
+    var ec = gp.current.gross ? r.employment.current / gp.current.gross * 100 : 0;
+    var ey = gp.ytd.gross ? r.employment.ytd / gp.ytd.gross * 100 : 0;
+    var oc = gp.current.gross ? r.operational.current / gp.current.gross * 100 : 0;
+    var oy = gp.ytd.gross ? r.operational.ytd / gp.ytd.gross * 100 : 0;
+    return '<tr' + (cls ? ' class="' + cls + '"' : '') + '>' +
+      '<td class="l">' + r.label + '<span class="src">' + r.band + '</span></td>' +
+      '<td>' + money(r.employment.current) + '</td><td>' + pct1(ec) + '</td><td>' + money(r.employment.ytd) + '</td><td>' + pct1(ey) + '</td>' +
+      '<td class="segstart">' + money(r.operational.current) + '</td><td>' + pct1(oc) + '</td><td>' + money(r.operational.ytd) + '</td><td>' + pct1(oy) + '</td></tr>';
+  }
+  var html = '', i;
+  for (i = 0; i < d.rows.length; i++) html += deRow(d.rows[i]);
+  html += deRow(d.totalExpense, 'totrow endband');
+  html += '<tr class="tot"><td class="l">' + d.totalDepartmentalExpenses.label + '<span class="src">statement</span></td>' +
+          '<td colspan="3"></td><td>' + money(d.totalDepartmentalExpenses.current) + '</td><td colspan="3"></td><td>' + money(d.totalDepartmentalExpenses.ytd) + '</td></tr>';
+  html += '<tr class="tot"><td class="l">' + d.profitAfterDepartmentalExpenses.label + '<span class="src">statement</span></td>' +
+          '<td colspan="3"></td><td>' + money(d.profitAfterDepartmentalExpenses.current) + '</td><td colspan="3"></td><td>' + money(d.profitAfterDepartmentalExpenses.ytd) + '</td></tr>';
+  document.getElementById('isdeBody').innerHTML = html;
+}
+
+/* ---------- Administration Expense ---------- */
+function renderAdmin(){
+  var ad = DATA.incomeStatement.administrationExpense;
+  var gp = DATA.incomeStatement.salesAndGrossProfit.total;
+  var html = '', i;
+  for (i = 0; i < ad.rows.length; i++) {
+    var r = ad.rows[i];
+    var pc = gp.current.netSales ? r.current / gp.current.netSales * 100 : 0;
+    var py = gp.ytd.netSales ? r.ytd / gp.ytd.netSales * 100 : 0;
+    html += '<tr><td class="l">' + r.label + '<span class="src">' + r.band + '</span></td>' +
+      '<td>' + money(r.current) + '</td><td>' + pct1(pc) + '</td><td>' + money(r.ytd) + '</td><td>' + pct1(py) + '</td></tr>';
+  }
+  var oh = ad.overheadExpenses;
+  var pc2 = gp.current.netSales ? oh.current / gp.current.netSales * 100 : 0;
+  var py2 = gp.ytd.netSales ? oh.ytd / gp.ytd.netSales * 100 : 0;
+  html += '<tr class="tot"><td class="l">' + oh.label + '<span class="src">statement</span></td>' +
+    '<td>' + money(oh.current) + '</td><td>' + pct1(pc2) + '</td><td>' + money(oh.ytd) + '</td><td>' + pct1(py2) + '</td></tr>';
+  document.getElementById('isadBody').innerHTML = html;
+}
+
+/* ---------- Operating Summary ---------- */
+function renderSummary(){
+  var s = DATA.incomeStatement.summary;
+  var order = ['operatingProfitLoss','netAdditionsAndDeductions','netProfitBeforeBonus','generalManagerBonus','salariesOwners'];
+  var html = '', i;
+  for (i = 0; i < order.length; i++) {
+    var r = s[order[i]];
+    html += '<tr><td class="l">' + r.label + '<span class="src">' + r.band + '</span></td><td>' + money(r.current) + '</td><td>' + money(r.ytd) + '</td></tr>';
+  }
+  var f = s.netProfitBeforeTaxes;
+  html += '<tr class="tot"><td class="l">' + f.label + '<span class="src">' + f.band + '</span></td><td>' + money(f.current) + '</td><td>' + money(f.ytd) + '</td></tr>';
+  document.getElementById('issumBody').innerHTML = html;
+}
+
+/* ---------- Additions & Deductions ---------- */
+function renderAddDed(){
+  var ad = DATA.incomeStatement.additionsAndDeductions;
+  function build(section, cls){
+    var html = '', i;
+    for (i = 0; i < section.rows.length; i++) {
+      var r = section.rows[i];
+      html += '<tr><td class="l">' + r.label + '<span class="src">' + r.band + '</span></td><td>' + money(r.current) + '</td><td>' + money(r.ytd) + '</td></tr>';
+    }
+    var t = section.total;
+    html += '<tr class="tot"><td class="l">' + t.label + '<span class="src">' + t.band + '</span></td><td>' + money(t.current) + '</td><td>' + money(t.ytd) + '</td></tr>';
+    return html;
+  }
+  document.getElementById('isaddBody').innerHTML = build(ad.additions);
+  document.getElementById('isdedBody').innerHTML = build(ad.deductions);
+}
+
+/* ---------- Section menu ---------- */
+var SECTIONS = [
+  { id: 'sec-balance-sheet',   t: 'Balance Sheet',    s: 'assets · liabilities · net worth' },
+  { id: 'sec-income-statement', t: 'Income Statement', s: 'sales · expense · profit' }
+];
+function renderSectionNav(){
+  var nav = document.getElementById('seclinks'), html = '', i;
+  for (i = 0; i < SECTIONS.length; i++)
+    html += '<a href="#' + SECTIONS[i].id + '" data-id="' + SECTIONS[i].id + '"><span class="t">' +
+            SECTIONS[i].t + '</span><span class="s">' + SECTIONS[i].s + '</span></a>';
+  nav.innerHTML = html;
+  var links = nav.getElementsByTagName('a');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  for (i = 0; i < links.length; i++) (function(a){
+    a.onclick = function(e){
+      var el = document.getElementById(a.getAttribute('data-id'));
+      if (!el || !el.scrollIntoView) return;
+      if (e && e.preventDefault) e.preventDefault();
+      if (reduce) el.scrollIntoView(true);
+      else { try { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (err) { el.scrollIntoView(true); } }
+    };
+  })(links[i]);
+  function spy(){
+    var y = (window.pageYOffset || document.documentElement.scrollTop) + 130, act = SECTIONS[0].id, j, el;
+    for (j = 0; j < SECTIONS.length; j++) { el = document.getElementById(SECTIONS[j].id); if (el && el.offsetTop <= y) act = SECTIONS[j].id; }
+    for (j = 0; j < links.length; j++) links[j].className = links[j].getAttribute('data-id') === act ? 'on' : '';
+  }
+  if (window.addEventListener) window.addEventListener('scroll', spy, false);
+  spy();
+}
+
+/* ---------- Load every sample figure from /data, then render ---------- */
+fetch('../data/financial-statements.json')
+  .then(function(res){ return res.json(); })
+  .then(function(json){
+    DATA = json;
+    document.getElementById('pageMeta').innerHTML =
+      DATA.store + '<br>Current: <b>' + DATA.period.label + '</b> (closed) &middot; YTD: <b>' + DATA.period.ytdLabel + '</b>';
+    renderBalanceSheet();
+    renderSalesGP();
+    renderDeptExpenses();
+    renderAdmin();
+    renderSummary();
+    renderAddDed();
+    renderSectionNav();
+  })
+  .catch(function(err){
+    document.querySelector('main').insertAdjacentHTML('afterbegin',
+      '<div class="spec" style="border-left-color:#B23A2B"><b class="h">Could not load ../data/financial-statements.json</b>' +
+      'This page reads its sample figures from a JSON file, so it needs to be served over http(s) rather than ' +
+      'opened directly as a file. Start a local server in this folder and open the page from there.<br>' +
+      '<code>' + err + '</code></div>');
+  });
+</script>
+</body>
+</html>

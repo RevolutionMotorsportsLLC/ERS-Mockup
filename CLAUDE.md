@@ -73,6 +73,12 @@ Three tabs, in this order:
   row, not a comparison basis on an aggregated metric, so the complexity problem above
   doesn't apply. Bike Sales' Per Deal table, Parts' and Motorclothes' Counter Sales tables,
   and Service's Closed ROs table are this case — leave them as built.
+- **Financial Statements carries no time tabs at all — the one table type this section
+  doesn't apply to.** A financial statement only exists for a closed month; there is no
+  "August as of day 10" to show, and no projection belongs on a document submitted as-is
+  to Harley. That tab shows Current (the most recently closed month) and complete Year to
+  Date, always, one closed month behind whatever "today" is on every other tab. See
+  Status, below.
 - **Prior periods are complete months**, not the same days of them. The income statement
   export reports finished periods — there is no "August as of day 10" to read.
 - `% of prior = month-to-date ÷ that whole month's figure`, read against the percentage of
@@ -196,8 +202,21 @@ segment-column layout described in Time tabs, above. MTD is the default tab ever
 this applies. Record-level tables (Per Deal, Counter Sales on Parts and Motorclothes,
 Closed ROs) are the deliberate exception and keep their Day scope.
 
-**Next:** a new Financial Statements tab — the exact statements dealers report to Harley,
-updated with daily data. Materials pending from Seth.
+**Also done, v1: Financial Statements** — Balance Sheet and Income Statement, full
+line-item fidelity, modeled on the workbook Logan uses to turn a Talon chart-of-accounts
+export into the statements dealers report to Harley. That workbook was a reference for
+correct statement shape only, never a data source or dependency for this tab. No time
+tabs — see the exception carved out in Time tabs, above. Sample figures are Emerald
+Coast's real August 2026 closed-month statement, and the Balance Sheet balances / the
+Income Statement's department rows sum to its own stated total, both confirmed against
+the source workbook.
+
+**Next:** per-department income statement detail (Bike Sales, Parts, Service,
+Motorclothes) on the Financial Statements tab, once the two whole-dealership pages above
+are validated — that detail has to reconcile line-for-line with those departments' own
+tabs, so it's staged separately rather than built alongside v1. The garage composite
+(consolidating multiple stores under one ownership entity) is explicitly **not** near-term
+scope — dropped from consideration for now, September 2026.
 
 **Not started:** CRM, Riding Academy, Maintenance.
 
