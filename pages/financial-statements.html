@@ -74,14 +74,12 @@
     <div class="spec note-el">
       <b class="h">Balance Sheet &mdash; build notes</b>
       <ul>
-        <li>Full line-item fidelity, deliberately &mdash; every account Harley's statement schema defines, not a
-          curated summary. This is meant to be a document a dealer can rely on, not an at-a-glance dashboard.</li>
-        <li>Fixed Assets is the one section with three amount columns (Cost, Accum. Deprec., Net Value) instead
-          of one &mdash; that's the real statement's own layout, kept as-is rather than flattened to match the
-          rest of the page.</li>
+        <li>Full line-item fidelity, deliberately &mdash; every account Harley's schema defines, not a curated
+          summary. This is a document to rely on, not a dashboard.</li>
+        <li>Fixed Assets alone has three amount columns (Cost, Accum. Deprec., Net Value) instead of one &mdash;
+          the real statement's own layout, kept as-is rather than flattened.</li>
         <li><b>Access:</b> gate this statement &mdash; cash, debt and equity lines especially &mdash; to owner/GM
-          roles through the permission tooling ERS already has for store-level restriction. Don't build new
-          permission logic; wire into what exists.</li>
+          roles through ERS's existing permission tooling. Don't build new logic; wire into what exists.</li>
       </ul>
     </div>
   </div>
@@ -144,18 +142,15 @@
     <div class="spec note-el">
       <b class="h">Income Statement &mdash; build notes</b>
       <ul>
-        <li><b>No time tabs, no MTD, no Projected month-end &mdash; this page is the deliberate exception</b> to
-          the Time tabs convention used everywhere else in ERS. A financial statement only exists for a
-          <b>closed month</b>; there's no "August as of day 10" to read, and no forecast belongs on a document
-          that gets submitted as-is. Current + complete Year to Date, always &mdash; no basis tabs.</li>
-        <li><b>This tab runs one closed month behind the rest of ERS on purpose.</b> Every other tab shows
-          today's in-progress month; this shows the most recently closed one (here, August while the rest of
-          the mockup shows September MTD). Not a bug &mdash; flag to Logan whether a live in-progress view is
-          ever wanted alongside the closed-month statement.</li>
-        <li>Every subtotal in the Operating Summary chain (Operating Profit &rarr; Net Profit Before Bonus &rarr;
-          Net Profit Before Taxes) is arithmetic on statement figures, same as the Balance Sheet's section
-          totals &mdash; tagged <code>statement</code>, not <code>derived</code>. Margin and the two %-of columns
-          are the only genuinely calculated figures on this whole tab.</li>
+        <li><b>No time tabs, no MTD, no Projected month-end</b> &mdash; the deliberate exception to the Time
+          tabs convention elsewhere in ERS. A statement only exists for a <b>closed month</b>; no forecast
+          belongs on a document submitted as-is. Current + complete Year to Date, always.</li>
+        <li><b>This tab runs one closed month behind the rest of ERS, on purpose</b> &mdash; every other tab
+          shows today's in-progress month; this shows the most recently closed one. Not a bug &mdash; flag to
+          Logan whether a live in-progress view is ever wanted too.</li>
+        <li>Every subtotal in the Operating Summary chain is arithmetic on statement figures, same as the
+          Balance Sheet's section totals &mdash; tagged <code>statement</code>, not <code>derived</code>.
+          Margin and the two %-of columns are the only genuinely calculated figures on this tab.</li>
       </ul>
     </div>
   </div>

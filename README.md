@@ -29,6 +29,7 @@ sidebar links to every other page that's been built.
 |---|---|
 | Store Overview | `pages/store-overview.html` |
 | Scorecards | `pages/scorecards.html` |
+| Financial Statements | `pages/financial-statements.html` |
 | Bike Sales | `pages/bike-sales.html` |
 | Parts Sales | `pages/parts-sales.html` |
 | Motorclothes | `pages/motorclothes.html` |

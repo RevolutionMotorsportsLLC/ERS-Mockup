@@ -133,7 +133,10 @@ Projected = MTD ÷ open days elapsed × total open days
   consent-gated, and suppressed below three or four contributing stores. Design the empty
   state before the feature.
 - **Long lists** get a six-row window that scrolls, with headings and totals pinned, plus a
-  Show all toggle. Totals always reflect the filters, never what is on screen.
+  Show all toggle. Totals always reflect the filters, never what is on screen. This is for
+  a **growing record list** (deals, reps, ROs) — it doesn't apply to a financial statement's
+  fixed line count. Financial Statements shows every line, unwindowed, on purpose: the
+  point is a document that reads as a complete statement, not a dashboard.
 
 ---
 
