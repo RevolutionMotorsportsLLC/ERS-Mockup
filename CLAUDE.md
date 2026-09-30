@@ -118,6 +118,25 @@ Projected = MTD ÷ open days elapsed × total open days
 
 ## Table conventions already settled
 
+- **Every table (or tightly related group of tables) sits in its own bordered, white
+  card** — `.card` in `app.css`. This is what makes a page of several tables read as
+  distinct reports instead of one long scroll. A table with few columns stretching to
+  the full content width leaves a dead gap between its labels and its numbers, so give
+  a narrow table's card a `max-width` (roughly 500&ndash;760px depending on column
+  count) rather than letting it stretch — see any KPI/summary table on Bike Sales,
+  Parts Sales, Motorclothes or Service for the pattern. A wide table (Per Deal, Counter
+  Sales, Closed ROs) needs no `max-width`; its own column count already fills the card.
+  Two tables that are cause-and-effect of each other (Bike Sales' F&amp;I Deal Charges
+  and the Counts table built from it) share one card rather than each getting their own.
+- **A true grand total gets a double rule and an accent-coloured edge** — the shared
+  `.tot` class in `app.css`. This is on top of, not instead of, the plain single-rule
+  bold `.totrow` used for a lesser subtotal, so the actual bottom line of a table stays
+  visually distinct from a subtotal partway through it. Excluded automatically when
+  `.tot` is combined with `.band` (a mini header borrowing `.tot`'s bold weight, not an
+  actual total — see Bike Sales' F&amp;I PPV sub-header row).
+- **The KPI ribbon and the progress bar are one card, not two strips** — `.headline` and
+  `.progress` in `app.css` already render this way; do not split them apart on a new
+  page.
 - **Segment blocks.** Where a table has segments (New / Used / New + Used), they are
   normally stacked blocks with a band header, not columns — the total block last, dark
   band, bold. **Bike Sales' KPI table is the deliberate exception:** segments are column
@@ -213,6 +232,16 @@ tabs — see the exception carved out in Time tabs, above. Sample figures are Em
 Coast's real August 2026 closed-month statement, and the Balance Sheet balances / the
 Income Statement's department rows sum to its own stated total, both confirmed against
 the source workbook.
+
+**Also done: a visual-consistency pass across every built tab**, September 2026 —
+every table (or tightly related group of tables) now sits in its own bordered card,
+narrow tables are capped to a sensible width instead of stretching full-bleed with a
+dead gap between labels and numbers, the KPI ribbon and progress bar read as one panel
+instead of two strips, and a true grand total carries a double rule and an accent edge
+wherever `.tot` means an actual total. See Table conventions, above, for the settled
+rules this left behind. Started on Financial Statements, then carried through Store
+Overview, Scorecards, Bike Sales, Parts Sales, Motorclothes and Service — all seven
+built tabs are now visually consistent with each other.
 
 **Next:** per-department income statement detail (Bike Sales, Parts, Service,
 Motorclothes) on the Financial Statements tab, once the two whole-dealership pages above
