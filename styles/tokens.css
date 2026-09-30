@@ -1,11 +1,67 @@
-/* ERS design system — defined once, never redefined per page. See CLAUDE.md. */
+/* ERS design system — defined once, never redefined per page. See CLAUDE.md.
+   Values here are the single source of truth; page styles only consume them. */
 :root{
-  --paper:#FBFAF8; --rail:#1A1B1E; --rail-ink:#B8BCC2;
-  --ink:#17181A; --ink-mid:#5A5F66; --ink-low:#9BA0A7;
-  --rule:#E4E3DF; --rule-hard:#C9C8C3;
-  --accent:#D9541F; --accent-soft:#FAEDE7;
-  --up:#2C6E4C; --down:#B23A2B;
+  /* Surfaces — a five-step ramp from page background to raised card. */
+  --paper:#FBFAF8;      /* page background */
+  --card:#FFFFFF;       /* a card or table panel */
+  --sunken:#F5F3EF;     /* table bands, inset tracks, grouped headers */
+  --sunken-2:#EFEDE9;   /* deeper band (segment blocks) */
+  --rail:#1A1B1E;       /* left navigation */
+  --rail-2:#1F2226;     /* raised state inside the rail */
+  --rail-3:#2A2E33;     /* hover inside the rail */
+
+  /* Ink — the text ramp. Primary → muted → faint. */
+  --ink:#17181A;
+  --ink-mid:#5A5F66;
+  --ink-low:#9BA0A7;
+  --ink-faint:#C2C6CB;
+  --rail-ink:#B8BCC2;
+  --rail-dim:#6E747C;
+
+  /* Rules — hairlines for structure, hard rules for boundaries. */
+  --rule:#E4E3DF;
+  --rule-hard:#C9C8C3;
+  --rule-strong:#17181A;
+
+  /* Accent — brand orange. Soft is the tinted fill behind it. */
+  --accent:#D9541F;
+  --accent-hover:#C2481A;
+  --accent-soft:#FAEDE7;
+  --accent-softer:#FDF6F3;
+  --accent-ink:#8A3510;
+  --accent-line:#F0D6C9;
+
+  /* Judgment colours — only ever used where a comparison supports one. */
+  --up:#2C6E4C;
+  --up-soft:#E9F2EC;
+  --down:#B23A2B;
+  --down-soft:#F8EAE7;
+
+  /* Type */
   --disp:'Barlow Condensed','Arial Narrow',sans-serif;
   --body:'Inter',-apple-system,'Segoe UI',sans-serif;
   --mono:'IBM Plex Mono',Menlo,monospace;
+
+  /* Radii — kept small; this is a dense reporting tool, not a consumer app. */
+  --r-xs:2px;
+  --r-sm:3px;
+  --r-md:5px;
+  --r-lg:8px;
+  --r-pill:999px;
+
+  /* Elevation — three quiet steps. Cards sit flat and lift on interaction. */
+  --sh-xs:0 1px 2px rgba(23,24,26,.05);
+  --sh-sm:0 1px 2px rgba(23,24,26,.06), 0 2px 6px rgba(23,24,26,.05);
+  --sh-md:0 2px 4px rgba(23,24,26,.06), 0 6px 16px rgba(23,24,26,.07);
+  --sh-lg:0 4px 8px rgba(23,24,26,.07), 0 16px 32px rgba(23,24,26,.10);
+  --sh-focus:0 0 0 3px rgba(217,84,31,.22);
+
+  /* Motion — fast and functional. Everything honours prefers-reduced-motion. */
+  --t-fast:90ms cubic-bezier(.2,.6,.3,1);
+  --t:150ms cubic-bezier(.2,.6,.3,1);
+  --t-slow:240ms cubic-bezier(.2,.6,.3,1);
+
+  /* Rhythm */
+  --rail-w:212px;
+  --pad-x:28px;
 }

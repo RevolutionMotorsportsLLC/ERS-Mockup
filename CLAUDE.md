@@ -233,6 +233,35 @@ Coast's real August 2026 closed-month statement, and the Balance Sheet balances 
 Income Statement's department rows sum to its own stated total, both confirmed against
 the source workbook.
 
+**Also done: a product-polish pass on the shared kit**, September 2026 — `styles/tokens.css`,
+`styles/app.css` and `scripts/nav.js` only. No page markup, no sample data, no formula or
+column rule changed; the conventions above all still hold and still read the same. What
+moved:
+
+- **Tokens** carry a surface ramp (`--paper` / `--card` / `--sunken` / `--sunken-2`), a
+  proper ink ramp including `--ink-faint`, three elevation steps, small radii, and a
+  motion scale. Colour values in the design block above are unchanged — `--accent` is
+  still `#D9541F`, and the judgment colours are still `--up` / `--down`.
+- **Controls** share one language: `.btn` (with a `.primary` variant), `select.btn` with
+  a drawn caret, `.chip` as a pill. Hover, active, `:focus-visible` (one accent ring,
+  everywhere) and disabled states are all defined. `.chip[aria-pressed="true"]` still means
+  "this toggle is on."
+- **Tables** are unchanged in structure and convention — cards, `.tot` double rule,
+  segment bands, `.src` source tags are all exactly as documented above. The source tag is
+  now a real pill rather than loose monospace, so it reads as metadata. Numbers use
+  `tabular-nums` so columns align optically as well as numerically.
+- **The rail** marks unbuilt tabs with a "Soon" badge and makes them inert rather than a
+  dead `#` link that bounces the reader to the top of the page. It also carries a small
+  **Row sources** legend restating the four source tags from hard rule 3, so the
+  vocabulary is on screen wherever a tagged row is.
+- **Print.** "Print page" now actually prints, and `@media print` in `app.css` strips the
+  rail, the controls and the developer notes, keeps table heads repeating, and stops cards
+  breaking across pages — so what comes out is a clean report a dealer can hand over.
+- **Reduced motion** is honoured globally; the transitions are polish, never information.
+
+Anything in that pass that a developer would otherwise get wrong belongs in the
+conventions above, not in a screenshot — the mockup is still the specification.
+
 **Also done: a visual-consistency pass across every built tab**, September 2026 —
 every table (or tightly related group of tables) now sits in its own bordered card,
 narrow tables are capped to a sensible width instead of stretching full-bleed with a
