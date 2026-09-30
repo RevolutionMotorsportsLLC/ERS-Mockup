@@ -9,6 +9,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../styles/tokens.css">
 <link rel="stylesheet" href="../styles/app.css">
+<style>
+/* "At a glance" dashboard panel: the KPI ribbon and the progress bar read as two
+   independent strips today. Framing them as one bordered card, with a light
+   internal divider between the two halves, reads as a single dashboard summary
+   instead of two loosely related rows. */
+.headline{border:1px solid var(--rule-hard);border-top:1px solid var(--rule-hard);border-radius:2px 2px 0 0;background:#fff;margin-top:14px;padding:15px 18px 14px}
+.hl{padding:0 16px;border-right:1px solid var(--rule)}
+.hl:first-child{padding-left:0}
+.hl:last-child{border-right:0;padding-right:0}
+.progress{border:1px solid var(--rule-hard);border-top:1px solid var(--rule);border-radius:0 0 2px 2px;background:#fff;margin:0 0 4px;padding:11px 18px 13px}
+@media (max-width:560px){.hl{border-right:0;padding:0 0 10px;margin-bottom:10px;border-bottom:1px solid var(--rule)}.hl:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -298,10 +310,20 @@ function renderDeptDetail(){
   ];
   var html = '', i, j;
   for (i = 0; i < blocks.length; i++) {
-    html += '<tr class="band"><td colspan="2">' + blocks[i].label + '</td></tr>';
-    for (j = 0; j < blocks[i].rows.length; j++) {
-      var r = blocks[i].rows[j];
-      html += '<tr' + (j === blocks[i].rows.length - 1 ? ' class="endband"' : '') + '>' +
+    var b = blocks[i];
+    if (b.rows.length === 1) {
+      /* A single-line department (Parts, Motorclothes) doesn't earn a full-width
+         band header of its own - that's a dark bar over one skinny row. Fold the
+         department name into the label instead, so it reads as one dense row. */
+      var r0 = b.rows[0];
+      html += '<tr class="endband"><td class="l">' + b.label + ' — ' + r0.label +
+        '<span class="src">' + r0.band + '</span></td><td>' + r0.mtd + '</td></tr>';
+      continue;
+    }
+    html += '<tr class="band"><td colspan="2">' + b.label + '</td></tr>';
+    for (j = 0; j < b.rows.length; j++) {
+      var r = b.rows[j];
+      html += '<tr' + (j === b.rows.length - 1 ? ' class="endband"' : '') + '>' +
         '<td class="l">' + r.label + '<span class="src">' + r.band + '</span></td>' +
         '<td>' + r.mtd + '</td></tr>';
     }
