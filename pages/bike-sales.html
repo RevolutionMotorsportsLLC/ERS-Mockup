@@ -67,17 +67,19 @@
     <p>Fifteen figures, five rows across New, Used and New + Used.</p>
   </div>
   <div>
-    <div class="bases" role="tablist" aria-label="Comparison basis">
-      <button role="tab" aria-selected="true"  data-basis="mtd">MTD</button>
-      <button role="tab" aria-selected="false" data-basis="lastmonth">vs. Last Month</button>
-      <button role="tab" aria-selected="false" data-basis="lastyear">vs. Last Year</button>
-    </div>
-    <div class="basisnote" id="basisnote"></div>
-    <div class="scroller">
-      <table><thead>
-        <tr class="grp" id="kpigrphead"></tr>
-        <tr id="kpicolhead"></tr>
-      </thead><tbody id="kpibody"></tbody></table>
+    <div class="card">
+      <div class="bases" role="tablist" aria-label="Comparison basis">
+        <button role="tab" aria-selected="true"  data-basis="mtd">MTD</button>
+        <button role="tab" aria-selected="false" data-basis="lastmonth">vs. Last Month</button>
+        <button role="tab" aria-selected="false" data-basis="lastyear">vs. Last Year</button>
+      </div>
+      <div class="basisnote" id="basisnote"></div>
+      <div class="scroller">
+        <table><thead>
+          <tr class="grp" id="kpigrphead"></tr>
+          <tr id="kpicolhead"></tr>
+        </thead><tbody id="kpibody"></tbody></table>
+      </div>
     </div>
 
     <div class="spec note-el">
@@ -133,10 +135,12 @@
     <p>Traffic, floor activity, conversion.</p>
   </div>
   <div>
-    <table><thead><tr>
-      <th class="l">Line item</th><th>MTD</th>
-      <th class="cmp">Goal</th><th class="cmp">MTD vs goal</th>
-    </tr></thead><tbody id="transbody"></tbody></table>
+    <div class="card" style="max-width:620px">
+      <table><thead><tr>
+        <th class="l">Line item</th><th>MTD</th>
+        <th class="cmp">Goal</th><th class="cmp">MTD vs goal</th>
+      </tr></thead><tbody id="transbody"></tbody></table>
+    </div>
 
     <div class="spec note-el">
       <b class="h">Transactions and conversion</b>
@@ -157,16 +161,18 @@
     <p>The Talon deal-charge export, with calculated rows attached.</p>
   </div>
   <div>
-    <div class="tbl-title">
-      <h4>F &amp; I Deal Charges</h4>
-      <span class="cnt" id="fiCnt"></span>
+    <div class="card" style="max-width:720px">
+      <div class="tbl-title">
+        <h4>F &amp; I Deal Charges</h4>
+        <span class="cnt" id="fiCnt"></span>
+      </div>
+      <table><thead><tr>
+        <th class="l">Deal charge</th><th># Units</th><th>Penetration</th><th>Total</th>
+      </tr></thead><tbody id="fibody"></tbody></table>
+      <table style="margin-top:2px"><thead><tr>
+        <th class="l">Counts</th><th></th><th>MTD</th><th class="cmp">Base</th>
+      </tr></thead><tbody id="fikpibody"></tbody></table>
     </div>
-    <table><thead><tr>
-      <th class="l">Deal charge</th><th># Units</th><th>Penetration</th><th>Total</th>
-    </tr></thead><tbody id="fibody"></tbody></table>
-    <table style="margin-top:2px"><thead><tr>
-      <th class="l">Calculated from the table above</th><th></th><th>MTD</th><th class="cmp">Base</th>
-    </tr></thead><tbody id="fikpibody"></tbody></table>
 
     <div class="spec note-el">
       <b class="h">Penetration uses two denominators</b>
@@ -189,14 +195,16 @@
     <p>Unchanged, moved above the deal list.</p>
   </div>
   <div>
-    <div style="display:flex;gap:7px;margin-bottom:10px">
-      <button class="chip" id="zoomNew" aria-pressed="false">Zoom New</button>
-      <button class="chip" id="zoomUsed" aria-pressed="false">Zoom Used</button>
-      <button class="chip" id="zoomOff" aria-pressed="true">Show all</button>
+    <div class="card" style="max-width:760px">
+      <div style="display:flex;gap:7px;margin-bottom:10px">
+        <button class="chip" id="zoomNew" aria-pressed="false">Zoom New</button>
+        <button class="chip" id="zoomUsed" aria-pressed="false">Zoom Used</button>
+        <button class="chip" id="zoomOff" aria-pressed="true">Show all</button>
+      </div>
+      <table><thead><tr>
+        <th class="l">Style</th><th>New</th><th>Used</th><th>Used &gt; 60</th><th>No PDI</th><th>No safety check</th>
+      </tr></thead><tbody id="invbody"></tbody></table>
     </div>
-    <table><thead><tr>
-      <th class="l">Style</th><th>New</th><th>Used</th><th>Used &gt; 60</th><th>No PDI</th><th>No safety check</th>
-    </tr></thead><tbody id="invbody"></tbody></table>
     <p class="mini note-el">Content and calculation unchanged from the current page. <b>Used &gt; 60</b> sits next to the used
       count rather than at the end of the row, because it is the aging figure a GM acts on.</p>
   </div>
@@ -209,25 +217,27 @@
     <p>32 columns reduced to 14. One table, two date scopes.</p>
   </div>
   <div>
-    <div class="filters">
-      <div class="fg"><b>New or used</b>
-        <label><input type="radio" name="nu" value="All" checked> All</label>
-        <label><input type="radio" name="nu" value="New"> New</label>
-        <label><input type="radio" name="nu" value="Used"> Used</label></div>
-    </div>
+    <div class="card">
+      <div class="filters">
+        <div class="fg"><b>New or used</b>
+          <label><input type="radio" name="nu" value="All" checked> All</label>
+          <label><input type="radio" name="nu" value="New"> New</label>
+          <label><input type="radio" name="nu" value="Used"> Used</label></div>
+      </div>
 
-    <div class="tbl-title" style="margin-top:20px">
-      <h4 id="dealTitle"></h4>
-      <span class="cnt">
-        <button class="chip" data-scope="day" aria-pressed="false">Sep 08</button>
-        <button class="chip" data-scope="mtd" aria-pressed="true">Month to date</button>
-        <span id="dealcnt" style="margin-left:10px"></span>
-        <button class="chip" id="dealToggle" aria-expanded="false" style="margin-left:6px">Show all</button>
-      </span>
+      <div class="tbl-title" style="margin-top:20px">
+        <h4 id="dealTitle"></h4>
+        <span class="cnt">
+          <button class="chip" data-scope="day" aria-pressed="false">Sep 08</button>
+          <button class="chip" data-scope="mtd" aria-pressed="true">Month to date</button>
+          <span id="dealcnt" style="margin-left:10px"></span>
+          <button class="chip" id="dealToggle" aria-expanded="false" style="margin-left:6px">Show all</button>
+        </span>
+      </div>
+      <div class="scroller"><div class="tscroll" id="dealScroll">
+        <table class="deals"><thead><tr id="dealhead"></tr></thead><tbody id="dealbody"></tbody></table>
+      </div></div>
     </div>
-    <div class="scroller"><div class="tscroll" id="dealScroll">
-      <table class="deals"><thead><tr id="dealhead"></tr></thead><tbody id="dealbody"></tbody></table>
-    </div></div>
 
     <div class="spec note-el">
       <b class="h">The deal list</b>

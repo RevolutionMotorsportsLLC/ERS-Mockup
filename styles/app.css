@@ -34,14 +34,20 @@ select.btn,input.btn{font-family:var(--mono);font-size:12px;padding:5px 8px}
 .chip{font-family:var(--mono);font-size:10px;letter-spacing:.05em;padding:3px 8px;border-radius:2px;border:1px solid var(--rule-hard);background:#fff;cursor:pointer;color:var(--ink-mid)}
 .chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
 
-.headline{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--rule);margin-top:13px;padding-top:15px}
-.hl{padding-right:16px}
+/* "At a glance" dashboard panel: the KPI ribbon and the progress bar are one
+   bordered card, not two independent strips, with a light internal divider
+   between the two halves and vertical rules separating each KPI tile. */
+.headline{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--rule-hard);border-radius:2px 2px 0 0;background:#fff;margin-top:14px;padding:15px 18px 14px}
+.hl{padding:0 16px;border-right:1px solid var(--rule)}
+.hl:first-child{padding-left:0}
+.hl:last-child{border-right:0;padding-right:0}
 .hl .k{font-family:var(--disp);font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-low);display:block;margin-bottom:3px}
 .hl .v{font-family:var(--mono);font-size:23px;font-weight:500;letter-spacing:-.03em;display:block;line-height:1.1}
 .hl .d{font-family:var(--mono);font-size:10.5px;color:var(--ink-mid);display:block;margin-top:5px}
 .hl .d b{color:var(--ink);font-weight:500}
+@media (max-width:560px){.hl{border-right:0;padding:0 0 10px;margin-bottom:10px;border-bottom:1px solid var(--rule)}.hl:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}}
 
-.progress{margin:16px 0 4px;padding:10px 0 0;border-top:1px solid var(--rule)}
+.progress{border:1px solid var(--rule-hard);border-top:1px solid var(--rule);border-radius:0 0 2px 2px;background:#fff;margin:0 0 4px;padding:11px 18px 13px}
 .progress .row{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;color:var(--ink-mid);margin-bottom:6px}
 .progress .row b{color:var(--ink)}
 .ptrack{height:7px;background:#EDECE8;position:relative}
@@ -113,6 +119,13 @@ tbody tr.tot td.l{font-family:var(--disp);font-size:12.5px;letter-spacing:.1em;t
    Sales' F&I PPV sub-header row). */
 tbody tr.tot:not(.band) td{border-top:3px double var(--ink);padding-top:8px}
 tbody tr.tot:not(.band) td.l{box-shadow:inset 3px 0 0 var(--accent)}
+
+/* A bordered card around a table or a group of tables - the general device for
+   "this is one distinct report," whether that's one of several independent
+   leaderboards (Scorecards) or a table that would otherwise stretch edge to
+   edge with too few columns to fill the width (see Bike Sales). */
+.card{border:1px solid var(--rule-hard);background:#fff;padding:14px 16px 8px;border-radius:2px}
+.card .scroller{margin:0}
 
 .src{font-family:var(--mono);font-size:9px;color:var(--ink-low);letter-spacing:.04em;padding-left:7px}
 td.base{font-family:var(--mono);font-size:10px;color:var(--ink-low);text-align:left}
