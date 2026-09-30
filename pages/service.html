@@ -64,13 +64,15 @@
     <p>Labor, parts and sublet, plus what the shop earns per RO.</p>
   </div>
   <div>
-    <div class="bases" role="tablist" aria-label="Comparison basis">
-      <button role="tab" aria-selected="true"  data-basis="mtd">MTD</button>
-      <button role="tab" aria-selected="false" data-basis="lastmonth">vs. Last Month</button>
-      <button role="tab" aria-selected="false" data-basis="lastyear">vs. Last Year</button>
+    <div class="card" style="max-width:640px">
+      <div class="bases" role="tablist" aria-label="Comparison basis">
+        <button role="tab" aria-selected="true"  data-basis="mtd">MTD</button>
+        <button role="tab" aria-selected="false" data-basis="lastmonth">vs. Last Month</button>
+        <button role="tab" aria-selected="false" data-basis="lastyear">vs. Last Year</button>
+      </div>
+      <div class="basisnote" id="basisnote"></div>
+      <table><thead><tr id="kpihead"></tr></thead><tbody id="kpibody"></tbody></table>
     </div>
-    <div class="basisnote" id="basisnote"></div>
-    <table><thead><tr id="kpihead"></tr></thead><tbody id="kpibody"></tbody></table>
 
     <div class="spec note-el">
       <b class="h">Per RO and % of Total, folded in rather than a separate panel</b>
@@ -119,14 +121,16 @@
     <p>By service advisor, by payer type.</p>
   </div>
   <div>
-    <div class="tbl-title">
-      <h4 id="repTitle"></h4>
-      <span class="cnt">
-        <button class="chip" data-scope="day" aria-pressed="false">Sep 11</button>
-        <button class="chip" data-scope="mtd" aria-pressed="true">Month to date</button>
-      </span>
+    <div class="card">
+      <div class="tbl-title">
+        <h4 id="repTitle"></h4>
+        <span class="cnt">
+          <button class="chip" data-scope="day" aria-pressed="false">Sep 11</button>
+          <button class="chip" data-scope="mtd" aria-pressed="true">Month to date</button>
+        </span>
+      </div>
+      <div class="scroller"><table class="deals"><thead><tr id="repHead"></tr></thead><tbody id="repBody"></tbody></table></div>
     </div>
-    <div class="scroller"><table class="deals"><thead><tr id="repHead"></tr></thead><tbody id="repBody"></tbody></table></div>
 
     <div class="spec note-el">
       <b class="h">One column dropped, one kept on request</b>
