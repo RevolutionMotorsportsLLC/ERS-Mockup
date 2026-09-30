@@ -64,13 +64,15 @@
     <p>Every revenue channel, and the totals built from them.</p>
   </div>
   <div>
-    <div class="bases" role="tablist" aria-label="Comparison basis">
-      <button role="tab" aria-selected="true"  data-basis="mtd">MTD</button>
-      <button role="tab" aria-selected="false" data-basis="lastmonth">vs. Last Month</button>
-      <button role="tab" aria-selected="false" data-basis="lastyear">vs. Last Year</button>
+    <div class="card" style="max-width:640px">
+      <div class="bases" role="tablist" aria-label="Comparison basis">
+        <button role="tab" aria-selected="true"  data-basis="mtd">MTD</button>
+        <button role="tab" aria-selected="false" data-basis="lastmonth">vs. Last Month</button>
+        <button role="tab" aria-selected="false" data-basis="lastyear">vs. Last Year</button>
+      </div>
+      <div class="basisnote" id="basisnote"></div>
+      <table><thead><tr id="kpihead"></tr></thead><tbody id="kpibody"></tbody></table>
     </div>
-    <div class="basisnote" id="basisnote"></div>
-    <table><thead><tr id="kpihead"></tr></thead><tbody id="kpibody"></tbody></table>
 
     <div class="spec note-el">
       <b class="h">A variation on Parts Sales, not a new design</b>
@@ -119,7 +121,9 @@
     <p>Today's sales and month-to-date productivity, by rep.</p>
   </div>
   <div>
-    <table class="deals"><thead><tr id="repHead"></tr></thead><tbody id="repBody"></tbody></table>
+    <div class="card">
+      <table class="deals"><thead><tr id="repHead"></tr></thead><tbody id="repBody"></tbody></table>
+    </div>
 
     <div class="spec note-el">
       <b class="h">Reduced from 17 columns to 7</b>
