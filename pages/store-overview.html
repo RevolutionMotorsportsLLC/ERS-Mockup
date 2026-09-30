@@ -58,21 +58,23 @@
     <p>The whole store on one line each.</p>
   </div>
   <div>
-    <div class="bases" role="tablist" aria-label="Comparison basis">
-      <button role="tab" aria-selected="true"  data-basis="mtd">MTD</button>
-      <button role="tab" aria-selected="false" data-basis="lastmonth">vs. Last Month</button>
-      <button role="tab" aria-selected="false" data-basis="lastyear">vs. Last Year</button>
-    </div>
-    <div class="basisnote" id="basisnote"></div>
+    <div class="card">
+      <div class="bases" role="tablist" aria-label="Comparison basis">
+        <button role="tab" aria-selected="true"  data-basis="mtd">MTD</button>
+        <button role="tab" aria-selected="false" data-basis="lastmonth">vs. Last Month</button>
+        <button role="tab" aria-selected="false" data-basis="lastyear">vs. Last Year</button>
+      </div>
+      <div class="basisnote" id="basisnote"></div>
 
-    <div class="scroller">
-      <table>
-        <thead>
-          <tr class="grp" id="grphead"></tr>
-          <tr id="colhead"></tr>
-        </thead>
-        <tbody id="deptbody"></tbody>
-      </table>
+      <div class="scroller">
+        <table>
+          <thead>
+            <tr class="grp" id="grphead"></tr>
+            <tr id="colhead"></tr>
+          </thead>
+          <tbody id="deptbody"></tbody>
+        </table>
+      </div>
     </div>
     <p class="mini">Sales and gross profit are read from the Talon income statement. Margin, the projection and
       the comparison columns are the only calculated values on this page.</p>
@@ -124,9 +126,11 @@
     <p>The operating detail the roll-up above doesn't carry, one segment block per department.</p>
   </div>
   <div>
-    <table><thead><tr>
-      <th class="l">Line item</th><th>MTD</th>
-    </tr></thead><tbody id="deptDetailBody"></tbody></table>
+    <div class="card" style="max-width:620px">
+      <table><thead><tr>
+        <th class="l">Line item</th><th>MTD</th>
+      </tr></thead><tbody id="deptDetailBody"></tbody></table>
+    </div>
     <p class="mini note-el">Motorclothes counter sales equal its Total sales above &mdash; no wholesale channel, so
       every dollar is retail. Service's Total labor + Total parts sum to its Total sales above, split.</p>
 
