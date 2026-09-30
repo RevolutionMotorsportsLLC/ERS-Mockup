@@ -65,13 +65,15 @@
     <p>Every revenue channel, and the totals built from them.</p>
   </div>
   <div>
-    <div class="bases" role="tablist" aria-label="Comparison basis">
-      <button role="tab" aria-selected="true"  data-basis="mtd">MTD</button>
-      <button role="tab" aria-selected="false" data-basis="lastmonth">vs. Last Month</button>
-      <button role="tab" aria-selected="false" data-basis="lastyear">vs. Last Year</button>
+    <div class="card" style="max-width:640px">
+      <div class="bases" role="tablist" aria-label="Comparison basis">
+        <button role="tab" aria-selected="true"  data-basis="mtd">MTD</button>
+        <button role="tab" aria-selected="false" data-basis="lastmonth">vs. Last Month</button>
+        <button role="tab" aria-selected="false" data-basis="lastyear">vs. Last Year</button>
+      </div>
+      <div class="basisnote" id="basisnote"></div>
+      <table><thead><tr id="kpihead"></tr></thead><tbody id="kpibody"></tbody></table>
     </div>
-    <div class="basisnote" id="basisnote"></div>
-    <table><thead><tr id="kpihead"></tr></thead><tbody id="kpibody"></tbody></table>
 
     <div class="spec note-el">
       <b class="h">Converted from the legacy Summary table</b>
@@ -123,7 +125,9 @@
     <p>Today's channel split and month-to-date productivity, by rep.</p>
   </div>
   <div>
-    <table class="deals"><thead><tr id="repHead"></tr></thead><tbody id="repBody"></tbody></table>
+    <div class="card">
+      <table class="deals"><thead><tr id="repHead"></tr></thead><tbody id="repBody"></tbody></table>
+    </div>
 
     <div class="spec note-el">
       <b class="h">Reduced from 17 columns to 11</b>
@@ -152,9 +156,11 @@
     <p>Bin-level cycle counts.</p>
   </div>
   <div>
-    <table><thead><tr>
-      <th class="l">Bin</th><th>Before</th><th>After</th><th>Loss</th><th>Gain</th><th class="l">Date</th>
-    </tr></thead><tbody id="invbody"></tbody></table>
+    <div class="card" style="max-width:700px">
+      <table><thead><tr>
+        <th class="l">Bin</th><th>Before</th><th>After</th><th>Loss</th><th>Gain</th><th class="l">Date</th>
+      </tr></thead><tbody id="invbody"></tbody></table>
+    </div>
     <p class="mini note-el">The live export's own Totals row didn't match its two visible bin rows either &mdash; more
       bins exist than were shown. These four are a self-contained sample set; their total is only the sum of what's
       shown here, not the real store's full bin count.</p>
@@ -168,9 +174,11 @@
     <p>Aging inventory, as a share of total.</p>
   </div>
   <div>
-    <table><thead><tr>
-      <th class="l">Line item</th><th>Inventory</th><th>% of total</th>
-    </tr></thead><tbody id="obsbody"></tbody></table>
+    <div class="card" style="max-width:520px">
+      <table><thead><tr>
+        <th class="l">Line item</th><th>Inventory</th><th>% of total</th>
+      </tr></thead><tbody id="obsbody"></tbody></table>
+    </div>
   </div>
 </section>
 
