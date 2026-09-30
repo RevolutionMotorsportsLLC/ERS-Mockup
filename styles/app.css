@@ -106,6 +106,14 @@ tbody tr.vehicles td{background:#F4F2EE}
 tbody tr.tot td{border-top:1px solid var(--ink);border-bottom:0;font-weight:600;padding-top:7px}
 tbody tr.tot td.l{font-family:var(--disp);font-size:12.5px;letter-spacing:.1em;text-transform:uppercase}
 
+/* A true grand total gets a double rule instead of a single one, plus a thin
+   accent edge on its label - the bottom line reads as unmistakable everywhere
+   this class means an actual total. Excluded when .tot is paired with .band
+   (a mini header borrowing .tot's bold treatment, not a real total - see Bike
+   Sales' F&I PPV sub-header row). */
+tbody tr.tot:not(.band) td{border-top:3px double var(--ink);padding-top:8px}
+tbody tr.tot:not(.band) td.l{box-shadow:inset 3px 0 0 var(--accent)}
+
 .src{font-family:var(--mono);font-size:9px;color:var(--ink-low);letter-spacing:.04em;padding-left:7px}
 td.base{font-family:var(--mono);font-size:10px;color:var(--ink-low);text-align:left}
 td.muted{color:#C9C8C3}
