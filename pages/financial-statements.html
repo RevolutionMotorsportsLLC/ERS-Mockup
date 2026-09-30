@@ -10,11 +10,50 @@
 <link rel="stylesheet" href="../styles/tokens.css">
 <link rel="stylesheet" href="../styles/app.css">
 <style>
+/* Each statement (or sub-statement) sits in its own bordered box, like a printed
+   schedule — the single biggest cue for "a new section starts here." */
+.stmt-box{border:1px solid var(--rule-hard);background:#fff;padding:18px 20px 16px;margin-top:16px}
+.stmt-box:first-child{margin-top:0}
+.stmt-box .tbl-title{margin-bottom:8px}
+.stmt-box tbody td{padding-top:5px;padding-bottom:5px}
+
+/* A printed statement's own masthead: dealer name, then which statement this is,
+   then the period — centered, the way the source workbook itself opens. Sets the
+   tone before a single number is read. */
+.stmt-letterhead{text-align:center;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--rule)}
+.stmt-letterhead .dealer{font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:.09em;text-transform:uppercase}
+.stmt-letterhead .doc{font-family:var(--disp);font-weight:600;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-top:3px}
+.stmt-letterhead .asof{font-family:var(--mono);font-size:10px;color:var(--ink-low);margin-top:4px}
+
 .bs-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 30px}
 .bs-grid .side{min-width:0}
 .bs-grid .side.r{border-left:1px solid var(--rule-hard);padding-left:30px}
 .bs-grid table{margin-bottom:2px}
 @media (max-width:1180px){.bs-grid{grid-template-columns:1fr}.bs-grid .side.r{border-left:0;padding-left:0;margin-top:18px}}
+
+/* Statement column headers (Assets / Liabilities and Net Worth) read as the title
+   of their half of the page, not just another column label. */
+th.stmt-head{font-size:13px;letter-spacing:.1em;color:var(--ink);border-bottom:2px solid var(--ink)}
+
+/* Line-item vs. subtotal vs. grand total — the three-tier hierarchy every real
+   financial statement uses. Line items indent under their section header; a
+   subtotal outdents back to the margin with a single rule above it (the classic
+   "add these up" underline); the grand total gets a double rule, a tinted band
+   and an accent-coloured edge, so the one number that matters can't be missed. */
+tr.item td.l{padding-left:20px}
+tr.subhead td{font-family:var(--mono);font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-low);padding:6px 10px 4px 20px;border-bottom:1px solid var(--rule)}
+tr.subhead td:last-child{padding-left:10px}
+tbody tr.totrow td{border-top:1px solid var(--ink-mid);padding-top:6px}
+tbody tr.tot td{border-top:3px double var(--ink);background:#F4F2EE;padding-top:8px;padding-bottom:8px}
+tbody tr.tot td.l{box-shadow:inset 3px 0 0 var(--accent)}
+tbody tr.band td{padding-top:7px}
+
+/* Grouped period/measure headers (Current | Year to Date, Employment | Operational)
+   get a soft tint of their own, so the two halves read as distinct blocks before
+   you even reach the numbers, and the divider between them is easier to track
+   down a wide table. */
+.stmt-box thead tr.grp th{background:#F7F6F3;padding-top:4px}
+.stmt-box th.segstart,.stmt-box td.segstart{border-left:2px solid var(--rule-hard)}
 </style>
 </head>
 <body>
@@ -56,16 +95,23 @@
     <p>As of the last day of the closed month. Every line, in the order Harley expects them.</p>
   </div>
   <div>
-    <div class="bs-grid">
-      <div class="side l">
-        <table><thead><tr><th class="l">Assets</th><th>Amount</th></tr></thead>
-          <tbody id="bsAssets"></tbody>
-        </table>
+    <div class="stmt-box">
+      <div class="stmt-letterhead">
+        <div class="dealer" id="lhDealer1"></div>
+        <div class="doc">Balance Sheet</div>
+        <div class="asof" id="lhAsOf"></div>
       </div>
-      <div class="side r">
-        <table><thead><tr><th class="l">Liabilities and Net Worth</th><th>Amount</th></tr></thead>
-          <tbody id="bsLiab"></tbody>
-        </table>
+      <div class="bs-grid">
+        <div class="side l">
+          <table><thead><tr><th class="l stmt-head">Assets</th><th>Amount</th></tr></thead>
+            <tbody id="bsAssets"></tbody>
+          </table>
+        </div>
+        <div class="side r">
+          <table><thead><tr><th class="l stmt-head">Liabilities and Net Worth</th><th>Amount</th></tr></thead>
+            <tbody id="bsLiab"></tbody>
+          </table>
+        </div>
       </div>
     </div>
     <p class="mini">Every figure on this statement is read directly from the Talon trial balance &mdash; nothing
@@ -92,50 +138,65 @@
     <p>Sales, gross profit and expense, whole-dealership, current month and year to date.</p>
   </div>
   <div>
-    <div class="tbl-title"><h4>Sales &amp; Gross Profit</h4></div>
-    <table>
-      <thead>
-        <tr class="grp" id="isgpGrpHead"></tr>
-        <tr id="isgpColHead"></tr>
-      </thead>
-      <tbody id="isgpBody"></tbody>
-    </table>
+    <div class="stmt-box">
+      <div class="stmt-letterhead">
+        <div class="dealer" id="lhDealer2"></div>
+        <div class="doc">Income Statement</div>
+        <div class="asof" id="lhPeriod"></div>
+      </div>
+      <div class="tbl-title"><h4>Sales &amp; Gross Profit</h4></div>
+      <table>
+        <thead>
+          <tr class="grp" id="isgpGrpHead"></tr>
+          <tr id="isgpColHead"></tr>
+        </thead>
+        <tbody id="isgpBody"></tbody>
+      </table>
+    </div>
     <p class="mini">Qty, Net Sales and Gross are read from the Talon income statement. Margin is the only
       calculated value in this table &mdash; <code>Gross &divide; Net Sales</code>.</p>
 
-    <div class="tbl-title" style="margin-top:18px"><h4>Departmental Expenses</h4></div>
-    <table>
-      <thead>
-        <tr class="grp" id="isdeGrpHead"></tr>
-        <tr id="isdeColHead"></tr>
-      </thead>
-      <tbody id="isdeBody"></tbody>
-    </table>
+    <div class="stmt-box">
+      <div class="tbl-title"><h4>Departmental Expenses</h4></div>
+      <table>
+        <thead>
+          <tr class="grp" id="isdeGrpHead"></tr>
+          <tr id="isdeColHead"></tr>
+        </thead>
+        <tbody id="isdeBody"></tbody>
+      </table>
+    </div>
     <p class="mini"><code>% of Gross = expense &divide; total Gross profit</code> for the same period (Current or
       YTD), from the Sales &amp; Gross Profit table above &mdash; not each department's own gross.</p>
 
-    <div class="tbl-title" style="margin-top:18px"><h4>Administration Expense</h4></div>
-    <table>
-      <thead><tr><th class="l">Line item</th><th>Current</th><th>% of Sales</th><th>YTD</th><th>% of Sales</th></tr></thead>
-      <tbody id="isadBody"></tbody>
-    </table>
+    <div class="stmt-box">
+      <div class="tbl-title"><h4>Administration Expense</h4></div>
+      <table>
+        <thead><tr><th class="l">Line item</th><th>Current</th><th>% of Sales</th><th>YTD</th><th>% of Sales</th></tr></thead>
+        <tbody id="isadBody"></tbody>
+      </table>
+    </div>
     <p class="mini"><code>% of Sales = expense &divide; total Net Sales</code> for the same period, from the
       Sales &amp; Gross Profit table's grand total.</p>
 
-    <div class="tbl-title" style="margin-top:18px"><h4>Operating Summary</h4></div>
-    <table>
-      <thead><tr><th class="l">Line item</th><th>Current</th><th>YTD</th></tr></thead>
-      <tbody id="issumBody"></tbody>
-    </table>
+    <div class="stmt-box">
+      <div class="tbl-title"><h4>Operating Summary</h4></div>
+      <table>
+        <thead><tr><th class="l">Line item</th><th>Current</th><th>YTD</th></tr></thead>
+        <tbody id="issumBody"></tbody>
+      </table>
+    </div>
 
-    <div class="bs-grid" style="margin-top:16px">
-      <div class="side l">
-        <div class="tbl-title"><h4>Additions to Income</h4></div>
-        <table><thead><tr><th class="l">Line item</th><th>Current</th><th>YTD</th></tr></thead><tbody id="isaddBody"></tbody></table>
-      </div>
-      <div class="side r">
-        <div class="tbl-title"><h4>Deductions from Income</h4></div>
-        <table><thead><tr><th class="l">Line item</th><th>Current</th><th>YTD</th></tr></thead><tbody id="isdedBody"></tbody></table>
+    <div class="stmt-box">
+      <div class="bs-grid">
+        <div class="side l">
+          <div class="tbl-title"><h4>Additions to Income</h4></div>
+          <table><thead><tr><th class="l">Line item</th><th>Current</th><th>YTD</th></tr></thead><tbody id="isaddBody"></tbody></table>
+        </div>
+        <div class="side r">
+          <div class="tbl-title"><h4>Deductions from Income</h4></div>
+          <table><thead><tr><th class="l">Line item</th><th>Current</th><th>YTD</th></tr></thead><tbody id="isdedBody"></tbody></table>
+        </div>
       </div>
     </div>
 
@@ -174,7 +235,7 @@
 var DATA;
 
 function row1(r){
-  return '<tr><td class="l">' + r.label + '<span class="src">' + r.band + '</span></td>' +
+  return '<tr class="item"><td class="l">' + r.label + '<span class="src">' + r.band + '</span></td>' +
          '<td>' + money(r.amount) + '</td></tr>';
 }
 function totRow1(r, cls){
@@ -200,10 +261,10 @@ function renderBalanceSheet(){
   if (a.otherVehicleAssets.rows.length) ah += block1('Other Vehicle Assets', a.otherVehicleAssets.rows, a.otherVehicleAssets.total);
   ah += totRow1(a.totalCurrentAssets, 'totrow endband');
   ah += '<tr class="band"><td colspan="2">Fixed Assets</td></tr>' +
-        '<tr><td class="l">Description<span class="src"></span></td><td>Net Value</td></tr>';
+        '<tr class="subhead"><td class="l">Description</td><td>Net Value</td></tr>';
   for (var i = 0; i < a.fixedAssets.rows.length; i++) {
     var f = a.fixedAssets.rows[i];
-    ah += '<tr><td class="l">' + f.label + '<span class="src">' + f.band + '</span></td><td>' + money(f.netValue) + '</td></tr>';
+    ah += '<tr class="item"><td class="l">' + f.label + '<span class="src">' + f.band + '</span></td><td>' + money(f.netValue) + '</td></tr>';
   }
   ah += '<tr class="totrow endband"><td class="l">' + a.fixedAssets.total.label + '<span class="src">statement</span></td><td>' + money(a.fixedAssets.total.netValue) + '</td></tr>';
   ah += block1('Other Assets', a.otherAssets.rows, a.otherAssets.total);
@@ -244,7 +305,7 @@ function renderSalesGP(){
       '<td class="segstart">' + commas(r.ytd.qty) + '</td><td>' + money(r.ytd.netSales) + '</td><td>' + money(r.ytd.gross) + '</td><td>' + pct1(my) + '</td></tr>';
   }
   var html = '', i;
-  for (i = 0; i < s.rows.length; i++) html += gpRow(s.rows[i]);
+  for (i = 0; i < s.rows.length; i++) html += gpRow(s.rows[i], 'item');
   html += gpRow(s.unitDepartmentTotal, 'totrow endband');
   for (i = 0; i < s.departmentRows.length; i++) html += gpRow(s.departmentRows[i]);
   html += gpRow(s.total, 'tot');
@@ -291,7 +352,7 @@ function renderAdmin(){
     var r = ad.rows[i];
     var pc = gp.current.netSales ? r.current / gp.current.netSales * 100 : 0;
     var py = gp.ytd.netSales ? r.ytd / gp.ytd.netSales * 100 : 0;
-    html += '<tr><td class="l">' + r.label + '<span class="src">' + r.band + '</span></td>' +
+    html += '<tr class="item"><td class="l">' + r.label + '<span class="src">' + r.band + '</span></td>' +
       '<td>' + money(r.current) + '</td><td>' + pct1(pc) + '</td><td>' + money(r.ytd) + '</td><td>' + pct1(py) + '</td></tr>';
   }
   var oh = ad.overheadExpenses;
@@ -323,7 +384,7 @@ function renderAddDed(){
     var html = '', i;
     for (i = 0; i < section.rows.length; i++) {
       var r = section.rows[i];
-      html += '<tr><td class="l">' + r.label + '<span class="src">' + r.band + '</span></td><td>' + money(r.current) + '</td><td>' + money(r.ytd) + '</td></tr>';
+      html += '<tr class="item"><td class="l">' + r.label + '<span class="src">' + r.band + '</span></td><td>' + money(r.current) + '</td><td>' + money(r.ytd) + '</td></tr>';
     }
     var t = section.total;
     html += '<tr class="tot"><td class="l">' + t.label + '<span class="src">' + t.band + '</span></td><td>' + money(t.current) + '</td><td>' + money(t.ytd) + '</td></tr>';
@@ -371,6 +432,17 @@ fetch('../data/financial-statements.json')
     DATA = json;
     document.getElementById('pageMeta').innerHTML =
       DATA.store + '<br>Current: <b>' + DATA.period.label + '</b> (closed) &middot; YTD: <b>' + DATA.period.ytdLabel + '</b>';
+
+    var dealerName = DATA.store.toUpperCase() + ' HARLEY-DAVIDSON';
+    var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var d = DATA.balanceSheet.asOf.split('-');
+    var asOfLabel = 'As of ' + MONTHS[+d[1] - 1] + ' ' + (+d[2]) + ', ' + d[0];
+    document.getElementById('lhDealer1').innerHTML = dealerName;
+    document.getElementById('lhDealer2').innerHTML = dealerName;
+    document.getElementById('lhAsOf').innerHTML = asOfLabel;
+    document.getElementById('lhPeriod').innerHTML =
+      DATA.period.label + ' &middot; Year to Date: ' + DATA.period.ytdLabel;
+
     renderBalanceSheet();
     renderSalesGP();
     renderDeptExpenses();
