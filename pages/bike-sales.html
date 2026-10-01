@@ -68,6 +68,14 @@
   </div>
   <div>
     <div class="card">
+      <div class="tbl-title"><h4>Are we on pace</h4><span class="cnt">New + Used combined</span></div>
+      <div id="kpiBullets" class="chart"></div>
+      <p class="chart-note">Bar is month to date. The vertical marker is projected month-end on the six-day
+        trading week &mdash; <span id="bulletBasis"></span>. The short tick below is the complete prior period.
+        Green and red mark the &plusmn;3-point pace judgment only.</p>
+    </div>
+
+    <div class="card">
       <div class="bases" role="tablist" aria-label="Comparison basis">
         <button role="tab" aria-selected="true"  data-basis="mtd">MTD</button>
         <button role="tab" aria-selected="false" data-basis="lastmonth">vs. Last Month</button>
@@ -135,6 +143,12 @@
     <p>Traffic, floor activity, conversion.</p>
   </div>
   <div>
+    <div class="card">
+      <div class="tbl-title"><h4>Sales floor conversion</h4><span class="cnt">Month to date</span></div>
+      <div id="txFunnel" class="chart"></div>
+      <p class="chart-note" id="txFunnelNote"></p>
+    </div>
+
     <div class="card" style="max-width:620px">
       <table><thead><tr>
         <th class="l">Line item</th><th>MTD</th>
@@ -161,6 +175,13 @@
     <p>The Talon deal-charge export, with calculated rows attached.</p>
   </div>
   <div>
+    <div class="card">
+      <div class="tbl-title"><h4>Where back-end gross comes from</h4><span class="cnt">Ranked, F&amp;I products only</span></div>
+      <div id="fiPareto" class="chart"></div>
+      <p class="chart-note">Ranked by total. Vehicles is excluded &mdash; it is a base row (vehicle sales), not an
+        F&amp;I charge, and is excluded from every calculation below.</p>
+    </div>
+
     <div class="card" style="max-width:720px">
       <div class="tbl-title">
         <h4>F &amp; I Deal Charges</h4>
@@ -302,6 +323,7 @@
 
 <script>var ERS_PAGE = 'bike-sales';</script>
 <script src="../scripts/format.js"></script>
+<script src="../scripts/charts.js"></script>
 <script src="../scripts/nav.js"></script>
 <script>
 /* Two day counts, on purpose.
@@ -429,7 +451,7 @@ var TXROWS = [
   {n:'Greets',                band:'entered', get:function(){ return TX.greets; },   fmt:commas},
   {n:'Sit-downs',             band:'entered', get:function(){ return TX.sitdowns; }, fmt:commas},
   {n:'Unit sales',            band:'counted', get:function(){ return TX.units; },    fmt:commas},
-  {n:'Missed opportunities',  band:'entered', get:function(){ return TX.missed; },   fmt:commas, goal:0, dir:'zero'},
+  {n:'Missed opportunities',  band:'entered', get:function(){ return TX.missed; },   fmt:function(n){ return counted(n); }, goal:0, dir:'zero'},
   {block:'Conversion \u2014 transactions per'},
   {n:'Transactions per greet',    band:'derived', get:function(){ return TX.greets ? txTotal()/TX.greets : 0; },     fmt:function(n){ return n.toFixed(1); }, goal:3,  dir:'ceiling'},
   {n:'Transactions per sit-down', band:'derived', get:function(){ return TX.sitdowns ? txTotal()/TX.sitdowns : 0; }, fmt:function(n){ return n.toFixed(1); }, goal:7,  dir:'ceiling'},
@@ -513,7 +535,9 @@ function renderInv(){
   }
   var dN = zoom === 'used' ? ' class="muted"' : '', dU = zoom === 'new' ? ' class="muted"' : '';
   for (i = 0; i < INV.length; i++) {
-    html += '<tr><td class="l">' + INV[i].style + '</td><td' + dN + '>' + INV[i].n + '</td><td' + dU + '>' +
+    /* Hard rule 4: a missing style name is "no value", not the word None. */
+    var styleName = dashIf(INV[i].style);
+    html += '<tr><td class="l">' + styleName + '</td><td' + dN + '>' + INV[i].n + '</td><td' + dU + '>' +
             INV[i].u + '</td><td' + dU + '>' + INV[i].o + '</td><td>' + INV[i].noPdi + '</td><td>' + INV[i].noSafety + '</td></tr>';
   }
   html += '<tr class="totrow"><td class="l">Totals</td><td' + dN + '>' + t.n + '</td><td' + dU + '>' + t.u +
@@ -715,9 +739,62 @@ function renderHeader(){
 }
 
 /* ---------- Load every sample figure from /data, then render ---------- */
+function renderCharts(){
+  /* Pace judgment, percentage points of the projection. CLAUDE.md: green at
+     +3 points or more, red at -3 or worse, otherwise plain. */
+  function paceCls(actual, pace){
+    if (!pace) return '';
+    return ERS.paceClass((actual - pace) / pace * 100);
+  }
+
+  /* Pace bullets — New + Used combined, so the page's one question is answerable
+     in a glance. Each row: actual bar, pace marker, prior-period tick. */
+  var comb = K.mtd.Total, combY = K.lastyear.Total;
+  var proj = projSeg(comb);
+  ERS.bullet(document.getElementById('kpiBullets'), [
+    { label:'Unit sales',   value:comb.u, pace:proj.u, prior:combY.u,
+      display:commas(comb.u),
+      caption:sgn(comb.u - proj.u, commas) + ' vs pace \u00b7 ' + commas(combY.u) + ' last September',
+      cls:paceCls(comb.u, proj.u) },
+    { label:'Total sales',  value:comb.s, pace:proj.s, prior:combY.s,
+      display:money(comb.s),
+      caption:sgn(comb.s - proj.s, money) + ' vs pace \u00b7 ' + money(combY.s) + ' last September',
+      cls:paceCls(comb.s, proj.s) },
+    { label:'Gross profit', value:comb.g, pace:proj.g, prior:combY.g,
+      display:money(comb.g),
+      caption:sgn(comb.g - proj.g, money) + ' vs pace \u00b7 ' + money(combY.g) + ' last September',
+      cls:paceCls(comb.g, proj.g) }
+  ], { label:'Bike sales pace, month to date' });
+  document.getElementById('bulletBasis').textContent =
+    PROJ_ELAPSED + ' of ' + PROJ_TOTAL + ' open days';
+
+  /* Conversion funnel — sales-floor health in one shape. */
+  ERS.funnel(document.getElementById('txFunnel'), [
+    { label:'Greets',     value:TX.greets },
+    { label:'Sit-downs',  value:TX.sitdowns },
+    { label:'Unit sales', value:TX.units }
+  ], { label:'Sales floor conversion' });
+  var g2u = TX.greets ? Math.round(TX.units / TX.greets * 100) : 0;
+  document.getElementById('txFunnelNote').innerHTML =
+    'Overall conversion <b>' + g2u + '%</b> of greets to a sold unit. ' +
+    'Missed opportunities ' + counted(TX.missed, 'Source value is ' + commas(TX.missed) + '. A count of missed ' +
+    'opportunities cannot be negative, so the magnitude is shown and flagged. OPEN_QUESTIONS.md item 2.') +
+    ' &mdash; a loss count, so it is not a funnel stage.';
+
+  /* F&I Pareto — a ranking question gets a ranking shape. */
+  var items = [], i;
+  for (i = 0; i < FI_CHARGES.length; i++) {
+    if (FI_CHARGES[i].base) continue;
+    items.push({ label:FI_CHARGES[i].n, value:FI_CHARGES[i].v, display:money(FI_CHARGES[i].v) });
+  }
+  items.sort(function(a, b){ return b.value - a.value; });
+  ERS.bars(document.getElementById('fiPareto'), items, { label:'F&I back-end gross by product' });
+}
+
 function renderAll(){
   renderHeader();
   renderKPI(); renderTrans(); renderFI(); renderInv(); renderDeals();
+  renderCharts();
   renderSectionNav();
 }
 fetch('../data/bike-sales.json')

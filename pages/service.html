@@ -122,6 +122,14 @@
   </div>
   <div>
     <div class="card">
+      <div class="tbl-title"><h4>Are we on pace</h4><span class="cnt">Labour, parts and sublet</span></div>
+      <div id="kpiBullets" class="chart"></div>
+      <p class="chart-note">Bar is month to date. Vertical marker is projected month-end on the six-day trading
+        week &mdash; <span id="bulletBasis"></span>. Tick below is the complete prior period. Colour marks the
+        &plusmn;3-point pace judgment only.</p>
+    </div>
+
+    <div class="card">
       <div class="tbl-title">
         <h4 id="repTitle"></h4>
         <span class="cnt">
@@ -193,6 +201,7 @@
 
 <script>var ERS_PAGE = 'service';</script>
 <script src="../scripts/format.js"></script>
+<script src="../scripts/charts.js"></script>
 <script src="../scripts/nav.js"></script>
 <script>
 /* Two day counts, on purpose - see the Projected month-end note above. */
@@ -442,6 +451,25 @@ function renderSectionNav(){
 }
 
 /* ---------- Load every sample figure from /data, then render ---------- */
+
+/* ---------- Charts (scripts/charts.js) ---------- */
+function renderCharts(){
+  function paceCls(a, p){ return p ? ERS.paceClass((a - p) / p * 100) : ''; }
+  var m = withDerived(DATA.kpi.mtd), p = proj(m), ly = withDerived(DATA.kpi.lastyear);
+  ERS.bullet(document.getElementById('kpiBullets'), [
+    { label:'Labor sales',  value:m.labor, pace:p.labor, prior:ly.labor,
+      display:money(m.labor), cls:paceCls(m.labor, p.labor),
+      caption:sgn(m.labor - p.labor, money) + ' vs pace \u00b7 ' + money(ly.labor) + ' last September' },
+    { label:'Parts sales',  value:m.parts, pace:p.parts, prior:ly.parts,
+      display:money(m.parts), cls:paceCls(m.parts, p.parts),
+      caption:sgn(m.parts - p.parts, money) + ' vs pace \u00b7 ' + money(ly.parts) + ' last September' },
+    { label:'Total close',  value:m.total, pace:m.total * PF, prior:ly.total,
+      display:money(m.total), cls:paceCls(m.total, m.total * PF),
+      caption:sgn(m.total - m.total * PF, money) + ' vs pace \u00b7 ' + money(ly.total) + ' last September' }
+  ], { label:'Service pace, month to date' });
+  document.getElementById('bulletBasis').textContent = PROJ_ELAPSED + ' of ' + PROJ_TOTAL + ' open days';
+}
+
 fetch('../data/service.json')
   .then(function(res){ return res.json(); })
   .then(function(json){
@@ -452,6 +480,7 @@ fetch('../data/service.json')
     PF   = PROJ_TOTAL / PROJ_ELAPSED;
     renderHeader();
     renderKPI();
+    renderCharts();
     renderReps();
     renderSectionNav();
   })

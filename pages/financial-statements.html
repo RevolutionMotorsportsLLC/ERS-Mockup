@@ -137,6 +137,15 @@ tbody tr.band td{padding-top:7px}
     <p>Sales, gross profit and expense, whole-dealership, current month and year to date.</p>
   </div>
   <div>
+    <div class="card">
+      <div class="tbl-title"><h4>Where the profit went</h4><span class="cnt">Current month, one shape</span></div>
+      <div id="isWaterfall" class="chart"></div>
+      <p class="chart-note">Every bar is a line on the statement below, in the order it appears there.
+        <b>Cost of sales</b> is the one derived step &mdash; net sales less gross profit &mdash; and is tagged
+        <code>derived</code>; every other bar is read from the Talon statement. The bars reconcile exactly to the
+        statement's own Operating Profit and Net Profit Before Taxes rows.</p>
+    </div>
+
     <div class="stmt-box">
       <div class="stmt-letterhead">
         <div class="dealer" id="lhDealer2"></div>
@@ -225,6 +234,7 @@ tbody tr.band td{padding-top:7px}
 
 <script>var ERS_PAGE = 'financial-statements';</script>
 <script src="../scripts/format.js"></script>
+<script src="../scripts/charts.js"></script>
 <script src="../scripts/nav.js"></script>
 <script>
 /* Every figure on this page lives in /data/financial-statements.json. Line items and
@@ -425,6 +435,34 @@ function renderSectionNav(){
 }
 
 /* ---------- Load every sample figure from /data, then render ---------- */
+/* ---------- Waterfall: where the profit went ----------
+   Every bar is a line already on the statement below, in statement order.
+   The single derived step is Cost of sales (net sales less gross profit);
+   it is labelled derived so the provenance stays honest. The sequence
+   reconciles to the statement's own Operating Profit and Net Before Taxes. */
+function renderWaterfall(){
+  var is  = DATA.incomeStatement;
+  var gp  = is.salesAndGrossProfit.total.current;
+  var dep = is.departmentalExpenses.totalDepartmentalExpenses.current;
+  var adm = is.administrationExpense.overheadExpenses.current;
+  var sum = is.summary;
+
+  var costOfSales = gp.netSales - gp.gross;
+
+  ERS.waterfall(document.getElementById('isWaterfall'), [
+    { label:'Net sales',      type:'total', value:gp.netSales, fmt:money },
+    { label:'Cost of sales',  type:'step',  value:-costOfSales, fmt:money },
+    { label:'Gross profit',   type:'total', value:gp.gross, fmt:money },
+    { label:'Dept expenses',  type:'step',  value:-dep, fmt:money },
+    { label:'Overhead',       type:'step',  value:-adm, fmt:money },
+    { label:'Operating',      type:'total', value:sum.operatingProfitLoss.current, fmt:money },
+    { label:'Add / ded.',     type:'step',  value:sum.netAdditionsAndDeductions.current, fmt:money },
+    { label:'Bonus',          type:'step',  value:-sum.generalManagerBonus.current, fmt:money },
+    { label:'Owner sal.',     type:'step',  value:-sum.salariesOwners.current, fmt:money },
+    { label:'Net before tax', type:'total', value:sum.netProfitBeforeTaxes.current, fmt:money }
+  ], { label:'Income statement waterfall, current month', height:210 });
+}
+
 fetch('../data/financial-statements.json')
   .then(function(res){ return res.json(); })
   .then(function(json){
@@ -448,6 +486,7 @@ fetch('../data/financial-statements.json')
     renderAdmin();
     renderSummary();
     renderAddDed();
+    renderWaterfall();
     renderSectionNav();
   })
   .catch(function(err){

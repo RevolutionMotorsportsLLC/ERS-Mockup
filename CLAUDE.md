@@ -159,6 +159,46 @@ Projected = MTD ÷ open days elapsed × total open days
 
 ---
 
+## Charts and visuals
+
+Built once in `/scripts/charts.js`, styled by `/styles/app.css`, and obeying every rule
+above. A chart is a different *view* of the same figures, never a second source of truth —
+if it cannot reconcile with the table beside it, it does not ship.
+
+- **The data shape is three points, not a series.** Every dataset carries month to date,
+  last month and last year. There is no daily feed. So: no trend lines, no sparklines, no
+  forecast curves. Comparison shapes only — bullets, bars, waterfalls, funnels, matrices.
+  If a `byDate` feed is added later, the first chart to build is cumulative actual against
+  pace with a projection fan.
+- **Colour only where a judgment is possible**, exactly as for tables. Pace uses the
+  documented ±3-point rule. A chart with no red and no green is a healthy chart — the
+  absence of colour is itself information.
+- **Never a zero for "no value"**, on an axis, a tooltip or a label. Em-dash everywhere.
+- **The two day-counts stay separate and stay labelled** on any pace visual. The bullets
+  state the projection basis in their caption.
+- **Source tags apply to charts too.** The one derived step in the income-statement
+  waterfall (cost of sales = net sales less gross profit) is labelled `derived` on the
+  chart note, because it is the only bar ERS calculates.
+- **Cross-store visuals are magnitude, not judgment**, until benchmarking is consent-gated
+  and settled — see hard rule 9 and `OPEN_QUESTIONS.md`. The matrix bars are deliberately
+  neutral; the reader's own store is picked out in accent. The empty state below four
+  contributing stores is built first and renders instead of the chart.
+- **Charts print.** They must not break the printable statement.
+
+### Where charts appear
+
+| Tab | Visual | What it answers |
+|---|---|---|
+| Store Overview | exception strip + department share | What needs attention, and where the gross actually comes from |
+| Bike Sales | pace bullets + conversion funnel + F&I Pareto | Is the floor converting, and where does back-end gross come from |
+| Parts Sales | pace bullets + obsolescence share | Is inventory turning |
+| Motorclothes | pace bullets | Is apparel moving |
+| Service | pace bullets | Are we billing the hours |
+| Scorecards | cross-store matrix | Which store needs help |
+| Financial Statements | income-statement waterfall | Where did the profit go |
+
+---
+
 ## Notes on the page
 
 Two audiences, two documents. Do not mix them.
@@ -167,8 +207,13 @@ Two audiences, two documents. Do not mix them.
   colour thresholds, anything they would otherwise get wrong. Short bullets. The Bike Sales
   mockup runs about 270 words of notes across three boxes; that is the ceiling, not a target.
 - **In `OPEN_QUESTIONS.md`:** definitions and data sources that need Logan's answer. These
-  block the spec, not the build.
-- Every page carries a **Hide notes** toggle so the tables can be read clean.
+  block the spec, not the build. That file now exists and carries nine open items; anything
+  the mockup deliberately did not guess at belongs there, not inline.
+- Every page carries a **Show notes / Hide notes** toggle so the tables can be read clean.
+  **Build notes default to hidden** — the default read is the dashboard, not the
+  annotation, and one click reveals the spec. The toggle is in the header on every page.
+  The source tags are clickable too: clicking one isolates that provenance band so the data
+  contract can actually be audited, and Escape clears it.
 
 ---
 
@@ -197,20 +242,24 @@ earlier version was rescaled down 15% because a fifteen-row table would not fit 
 /index.html            redirects to the default tab (Store Overview)
 /pages/                one file per tab
 /styles/tokens.css     the design system above
-/styles/app.css        shared layout and table styles
+/styles/app.css        shared layout, table and chart styles
 /data/*.json           all sample figures, per store and period
-/scripts/nav.js        shared sidebar, generated once per page from one nav list
-/scripts/format.js     shared number formatting (money, commas, percentages)
+/scripts/nav.js        shared sidebar, build-notes toggle, source filter, Print page
+/scripts/format.js     shared number formatting (money, commas, percentages, dashes)
+/scripts/charts.js     shared SVG chart kit — bullets, funnels, waterfalls, matrices
 README.md              entry point for developers implementing this
 CLAUDE.md              this file
+HANDOFF.md             what just happened, what is open, where to pick up — read first
+OPEN_QUESTIONS.md      the items that need Logan's answer before the spec is final
+DESIGN_AUDIT.md        design audit and layout proposal that led to the chart work
 ```
 
 Table rendering itself is still per-page, not shared — each tab's KPI/record logic lives
 in its own `<script>` block. Extracting a shared renderer waits until enough tabs exist to
 show what's actually common, per Hard Rule discipline elsewhere in this file; forcing one
-early risked baking in the wrong abstraction. `OPEN_QUESTIONS.md`, referenced under Notes
-on the page below, doesn't exist yet — deemed mostly redundant with the questions already
-flagged inline on each page, but the file layout leaves room for it if that changes.
+early risked baking in the wrong abstraction. Chart rendering is the exception and *is*
+shared, in `scripts/charts.js`, because a chart has no per-tab business logic — it takes
+plain figures and draws them.
 
 ---
 
@@ -233,6 +282,48 @@ Coast's real August 2026 closed-month statement, and the Balance Sheet balances 
 Income Statement's department rows sum to its own stated total, both confirmed against
 the source workbook.
 
+**Also done: a design pass on the shared kit**, September 2026 — `styles/tokens.css`,
+`styles/app.css` and `scripts/nav.js` only. No page markup, no sample data, no formula or
+column rule changed; the conventions above all still hold and still read the same. What
+moved:
+
+- **Tokens** carry a surface ramp (`--paper` / `--card` / `--sunken` / `--sunken-2`), the
+  ink ramp plus `--ink-faint`, four elevation steps, a radius scale, and a motion scale.
+  The documented palette is unchanged and exact — `--paper`, the ink ramp, `--rule`,
+  `--rule-hard`, `--accent`, `--accent-soft`, `--up`, `--down` all still match the values
+  in the Design system block above. Everything else is working colour derived from them
+  (`--accent-hover`, `--accent-deep`, `--accent-softer`, the up/down tints).
+- **The rail** is a proper chrome edge: brand lockup with an accent rule, rounded nav
+  items with an accent bar on the current page, unbuilt tabs marked with a **Soon** badge
+  and made inert instead of a dead `#` link, and a **Row sources** legend at the foot
+  restating the four tags from hard rule 3 — with `derived` called out in accent, since
+  it is the only band where a formula can be wrong.
+- **Controls** share one language: `.btn` with a `.primary` variant, `select.btn` with a
+  drawn caret, `.chip` as a pill. Hover, active, `:focus-visible` (one accent ring,
+  everywhere) and disabled are all defined. `.chip[aria-pressed="true"]` still means "this
+  toggle is on."
+- **The comparison tabs** (`bases`) render as a segmented control — one raised segment for
+  the selected basis — rather than an underline tab strip. Same three tabs, same order,
+  same semantics.
+- **The KPI ribbon** is the visual anchor: larger tabular numerals, a hairline accent rule
+  along the top of the panel, and the progress track as a filled pill with a marker. It
+  and the progress bar are still one card, as required above.
+- **Tables** are unchanged in structure and convention — cards, `.tot` double rule,
+  segment bands, `.src` source tags are exactly as documented above. The source tag is now
+  a real pill (and on a grand-total row, an accent pill), so it reads as metadata rather
+  than loose monospace. Numbers use `tabular-nums` so columns align optically as well as
+  numerically.
+- **Responsive is actually fixed.** Grid children get `min-width:0` and wide tables scroll
+  inside their own card, so the page never gains a horizontal scrollbar — previously the
+  layout overflowed at 1280px and below on several tabs.
+- **Print.** "Print page" now actually prints, and `@media print` strips the rail, the
+  controls and the developer notes, keeps table heads repeating, and stops cards breaking
+  across pages — so what comes out is a clean report a dealer can hand over.
+- **Reduced motion** is honoured globally; the transitions are polish, never information.
+
+Anything in that pass that a developer would otherwise get wrong belongs in the
+conventions above, not in a screenshot — the mockup is still the specification.
+
 **Also done: a visual-consistency pass across every built tab**, September 2026 —
 every table (or tightly related group of tables) now sits in its own bordered card,
 narrow tables are capped to a sensible width instead of stretching full-bleed with a
@@ -249,6 +340,66 @@ are validated — that detail has to reconcile line-for-line with those departme
 tabs, so it's staged separately rather than built alongside v1. The garage composite
 (consolidating multiple stores under one ownership entity) is explicitly **not** near-term
 scope — dropped from consideration for now, September 2026.
+
+**Also done: charts, and an information-design pass**, September 2026 — `scripts/charts.js`
+(new), `scripts/format.js`, `scripts/nav.js`, `styles/app.css`, and chart mounts on all
+seven built tabs. No sample data changed and no formula or column rule changed; every chart
+reconciles with the table beside it. Prompted by `DESIGN_AUDIT.md`, which found 32 tables
+and no visual data representation anywhere. What moved:
+
+- **A shared chart kit** (`scripts/charts.js`) — pace bullets, conversion funnels,
+  waterfalls, aging/share bars, ranked bars, and a cross-store matrix. Dependency-free SVG,
+  one copy, styled by the existing tokens. Charts follow every rule above: no trend lines
+  (there is no daily feed), colour only where a judgment is possible, em-dash for no value,
+  and source provenance carried through.
+- **Pace bullets on every department tab** — the product's primary question, "are we on
+  plan", is now answerable in a glance instead of three columns of mental arithmetic. Bar
+  is month to date, the marker is projected month-end on the six-day trading week, the tick
+  is the complete prior period.
+- **A conversion funnel on Bike Sales** — greets to sit-downs to units, 174 → 68 → 28, a
+  16% greet-to-unit rate that was previously three flat numbers among six.
+- **An income-statement waterfall on Financial Statements** — sales to net before taxes in
+  one shape, reconciling exactly to the statement's own Operating Profit and Net Profit
+  rows. The single derived bar (cost of sales) is labelled `derived`.
+- **A cross-store matrix on Scorecards** — nine metrics across seven stores, replacing the
+  task of ranking six stacked tables by hand. Bars are magnitude in neutral colour, because
+  without a per-metric target there is no judgment to make; the reader's own store is
+  picked out in accent. Below four contributing stores it renders the consent-gated empty
+  state instead, per hard rule 9.
+- **An exception strip on Store Overview** — only what crosses a judgment threshold, using
+  the ±3-point rule already documented above. When nothing crosses it, the strip says so.
+- **Build notes collapse by default** and the **source tags are a working filter** — click
+  one to isolate that provenance band. The trust convention is now an audit tool, with no
+  new data behind it.
+- **Two data-quality fixes.** `transactions.missed` arrives as `-14`, which is impossible
+  for a count; the magnitude is shown and the row flagged rather than either inventing a
+  sign or trusting a broken figure. `inventory[].style` arrived as the string `"None"` and
+  printed as text; it now renders as the em-dash hard rule 4 requires. Both are logged in
+  `OPEN_QUESTIONS.md` for Logan rather than silently resolved.
+
+**Also done: a UI refinement pass on the shared kit**, October 2026 — `styles/tokens.css`,
+`styles/app.css`, `scripts/nav.js`, `scripts/charts.js` only. The locked palette and
+typefaces are untouched; this is craft, not branding. What moved:
+
+- **Flat chrome.** Every gradient in the rail, the ribbon, the progress fill and the note
+  boxes is gone; surfaces differ by hairline and step, shadow is a whisper and appears on
+  hover. Derived neutrals (`--sunken`, the rail ramp, shadows) went cool; the spec values
+  in the Design system block above are unchanged and exact.
+- **The rail carries icons.** One 24px stroke icon per tab, inline SVG in `nav.js`, no icon
+  library; the brand lockup is a pace-bullet glyph (the product's own hero chart) in an
+  accent tile. The current page is a flat `--rail-2` row with the accent bar, icon in accent.
+- **Chart label anchoring is a class, not an attribute.** `.c-val` is `text-anchor:end` in
+  CSS, and CSS beats the SVG attribute — a label placed inside a bar or above a column must
+  carry `.t-start` or `.t-mid`. (The share bars and the aging stack had labels rendering
+  backwards for exactly this reason.)
+- **Money signs read correctly.** The waterfall prints `−$1,125,753`, sign before the
+  dollar, not `$−1,125,753`.
+- **The segment ramp has seven stops** (`c-seg-0` … `c-seg-6`); Riding Academy and
+  Administration used to both fall back to the same black.
+- **The cross-store matrix row breathes**: value above the bar, not on it; row height 30.
+- **`.head .meta` is inline text, not flex.** As a flex row its bare text nodes and `<b>`s
+  became separate items and the day-count ("open day 10 of 30") wrapped into overlapping
+  fragments on several tabs.
 
 **Not started:** CRM, Riding Academy, Maintenance.
 

@@ -65,6 +65,14 @@
     <p>Every revenue channel, and the totals built from them.</p>
   </div>
   <div>
+    <div class="card">
+      <div class="tbl-title"><h4>Are we on pace</h4><span class="cnt">All parts revenue channels</span></div>
+      <div id="kpiBullets" class="chart"></div>
+      <p class="chart-note">Bar is month to date. Vertical marker is projected month-end on the six-day trading
+        week &mdash; <span id="bulletBasis"></span>. Tick below is the complete prior period. Colour marks the
+        &plusmn;3-point pace judgment only.</p>
+    </div>
+
     <div class="card" style="max-width:640px">
       <div class="bases" role="tablist" aria-label="Comparison basis">
         <button role="tab" aria-selected="true"  data-basis="mtd">MTD</button>
@@ -174,6 +182,15 @@
     <p>Aging inventory, as a share of total.</p>
   </div>
   <div>
+    <div class="card">
+      <div class="tbl-title"><h4>Aged inventory as a share of total</h4><span class="cnt">Two thresholds, stated separately</span></div>
+      <div id="obsShare" class="chart"></div>
+      <p class="chart-note">Each bar is the full inventory with one aging threshold marked. The source reports
+        <b>Over 6 Months</b> and <b>Over 12 Months</b> as separate line items and does not state whether the second
+        is nested inside the first, so no combined "current" bucket is calculated here &mdash; the two thresholds
+        are shown against total exactly as they are stated. See <code>OPEN_QUESTIONS.md</code>.</p>
+    </div>
+
     <div class="card" style="max-width:520px">
       <table><thead><tr>
         <th class="l">Line item</th><th>Inventory</th><th>% of total</th>
@@ -220,6 +237,7 @@
 
 <script>var ERS_PAGE = 'parts-sales';</script>
 <script src="../scripts/format.js"></script>
+<script src="../scripts/charts.js"></script>
 <script src="../scripts/nav.js"></script>
 <script>
 /* Two day counts, on purpose - see the Projected month-end note above. */
@@ -467,6 +485,40 @@ function renderSectionNav(){
 }
 
 /* ---------- Load every sample figure from /data, then render ---------- */
+/* ---------- Charts (scripts/charts.js) ---------- */
+function renderCharts(){
+  function paceCls(actual, pace){ return pace ? ERS.paceClass((actual - pace) / pace * 100) : ''; }
+
+  var m = withTotal(DATA.kpi.mtd);
+  var p = proj(m);
+  var ly = withTotal(DATA.kpi.lastyear);
+  ERS.bullet(document.getElementById('kpiBullets'), [
+    { label:'Total sales',  value:m.total, pace:p.total, prior:ly.total,
+      display:money(m.total), cls:paceCls(m.total, p.total),
+      caption:sgn(m.total - p.total, money) + ' vs pace \u00b7 ' + money(ly.total) + ' last September' },
+    { label:'Gross profit', value:m.grossProfit, pace:p.grossProfit, prior:ly.grossProfit,
+      display:money(m.grossProfit), cls:paceCls(m.grossProfit, p.grossProfit),
+      caption:sgn(m.grossProfit - p.grossProfit, money) + ' vs pace \u00b7 ' + money(ly.grossProfit) + ' last September' },
+    { label:'Gross margin', value:m.margin, pace:null, prior:ly.margin,
+      display:pct1(m.margin), cls:'',
+      caption:'Ratio \u2014 no projected margin. ' + sgn(m.margin - ly.margin, function(n){ return n.toFixed(1) + ' pts'; }) + ' vs last September' }
+  ], { label:'Parts sales pace, month to date' });
+  document.getElementById('bulletBasis').textContent = PROJ_ELAPSED + ' of ' + PROJ_TOTAL + ' open days';
+
+  /* Two aging thresholds shown against total. The source does not say whether
+     "over 12 months" is nested inside "over 6 months", so no residual bucket is
+     calculated - see OPEN_QUESTIONS.md. */
+  var o = DATA.obsolescence;
+  ERS.share(document.getElementById('obsShare'), [
+    { label:'Over 6 months', parts:[
+      { label:'Over 6 months', value:o.over6mo },
+      { label:'Within 6 months', value:o.totalInv - o.over6mo } ] },
+    { label:'Over 12 months', parts:[
+      { label:'Over 12 months', value:o.over12mo },
+      { label:'Under 12 months', value:o.totalInv - o.over12mo } ] }
+  ], { label:'Aged inventory against total' });
+}
+
 fetch('../data/parts-sales.json')
   .then(function(res){ return res.json(); })
   .then(function(json){
@@ -480,6 +532,7 @@ fetch('../data/parts-sales.json')
     renderReps();
     renderInv();
     renderObs();
+    renderCharts();
     renderSectionNav();
   })
   .catch(function(err){

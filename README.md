@@ -46,12 +46,18 @@ next; this table is just quick orientation.
   and back end: build the real pages to read from real data shaped like this, and none of
   the sample figures here need to survive into production.
 - `/styles/tokens.css`, `/styles/app.css` — the design system (colors, type, spacing,
-  table conventions), shared by every page, defined once
+  table and chart conventions), shared by every page, defined once
 - `/scripts/format.js`, `/scripts/nav.js` — shared number formatting and the site
   navigation, also shared by every page
+- `/scripts/charts.js` — the shared chart kit (pace bullets, funnels, waterfalls, the
+  cross-store matrix). Dependency-free SVG; a chart is a different view of the same
+  figures, never a second source of truth
 - `CLAUDE.md` — the full set of design rules and conventions this mockup follows. Read
   this before implementing anything; it explains the *why* behind things like the source
   tags on every row and the two different day-counts used for projections.
+- `OPEN_QUESTIONS.md` — the items that need Logan's answer before the spec is final.
+  These block the spec, not the build.
+- `DESIGN_AUDIT.md` — the design audit and layout proposal behind the chart work.
 
 ## The two things most likely to trip you up
 

@@ -1,11 +1,74 @@
-/* ERS design system — defined once, never redefined per page. See CLAUDE.md. */
+/* ERS design system — defined once, never redefined per page. See CLAUDE.md.
+   The documented palette (paper, ink ramp, rules, accent, up/down) is the spec and
+   its values are fixed; everything else here is scaffolding built around it.
+   Scaffolding is cool neutral and flat: surfaces differ by hairline and step, not
+   by gradient. */
 :root{
-  --paper:#FBFAF8; --rail:#1A1B1E; --rail-ink:#B8BCC2;
-  --ink:#17181A; --ink-mid:#5A5F66; --ink-low:#9BA0A7;
-  --rule:#E4E3DF; --rule-hard:#C9C8C3;
-  --accent:#D9541F; --accent-soft:#FAEDE7;
-  --up:#2C6E4C; --down:#B23A2B;
+  /* Surfaces — page sits warm and flat; cards lift off it; bands sink below it. */
+  --paper:#FBFAF8;
+  --card:#FFFFFF;
+  --sunken:#F4F4F3;
+  --sunken-2:#EBEBE9;
+  --rail:#17191D;
+  --rail-2:#1F2227;
+  --rail-3:#2A2E34;
+
+  /* Ink — spec ramp plus a fainter step for rules and disabled text. */
+  --ink:#17181A;
+  --ink-mid:#5A5F66;
+  --ink-low:#9BA0A7;
+  --ink-faint:#C7C9CB;
+  --rail-ink:#B4BAC2;
+  --rail-dim:#6B727B;
+
+  /* Rules — spec values, unchanged. */
+  --rule:#E4E3DF;
+  --rule-hard:#C9C8C3;
+  --rule-strong:#17181A;
+
+  /* Accent — spec values, unchanged. Softer/deeper tints are working colours
+     built around that brand orange, used for fills and hovers only. */
+  --accent:#D9541F;
+  --accent-hover:#C2481A;
+  --accent-deep:#9E3A14;
+  --accent-soft:#FAEDE7;
+  --accent-softer:#FDF5F1;
+  --accent-ink:#8A3510;
+  --accent-line:#EED6C8;
+
+  /* Judgment colours — spec values, unchanged. */
+  --up:#2C6E4C;
+  --up-soft:#E9F1EC;
+  --down:#B23A2B;
+  --down-soft:#F8EAE7;
+
+  /* Type */
   --disp:'Barlow Condensed','Arial Narrow',sans-serif;
   --body:'Inter',-apple-system,'Segoe UI',sans-serif;
   --mono:'IBM Plex Mono',Menlo,monospace;
+
+  /* Radii — dense tool, so small and consistent. */
+  --r-xs:3px;
+  --r-sm:5px;
+  --r-md:7px;
+  --r-lg:10px;
+  --r-pill:999px;
+
+  /* Elevation — quiet and cool. Cards rest flat; shadow is a whisper, never a drop. */
+  --sh-hair:0 0 0 1px rgba(20,22,26,.05);
+  --sh-xs:0 1px 2px rgba(20,22,26,.06);
+  --sh-sm:0 1px 2px rgba(20,22,26,.05), 0 4px 10px rgba(20,22,26,.05);
+  --sh-md:0 2px 4px rgba(20,22,26,.05), 0 10px 24px rgba(20,22,26,.08);
+  --sh-lg:0 4px 10px rgba(20,22,26,.06), 0 24px 48px rgba(20,22,26,.10);
+  --sh-focus:0 0 0 3px rgba(217,84,31,.22);
+
+  /* Motion — fast, functional, always optional. */
+  --t-fast:90ms cubic-bezier(.2,.65,.3,1);
+  --t:160ms cubic-bezier(.2,.65,.3,1);
+  --t-slow:280ms cubic-bezier(.2,.7,.3,1);
+
+  /* Rhythm */
+  --rail-w:232px;
+  --pad-x:32px;
+  --pad-y:26px;
 }
