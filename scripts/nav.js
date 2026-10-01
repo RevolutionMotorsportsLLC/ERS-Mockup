@@ -1,5 +1,5 @@
-/* Shared left-rail navigation, source-tag legend, "Hide notes" wiring and the
-   Print page action — one copy for every page.
+/* Shared left-rail navigation, source-tag legend, "Hide notes" wiring, the
+   source-tag filter and the Print page action — one copy for every page.
 
    Each page sets `var ERS_PAGE = 'bike-sales';` (its own nav id) before loading this
    script, so the matching link gets marked current.
@@ -73,15 +73,70 @@ function renderNav(){
 }
 renderNav();
 
+/* ------------------------------------------------------------------
+   Build notes default to hidden.
+
+   The mockup is the specification, so the notes still have to be one
+   click away on every page — but the default read is the dashboard,
+   not the annotation. The toggle keeps its own label in sync.
+   ------------------------------------------------------------------ */
 (function(){
   var b = document.getElementById('notesToggle');
+  document.body.className = 'notes-off';
   if (!b) return;
+  b.innerHTML = 'Show notes';
+  b.setAttribute('aria-pressed', 'true');
   b.onclick = function(){
     var off = document.body.className.indexOf('notes-off') > -1;
     document.body.className = off ? '' : 'notes-off';
     b.innerHTML = off ? 'Hide notes' : 'Show notes';
     b.setAttribute('aria-pressed', off ? 'false' : 'true');
   };
+})();
+
+/* ------------------------------------------------------------------
+   Source tags are a filter, not just a label.
+
+   Hard rule 3 puts provenance on every row. Clicking a tag isolates
+   that band so the data contract can actually be audited — click again
+   to clear. Turns an existing trust convention into a working tool
+   with no new data behind it.
+   ------------------------------------------------------------------ */
+(function(){
+  var current = null;
+  function apply(){
+    var rows = document.querySelectorAll('tbody tr'), i, j, tags, hit;
+    for (i = 0; i < rows.length; i++) {
+      if (!current) { rows[i].className = rows[i].className.replace(/\s*src-hit|\s*src-miss/g, ''); continue; }
+      tags = rows[i].querySelectorAll('.src');
+      hit = false;
+      for (j = 0; j < tags.length; j++) {
+        if (tags[j].textContent.replace(/\s+/g,'').toLowerCase().indexOf(current) === 0) { hit = true; break; }
+      }
+      var cls = rows[i].className.replace(/\s*src-hit|\s*src-miss/g, '');
+      rows[i].className = cls + (hit ? ' src-hit' : ' src-miss');
+    }
+    document.body.setAttribute('data-src-filter', current || '');
+  }
+
+  document.addEventListener('click', function(e){
+    var t = e.target;
+    while (t && t !== document && !(t.className && String(t.className).indexOf('src') > -1)) t = t.parentNode;
+    if (!t || t === document) return;
+    var word = (t.textContent || '').replace(/[^a-z]/gi,'').toLowerCase();
+    var known = false, i;
+    for (i = 0; i < ERS_SOURCES.length; i++) if (word.indexOf(ERS_SOURCES[i][0]) === 0) known = true;
+    if (!known) return;
+    e.preventDefault();
+    e.stopPropagation();
+    current = (current === word) ? null : word;
+    apply();
+  });
+
+  /* Escape clears the filter, like any other transient highlight. */
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && current) { current = null; apply(); }
+  });
 })();
 
 /* "Print page" prints. The print stylesheet in app.css strips the rail, the

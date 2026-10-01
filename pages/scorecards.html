@@ -52,6 +52,24 @@
 </div>
 
 <!-- ============ BIKE SALES TRANSACTIONS ============ -->
+<!-- ============ CROSS-STORE MATRIX ============ -->
+<section class="anchor" id="sec-matrix">
+  <div class="gutter">
+    <h2>Every store at once</h2>
+    <p>The nine numbers a morning meeting actually turns on.</p>
+  </div>
+  <div>
+    <div class="card">
+      <div class="tbl-title"><h4>Cross-store matrix</h4><span class="cnt" id="matrixCnt"></span></div>
+      <div id="matrix" class="chart"></div>
+      <p class="chart-note">Each bar is scaled to the highest store on that column, so the shape of a column is the
+        spread across stores. Bars are <b>neutral in colour on purpose</b>: without a per-metric target there is no
+        judgment to make, and colouring against peers would be ranking. Your store is picked out in accent.
+        Tables below carry every metric &mdash; this is the nine that get discussed.</p>
+    </div>
+  </div>
+</section>
+
 <section class="anchor">
   <div class="gutter">
     <h2>Bike Sales Transactions</h2>
@@ -138,6 +156,7 @@
 
 <script>var ERS_PAGE = 'scorecards';</script>
 <script src="../scripts/format.js"></script>
+<script src="../scripts/charts.js"></script>
 <script src="../scripts/nav.js"></script>
 <script>
 var DATA, SELECTED = 'Emerald Coast';
@@ -258,6 +277,36 @@ var SVC_COLS = [
   { t: 'Customer Pay %', get: function(s){ return s.service.customerPayPct; }, fmt: pct1 }
 ];
 
+/* ---------- Cross-store matrix ----------
+   Nine metrics, one shape. The six tables below carry all 36; this is the set
+   that actually gets discussed in a morning meeting.
+
+   Bars are magnitude, not judgment - see charts.js. Cross-store ranking is
+   Phase 2 and consent-gated (CLAUDE.md hard rule 9), and the empty state below
+   four contributing stores is built first and rendered by charts.js when it
+   applies. */
+function renderMatrix(){
+  var cols = [
+    { short:'Units',     label:'Units sold',            get:function(s){ return s.transactions.unitSales; }, fmt:commas },
+    { short:'Missed',    label:'Missed opportunities',  get:function(s){ return s.transactions.missedOpp; }, fmt:commas },
+    { short:'BE PUS',    label:'Back end per unit',     get:bePus, fmt:money },
+    { short:'PPM',       label:'PPM %',                 get:pctOfUnits('ppmMtd'), fmt:pct1, unit:'% of units' },
+    { short:'ESP',       label:'ESP %',                 get:pctOfUnits('espMtd'), fmt:pct1, unit:'% of units' },
+    { short:'New GM',    label:'New margin',            get:newMargin, fmt:pct1, unit:'%' },
+    { short:'Parts GM',  label:'Parts gross margin',    get:function(s){ var d = s.parts; return d.totalSalesMtd ? d.grossProfitMtd / d.totalSalesMtd * 100 : null; }, fmt:pct1, unit:'%' },
+    { short:'OBS',       label:'Parts obsolescence',    get:function(s){ return s.parts.obsPct; }, fmt:pct1, unit:'%' },
+    { short:'Sv prod',   label:'Service productivity',  get:function(s){ return s.service.productivityPct; }, fmt:pct1, unit:'%' }
+  ];
+  ERS.heatmap(document.getElementById('matrix'), cols, DATA.stores, {
+    me: SELECTED,
+    minStores: 4,
+    cellWidth: 88,
+    label: 'Cross-store comparison across nine metrics'
+  });
+  var cnt = document.getElementById('matrixCnt');
+  if (cnt) cnt.textContent = DATA.stores.length + ' stores \u00b7 ' + cols.length + ' metrics';
+}
+
 /* ---------- Header + store picker ---------- */
 function renderHeader(){
   document.getElementById('pageMeta').innerHTML = DATA.date.label + ' &middot; Month to date';
@@ -271,6 +320,7 @@ function renderHeader(){
 }
 
 function renderAll(){
+  renderMatrix();
   renderTable('tx',    'txHead',    'txBody',    TX_COLS);
   renderTable('bu',    'buHead',    'buBody',    BU_COLS);
   renderTable('fi',    'fiHead',    'fiBody',    FI_COLS);

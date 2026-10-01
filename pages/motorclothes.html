@@ -122,6 +122,14 @@
   </div>
   <div>
     <div class="card">
+      <div class="tbl-title"><h4>Are we on pace</h4><span class="cnt">Counter, wholesale and employee</span></div>
+      <div id="kpiBullets" class="chart"></div>
+      <p class="chart-note">Bar is month to date. Vertical marker is projected month-end on the six-day trading
+        week &mdash; <span id="bulletBasis"></span>. Tick below is the complete prior period. Colour marks the
+        &plusmn;3-point pace judgment only.</p>
+    </div>
+
+    <div class="card">
       <table class="deals"><thead><tr id="repHead"></tr></thead><tbody id="repBody"></tbody></table>
     </div>
 
@@ -182,6 +190,7 @@
 
 <script>var ERS_PAGE = 'motorclothes';</script>
 <script src="../scripts/format.js"></script>
+<script src="../scripts/charts.js"></script>
 <script src="../scripts/nav.js"></script>
 <script>
 /* Two day counts, on purpose - see the Projected month-end note above. */
@@ -390,6 +399,28 @@ function renderSectionNav(){
 }
 
 /* ---------- Load every sample figure from /data, then render ---------- */
+
+/* ---------- Charts (scripts/charts.js) ---------- */
+function renderCharts(){
+  function paceCls(a, p){ return p ? ERS.paceClass((a - p) / p * 100) : ''; }
+  var m = withTotal(DATA.kpi.mtd), p = proj(m), ly = withTotal(DATA.kpi.lastyear);
+  ERS.bullet(document.getElementById('kpiBullets'), [
+    { label:'Counter sales', value:m.counter, pace:p.counter, prior:ly.counter,
+      display:money(m.counter), cls:paceCls(m.counter, p.counter),
+      caption:sgn(m.counter - p.counter, money) + ' vs pace \u00b7 ' + money(ly.counter) + ' last September' },
+    { label:'Total sales',   value:m.total, pace:p.total, prior:ly.total,
+      display:money(m.total), cls:paceCls(m.total, p.total),
+      caption:sgn(m.total - p.total, money) + ' vs pace \u00b7 ' + money(ly.total) + ' last September' },
+    { label:'Gross profit',  value:m.grossProfit, pace:p.grossProfit, prior:ly.grossProfit,
+      display:money(m.grossProfit), cls:paceCls(m.grossProfit, p.grossProfit),
+      caption:sgn(m.grossProfit - p.grossProfit, money) + ' vs pace \u00b7 ' + money(ly.grossProfit) + ' last September' },
+    { label:'Gross margin',  value:m.margin, pace:null, prior:ly.margin,
+      display:pct1(m.margin), cls:'',
+      caption:'Ratio \u2014 no projected margin. ' + sgn(m.margin - ly.margin, function(n){ return n.toFixed(1) + ' pts'; }) + ' vs last September' }
+  ], { label:'Motorclothes pace, month to date' });
+  document.getElementById('bulletBasis').textContent = PROJ_ELAPSED + ' of ' + PROJ_TOTAL + ' open days';
+}
+
 fetch('../data/motorclothes.json')
   .then(function(res){ return res.json(); })
   .then(function(json){
@@ -400,6 +431,7 @@ fetch('../data/motorclothes.json')
     PF   = PROJ_TOTAL / PROJ_ELAPSED;
     renderHeader();
     renderKPI();
+    renderCharts();
     renderReps();
     renderSectionNav();
   })

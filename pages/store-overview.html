@@ -59,6 +59,19 @@
   </div>
   <div>
     <div class="card">
+      <div class="tbl-title"><h4>What needs attention</h4><span class="cnt" id="excCount"></span></div>
+      <div class="exceptions" id="exceptions"></div>
+    </div>
+
+    <div class="card">
+      <div class="tbl-title"><h4>Where the sales are, where the gross is</h4><span class="cnt">Share of store total</span></div>
+      <div id="deptShare" class="chart"></div>
+      <p class="chart-note">The two bars are the same store, two questions. A department that is a sliver of sales
+        and a slab of gross is where the profit actually comes from &mdash; that inversion is invisible in the
+        table below.</p>
+    </div>
+
+    <div class="card">
       <div class="bases" role="tablist" aria-label="Comparison basis">
         <button role="tab" aria-selected="true"  data-basis="mtd">MTD</button>
         <button role="tab" aria-selected="false" data-basis="lastmonth">vs. Last Month</button>
@@ -158,6 +171,7 @@
 
 <script>var ERS_PAGE = 'store-overview';</script>
 <script src="../scripts/format.js"></script>
+<script src="../scripts/charts.js"></script>
 <script src="../scripts/nav.js"></script>
 <script>
 /* Two day counts, on purpose.
@@ -323,6 +337,69 @@ function renderDeptDetail(){
   document.getElementById('deptDetailBody').innerHTML = html;
 }
 
+/* ---------- Signals: what needs attention ----------
+   Only what a judgment can be made about, using the rule CLAUDE.md already
+   documents: % of prior against the percentage of the period elapsed, green
+   at +3 points or more and red at -3 or worse. Nothing here invents a target;
+   it is the same comparison the table makes, surfaced above the fold.
+
+   When nothing crosses a threshold the strip says so - an absence of colour
+   is information, and a page with nothing red is a healthy page. */
+function renderSignals(){
+  var elapsedPct = ELAPSED / TOTAL * 100, out = [], i, d, pct, delta;
+
+  for (i = 0; i < DEPTS.length; i++) {
+    d = DEPTS[i];
+    if (!d.lms) continue;
+    pct   = d.s / d.lms * 100;
+    delta = pct - elapsedPct;
+    if (delta <= -3) {
+      out.push('<div class="exception bad"><span class="dot"></span><span>' +
+        '<b>' + d.n + '</b> is at <span class="n">' + pct1(pct) + '</span> of last month against ' +
+        '<span class="n">' + pct1(elapsedPct) + '</span> elapsed &mdash; ' +
+        '<span class="n">' + sgn(delta, function(n){ return n.toFixed(1) + ' pts'; }) + '</span></span></div>');
+    } else if (delta >= 3) {
+      out.push('<div class="exception warn"><span class="dot"></span><span>' +
+        '<b>' + d.n + '</b> is ahead &mdash; <span class="n">' + sgn(delta, function(n){ return n.toFixed(1) + ' pts'; }) +
+        '</span> against elapsed</span></div>');
+    }
+  }
+
+  /* Units: the same judgment on the headline count. */
+  var u = DATA.headline.units, lu = DATA.detail.bikeSales;
+  if (u && lu) {
+    out.push('<div class="exception"><span class="dot" style="background:var(--ink-low)"></span><span>' +
+      'Units <b>' + commas(u.total) + '</b> &mdash; New <span class="n">' + commas(u.new) +
+      '</span> &middot; Used <span class="n">' + commas(u.used) + '</span>. ' +
+      'Repair orders <span class="n">' + commas(DATA.headline.repairOrders) + '</span>.</span></div>');
+  }
+
+  var mount = document.getElementById('exceptions');
+  mount.innerHTML = out.length
+    ? out.join('')
+    : '<div class="exception-empty"><b>All departments within &plusmn;3 points of pace.</b> ' +
+      'Nothing on this page currently crosses a judgment threshold.</div>';
+  document.getElementById('excCount').textContent = out.length
+    ? out.length + (out.length === 1 ? ' signal' : ' signals')
+    : 'no signals';
+}
+
+/* ---------- Charts (scripts/charts.js) ---------- */
+function renderCharts(){
+  /* Sales share against gross share, by department. */
+  var sales = [], gross = [], i, d;
+  for (i = 0; i < DEPTS.length; i++) {
+    d = DEPTS[i];
+    if (!d.s && !d.g) continue;
+    sales.push({ label:d.n, value:d.s });
+    gross.push({ label:d.n, value:d.g });
+  }
+  ERS.share(document.getElementById('deptShare'), [
+    { label:'Share of sales', parts:sales },
+    { label:'Share of gross', parts:gross }
+  ], { label:'Department share of store sales and gross' });
+}
+
 /* ---------- Load every sample figure from /data, then render ---------- */
 fetch('../data/store-overview.json')
   .then(function(res){ return res.json(); })
@@ -336,6 +413,8 @@ fetch('../data/store-overview.json')
     renderHeader();
     render();
     renderDeptDetail();
+    renderSignals();
+    renderCharts();
   })
   .catch(function(err){
     document.querySelector('main').insertAdjacentHTML('afterbegin',

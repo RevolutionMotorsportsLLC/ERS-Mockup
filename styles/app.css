@@ -333,6 +333,17 @@ tbody tr.tot td.l{font-family:var(--disp);font-size:12px;letter-spacing:.12em;te
 tbody tr.tot:not(.band) td{border-top:3px double var(--rule-strong);padding-top:9px}
 tbody tr.tot:not(.band) td.l{box-shadow:inset 3px 0 0 var(--accent);padding-left:11px}
 
+/* Source-tag filter: clicking a .src isolates that provenance band so the data
+   contract can be audited. Escape or a second click clears it. */
+.src{cursor:pointer}
+.src:hover{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-softer)}
+tr.src-hit td{background:var(--accent-softer)}
+tr.src-hit:hover td{background:var(--accent-soft)}
+tr.src-miss td{opacity:.24}
+tr.src-miss:hover td{opacity:.5}
+body[data-src-filter]:not([data-src-filter=""]) .src{opacity:.4}
+body[data-src-filter]:not([data-src-filter=""]) tr.src-hit .src{opacity:1;border-color:var(--accent);color:var(--accent-ink)}
+
 /* ================= Cards =================
    One bordered card per table, or per tightly related group. */
 .card{
@@ -468,6 +479,114 @@ table.deals tbody tr.tot td.l{font-family:var(--disp);font-size:11px;letter-spac
 .legend{
   display:inline-block;width:9px;height:9px;background:var(--accent-softer);
   box-shadow:inset 2px 0 0 var(--accent);vertical-align:-1px;margin-right:5px;border-radius:1px;
+}
+
+/* ================= Charts =================
+   Dependency-free SVG in scripts/charts.js. Same tokens, same restraint.
+   Colour appears only where a judgment is possible - a chart with no red
+   and no green is a healthy chart. */
+.chart{margin:4px 0 2px;width:100%}
+.chart svg{display:block;width:100%;overflow:visible}
+.chart svg[height]{height:auto}
+
+.chart .c-lab{font-family:var(--body);font-size:11.5px;fill:var(--ink);dominant-baseline:middle}
+.chart .c-lab-me{font-weight:600;fill:var(--accent-ink)}
+.chart .c-val{font-family:var(--mono);font-size:11px;fill:var(--ink);text-anchor:end;font-variant-numeric:tabular-nums;dominant-baseline:middle}
+.chart .c-cap{font-family:var(--mono);font-size:9px;fill:var(--ink-low);dominant-baseline:middle}
+.chart .c-dash{font-family:var(--mono);font-size:11px;fill:var(--ink-faint)}
+.chart .c-on-dark{fill:#fff;font-weight:500}
+
+.chart .c-track{fill:var(--sunken-2)}
+.chart .c-fill{fill:var(--ink);opacity:.86}
+.chart .c-fill.up{fill:var(--up)}
+.chart .c-fill.down{fill:var(--down)}
+.chart .c-pace{stroke:var(--ink);stroke-width:1.5}
+.chart .c-prior{stroke:var(--ink-low);stroke-width:2}
+
+.chart .c-seg-0{fill:#2B2E33}
+.chart .c-seg-1{fill:#5A5F66}
+.chart .c-seg-2{fill:#8E939A}
+.chart .c-seg-3{fill:var(--accent)}
+.chart .c-seg-4{fill:#C08A72}
+.chart .c-key{opacity:.9}
+
+.chart .c-base{stroke:var(--rule-hard);stroke-width:1}
+.chart .c-wf-pos{fill:var(--ink);opacity:.88}
+.chart .c-wf-neg{fill:var(--down);opacity:.8}
+.chart .c-wf-total{fill:var(--accent)}
+.chart .c-wf-link{stroke:var(--rule-hard);stroke-width:1;stroke-dasharray:2 2}
+.chart .c-wf-lab{font-family:var(--disp);font-size:10px;letter-spacing:.11em;text-transform:uppercase;fill:var(--ink-mid)}
+
+.chart .c-col{font-family:var(--disp);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;fill:var(--ink-mid);dominant-baseline:middle}
+.chart .c-col-unit{font-family:var(--mono);font-size:8.5px;fill:var(--ink-low);dominant-baseline:middle}
+.chart .c-heat-rule{stroke:var(--rule);stroke-width:1}
+.chart .c-heat-rule-hard{stroke:var(--ink);stroke-width:1}
+.chart .c-heat-row{stroke:var(--rule);stroke-width:1}
+.chart .c-heat-track{fill:var(--sunken-2)}
+.chart .c-heat-fill{fill:var(--ink);opacity:.28}
+.chart .c-heat-fill.me{fill:var(--accent);opacity:.85}
+.chart .c-heat-val{font-family:var(--mono);font-size:9.5px;fill:var(--ink-mid);dominant-baseline:middle;font-variant-numeric:tabular-nums}
+.chart .c-heat-val.me{fill:var(--accent-ink);font-weight:500}
+.chart .c-heat-me{fill:var(--accent-softer)}
+
+/* The empty state comes first, by design - see CLAUDE.md hard rule 9. */
+.chart-empty{
+  border:1px dashed var(--rule-hard);background:var(--sunken);border-radius:var(--r-sm);
+  padding:18px 20px;font-size:11.5px;color:var(--ink-mid);line-height:1.7;max-width:62ch;
+}
+.chart-empty b.h{
+  font-family:var(--disp);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink);display:block;margin-bottom:6px;
+}
+
+/* Chart card: a chart is one distinct report, exactly like a table. */
+.card .chart + .mini{margin-top:12px}
+.chart-note{font-family:var(--mono);font-size:9.5px;color:var(--ink-low);margin-top:10px;letter-spacing:.01em;line-height:1.6}
+
+/* Pace ribbon - joins the KPI ribbon to make one panel (CLAUDE.md). */
+.pbar{padding:2px 0 4px}
+.pbar-track{height:9px;background:var(--sunken-2);border-radius:var(--r-pill);position:relative;box-shadow:inset 0 1px 2px rgba(23,24,26,.08)}
+.pbar-fill{position:absolute;inset:0 auto 0 0;border-radius:var(--r-pill);background:linear-gradient(90deg,var(--accent-deep),var(--accent) 60%,#E8865C);box-shadow:0 1px 3px rgba(217,84,31,.3)}
+.pbar-tick{position:absolute;top:-4px;bottom:-4px;width:1px;background:var(--ink);opacity:.5;border-radius:var(--r-pill)}
+.pbar-legend{display:flex;gap:22px;flex-wrap:wrap;margin-top:10px;font-family:var(--mono);font-size:9.5px;color:var(--ink-low);letter-spacing:-.01em}
+.pbar-legend b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
+.pbar-legend i.k{display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--accent);margin-right:6px;vertical-align:0}
+.pbar-legend i.k2{background:var(--ink-low)}
+
+/* Exception strip - only what needs action, above everything else. */
+.exceptions{
+  display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;
+}
+.exception{
+  display:flex;align-items:baseline;gap:9px;padding:9px 13px;
+  border:1px solid var(--rule-hard);border-radius:var(--r-md);background:var(--card);
+  box-shadow:var(--sh-xs);font-size:11.5px;color:var(--ink-mid);max-width:100%;
+}
+.exception .dot{width:7px;height:7px;border-radius:50%;flex:none;position:relative;top:0}
+.exception.bad{border-color:#E2B7AF;background:var(--down-soft)}
+.exception.bad .dot{background:var(--down)}
+.exception.warn{border-color:#E7D2A8;background:#FBF6E6}
+.exception.warn .dot{background:#B8860B}
+.exception b{color:var(--ink);font-weight:600}
+.exception .n{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+.exception-empty{
+  font-family:var(--mono);font-size:10.5px;color:var(--ink-low);padding:9px 0;
+}
+.exception-empty b{color:var(--up);font-weight:500}
+
+/* Data-quality flag - a figure whose source value violates its own type
+   (e.g. a negative count). Honest by design; see OPEN_QUESTIONS.md. */
+.qflag{
+  display:inline-block;width:12px;height:12px;line-height:12px;text-align:center;
+  font-family:var(--mono);font-size:9px;color:#B8860B;background:#FBF6E6;
+  border:1px solid #E7D2A8;border-radius:50%;margin-left:5px;cursor:help;
+  vertical-align:1px;
+}
+
+@media (max-width:560px){
+  .pbar-legend{gap:10px}
+  .exceptions{gap:8px}
+  .exception{font-size:11px}
 }
 
 /* ================= Footer ================= */
