@@ -72,6 +72,7 @@ To see the *original* alongside it for comparison, run the same thing on a diffe
 | 4 | Redesign the charts, sliders and data intake; audit the whole thing | Wrote `DESIGN_AUDIT.md` (552 lines) |
 | 5 | Make the best call and take it all the way to the finish line | Built the chart kit and the layout changes; opened the PR |
 | 6 | Write a handoff document | This file |
+| 7 | Overall UI enhancement — sleeker, more professional, same palette | The refinement pass (§4.4) |
 
 The audit (step 4) is what drove everything after it. Two findings in particular changed
 the shape of the work:
@@ -149,6 +150,27 @@ fixed** — the mockup handles them honestly and they are recorded in `OPEN_QUES
    sign should mean.
 2. **A style name arrives as the word `None`**, which printed as text instead of the dash
    the rules require. Now shows `—`.
+
+### 4.4 The refinement pass
+
+A UI-polish pass asked for after the handoff was written: make it look sleeker and more
+professional without touching the brand. The locked palette, the typefaces and every
+convention in §6 are unchanged — this is craft around them.
+
+- **Flat instead of gradient.** The rail, the KPI ribbon, the progress fill and the note
+  boxes all used subtle gradients; every one is now a flat surface separated by a hairline,
+  with shadow only on hover. The derived greys went cool-neutral. The brand orange, the
+  paper and the ink ramp are the documented spec values, untouched.
+- **The sidebar got icons** — one small line icon per tab, drawn inline, no library — and
+  the brand mark is now a tiny pace bullet, the product's own hero chart.
+- **Four rendering bugs fixed on the way**, all visible in the earlier screenshots:
+  the share-bar percentages rendered backwards (a CSS anchor rule was overriding the SVG
+  attribute), the waterfall printed `$−1,125,753` instead of `−$1,125,753`, two departments
+  in the share chart shared the same black, and the cross-store matrix wrote its values on
+  top of its bars. The page header's day-count also overlapped itself on some tabs.
+- **Verified again end to end:** all seven tabs load with no console errors, nothing
+  overflows at 1440 / 1280 / 1180 / 820 / 560, and the print stylesheet still produces a
+  clean report.
 
 ---
 

@@ -377,6 +377,30 @@ and no visual data representation anywhere. What moved:
   printed as text; it now renders as the em-dash hard rule 4 requires. Both are logged in
   `OPEN_QUESTIONS.md` for Logan rather than silently resolved.
 
+**Also done: a UI refinement pass on the shared kit**, October 2026 — `styles/tokens.css`,
+`styles/app.css`, `scripts/nav.js`, `scripts/charts.js` only. The locked palette and
+typefaces are untouched; this is craft, not branding. What moved:
+
+- **Flat chrome.** Every gradient in the rail, the ribbon, the progress fill and the note
+  boxes is gone; surfaces differ by hairline and step, shadow is a whisper and appears on
+  hover. Derived neutrals (`--sunken`, the rail ramp, shadows) went cool; the spec values
+  in the Design system block above are unchanged and exact.
+- **The rail carries icons.** One 24px stroke icon per tab, inline SVG in `nav.js`, no icon
+  library; the brand lockup is a pace-bullet glyph (the product's own hero chart) in an
+  accent tile. The current page is a flat `--rail-2` row with the accent bar, icon in accent.
+- **Chart label anchoring is a class, not an attribute.** `.c-val` is `text-anchor:end` in
+  CSS, and CSS beats the SVG attribute — a label placed inside a bar or above a column must
+  carry `.t-start` or `.t-mid`. (The share bars and the aging stack had labels rendering
+  backwards for exactly this reason.)
+- **Money signs read correctly.** The waterfall prints `−$1,125,753`, sign before the
+  dollar, not `$−1,125,753`.
+- **The segment ramp has seven stops** (`c-seg-0` … `c-seg-6`); Riding Academy and
+  Administration used to both fall back to the same black.
+- **The cross-store matrix row breathes**: value above the bar, not on it; row height 30.
+- **`.head .meta` is inline text, not flex.** As a flex row its bare text nodes and `<b>`s
+  became separate items and the day-count ("open day 10 of 30") wrapped into overlapping
+  fragments on several tabs.
+
 **Not started:** CRM, Riding Academy, Maintenance.
 
 **Not this project's job:** the Talon mapping, the formula specification, the acceptance

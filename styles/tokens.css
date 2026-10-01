@@ -1,23 +1,25 @@
 /* ERS design system — defined once, never redefined per page. See CLAUDE.md.
    The documented palette (paper, ink ramp, rules, accent, up/down) is the spec and
-   its values are fixed; everything else here is scaffolding built around it. */
+   its values are fixed; everything else here is scaffolding built around it.
+   Scaffolding is cool neutral and flat: surfaces differ by hairline and step, not
+   by gradient. */
 :root{
   /* Surfaces — page sits warm and flat; cards lift off it; bands sink below it. */
   --paper:#FBFAF8;
   --card:#FFFFFF;
-  --sunken:#F6F4F0;
-  --sunken-2:#EEEBE5;
-  --rail:#1A1B1E;
-  --rail-2:#222428;
-  --rail-3:#2B2E33;
+  --sunken:#F4F4F3;
+  --sunken-2:#EBEBE9;
+  --rail:#17191D;
+  --rail-2:#1F2227;
+  --rail-3:#2A2E34;
 
   /* Ink — spec ramp plus a fainter step for rules and disabled text. */
   --ink:#17181A;
   --ink-mid:#5A5F66;
   --ink-low:#9BA0A7;
-  --ink-faint:#C6C9CD;
-  --rail-ink:#B8BCC2;
-  --rail-dim:#6E747C;
+  --ink-faint:#C7C9CB;
+  --rail-ink:#B4BAC2;
+  --rail-dim:#6B727B;
 
   /* Rules — spec values, unchanged. */
   --rule:#E4E3DF;
@@ -36,9 +38,9 @@
 
   /* Judgment colours — spec values, unchanged. */
   --up:#2C6E4C;
-  --up-soft:#E7F0EA;
+  --up-soft:#E9F1EC;
   --down:#B23A2B;
-  --down-soft:#F7E9E6;
+  --down-soft:#F8EAE7;
 
   /* Type */
   --disp:'Barlow Condensed','Arial Narrow',sans-serif;
@@ -46,19 +48,19 @@
   --mono:'IBM Plex Mono',Menlo,monospace;
 
   /* Radii — dense tool, so small and consistent. */
-  --r-xs:2px;
-  --r-sm:4px;
+  --r-xs:3px;
+  --r-sm:5px;
   --r-md:7px;
-  --r-lg:11px;
+  --r-lg:10px;
   --r-pill:999px;
 
-  /* Elevation — layered and quiet. Cards rest flat, lift on touch. */
-  --sh-hair:0 0 0 1px rgba(23,24,26,.04);
-  --sh-xs:0 1px 2px rgba(23,24,26,.05);
-  --sh-sm:0 1px 2px rgba(23,24,26,.05), 0 3px 8px rgba(23,24,26,.05);
-  --sh-md:0 2px 4px rgba(23,24,26,.05), 0 8px 20px rgba(23,24,26,.07);
-  --sh-lg:0 4px 10px rgba(23,24,26,.07), 0 20px 40px rgba(23,24,26,.10);
-  --sh-focus:0 0 0 3px rgba(217,84,31,.24);
+  /* Elevation — quiet and cool. Cards rest flat; shadow is a whisper, never a drop. */
+  --sh-hair:0 0 0 1px rgba(20,22,26,.05);
+  --sh-xs:0 1px 2px rgba(20,22,26,.06);
+  --sh-sm:0 1px 2px rgba(20,22,26,.05), 0 4px 10px rgba(20,22,26,.05);
+  --sh-md:0 2px 4px rgba(20,22,26,.05), 0 10px 24px rgba(20,22,26,.08);
+  --sh-lg:0 4px 10px rgba(20,22,26,.06), 0 24px 48px rgba(20,22,26,.10);
+  --sh-focus:0 0 0 3px rgba(217,84,31,.22);
 
   /* Motion — fast, functional, always optional. */
   --t-fast:90ms cubic-bezier(.2,.65,.3,1);
@@ -66,7 +68,7 @@
   --t-slow:280ms cubic-bezier(.2,.7,.3,1);
 
   /* Rhythm */
-  --rail-w:224px;
+  --rail-w:232px;
   --pad-x:32px;
   --pad-y:26px;
 }

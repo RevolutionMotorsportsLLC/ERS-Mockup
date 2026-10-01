@@ -183,8 +183,12 @@ function waterfall(el, items, opts){
     }
 
     out += '<rect class="' + cls + '" x="' + x + '" y="' + yt + '" width="' + bw + '" height="' + h + '" rx="2"/>';
-    out += '<text class="c-val" x="' + (x + bw / 2) + '" y="' + (yt - 5) + '" text-anchor="middle">' +
-             esc(it2.fmt ? it2.fmt(it2.value) : fmtM(it2.value)) + '</text>';
+    /* Money reads with the sign out front: −$1,125,753, not $−1,125,753. */
+    var lab;
+    if (it2.value === null || it2.value === undefined) lab = '\u2014';
+    else if (it2.value < 0) lab = '\u2212' + (it2.fmt ? it2.fmt(Math.abs(it2.value)) : money(Math.abs(it2.value)));
+    else lab = it2.fmt ? it2.fmt(it2.value) : money(it2.value);
+    out += '<text class="c-val t-mid" x="' + (x + bw / 2) + '" y="' + (yt - 5) + '">' + esc(lab) + '</text>';
     out += '<text class="c-cap c-wf-lab" x="' + (x + bw / 2) + '" y="' + (H - padB + 15) + '" text-anchor="middle">' + esc(it2.label) + '</text>';
 
     /* end of this bar for the next connector */
@@ -213,7 +217,7 @@ function stack(el, segs, opts){
     var w = W * (s.value || 0) / total;
     out += '<rect class="c-seg c-seg-' + i + '" x="' + x + '" y="0" width="' + Math.max(0, w - 2) + '" height="' + barH + '" rx="2"/>';
     if (w > 54) {
-      out += '<text class="c-val c-on-dark" x="' + (x + 9) + '" y="' + (barH / 2 + 4) + '">' +
+      out += '<text class="c-val c-on-dark t-start" x="' + (x + 9) + '" y="' + (barH / 2 + 4) + '">' +
                esc(s.fmt ? s.fmt(s.value) : fmtM(s.value)) + '</text>';
     }
     /* legend row below */
@@ -282,7 +286,7 @@ function share(el, series, opts){
       var w = (W - 160) * (p.value || 0) / total;
       out += '<rect class="c-seg c-seg-' + i + '" x="' + x + '" y="' + y + '" width="' + Math.max(0, w - 2) + '" height="' + barH + '" rx="2"/>';
       if (w > 72) {
-        out += '<text class="c-val c-on-dark" x="' + (x + 8) + '" y="' + (y + 15) + '">' + Math.round((p.value || 0) / total * 100) + '%</text>';
+        out += '<text class="c-val c-on-dark t-start" x="' + (x + 8) + '" y="' + (y + 15) + '">' + Math.round((p.value || 0) / total * 100) + '%</text>';
       }
       x += w;
     }
@@ -326,7 +330,7 @@ function heatmap(el, cols, stores, opts){
     return;
   }
 
-  var labelW = 148, cellW = opts.cellWidth || 96, headH = 46, rowH = 26;
+  var labelW = 148, cellW = opts.cellWidth || 96, headH = 46, rowH = 30;
   var W = labelW + cols.length * cellW;
   var H = headH + stores.length * rowH + 6;
 
@@ -354,23 +358,24 @@ function heatmap(el, cols, stores, opts){
     var st = stores[s];
     var y = headH + s * rowH;
     var me = opts.me && st.name === opts.me;
-    if (me) out += '<rect class="c-heat-me" x="0" y="' + (y - 2) + '" width="' + W + '" height="' + rowH + '" rx="2"/>';
-    out += '<text class="c-lab' + (me ? ' c-lab-me' : '') + '" x="0" y="' + (y + 15) + '">' + esc(st.name) + '</text>';
+    if (me) out += '<rect class="c-heat-me" x="0" y="' + (y + 1) + '" width="' + W + '" height="' + (rowH - 2) + '" rx="2"/>';
+    out += '<text class="c-lab' + (me ? ' c-lab-me' : '') + '" x="0" y="' + (y + 17) + '">' + esc(st.name) + '</text>';
     for (c = 0; c < cols.length; c++) {
       var val = cols[c].get(st);
       var bx = labelW + c * cellW + 6;
       var bw = cellW - 12;
       if (val === null || val === undefined) {
-        out += '<text class="c-dash" x="' + (bx + bw / 2) + '" y="' + (y + 15) + '" text-anchor="middle">\u2014</text>';
+        out += '<text class="c-dash" x="' + (bx + bw / 2) + '" y="' + (y + 17) + '">\u2014</text>';
       } else {
-        out += '<rect class="c-heat-track" x="' + bx + '" y="' + (y + 8) + '" width="' + bw + '" height="8" rx="1"/>';
-        var fw = Math.max(1, bw * Math.abs(val) / maxes[c]);
-        out += '<rect class="c-heat-fill' + (me ? ' me' : '') + '" x="' + bx + '" y="' + (y + 8) + '" width="' + fw + '" height="8" rx="1"/>';
-        out += '<text class="c-heat-val' + (me ? ' me' : '') + '" x="' + (labelW + c * cellW + cellW / 2) + '" y="' + (y + 7) + '" text-anchor="middle">' +
+        /* Value sits above the bar, not on it — the two used to collide. */
+        out += '<text class="c-heat-val' + (me ? ' me' : '') + '" x="' + (labelW + c * cellW + cellW / 2) + '" y="' + (y + 9) + '">' +
                  esc(cols[c].fmt ? cols[c].fmt(val) : fmtN(val)) + '</text>';
+        out += '<rect class="c-heat-track" x="' + bx + '" y="' + (y + 15) + '" width="' + bw + '" height="7" rx="1"/>';
+        var fw = Math.max(1, bw * Math.abs(val) / maxes[c]);
+        out += '<rect class="c-heat-fill' + (me ? ' me' : '') + '" x="' + bx + '" y="' + (y + 15) + '" width="' + fw + '" height="7" rx="1"/>';
       }
     }
-    out += '<line class="c-heat-row" x1="0" y1="' + (y + rowH - 3) + '" x2="' + W + '" y2="' + (y + rowH - 3) + '"/>';
+    out += '<line class="c-heat-row" x1="0" y1="' + (y + rowH - 1) + '" x2="' + W + '" y2="' + (y + rowH - 1) + '"/>';
   }
   out += '</svg>';
   mount(el, out, opts.label || 'Cross-store comparison');
