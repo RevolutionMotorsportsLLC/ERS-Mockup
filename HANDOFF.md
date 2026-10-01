@@ -38,8 +38,8 @@ merging is not urgent.
 |---|---|
 | **Pull request** | <https://github.com/RevolutionMotorsportsLLC/ERS-Mockup/pull/1> |
 | **State** | Draft — cannot be merged by accident |
-| **Branch** | `ui-polish-shared-kit`, 3 commits |
-| **Size** | 16 files, +2,430 / −167 lines |
+| **Branch** | `ui-polish-shared-kit`, 5 commits |
+| **Size** | 17 files, +2,821 / −167 lines |
 | **Base** | `main`, untouched |
 | **Who owns it** | Seth Cooke and Logan (organisation owners) |
 | **Approvals needed** | None technically. Open questions in §5 are the real gate |
@@ -277,7 +277,7 @@ Everything requested is done and pushed. Nothing is half-built.
 
 | | |
 |---|---|
-| Work committed | Yes — 3 commits on `ui-polish-shared-kit` |
+| Work committed | Yes — 5 commits on `ui-polish-shared-kit` |
 | Pushed | Yes — to the fork, PR #1 updated |
 | PR description current | Yes |
 | `main` affected | No |
