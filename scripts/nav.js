@@ -33,10 +33,10 @@ var ERS_NAV = [
    rail so the vocabulary is on screen wherever a tagged row is - 'derived' is the
    only band ERS calculates, and the only one a formula can get wrong. */
 var ERS_SOURCES = [
-  ['statement', 'from the Talon statement'],
-  ['counted',   'unit, deal or invoice records'],
-  ['entered',   'dealer or CRM entered'],
-  ['derived',   'ERS arithmetic']
+  ['statement', 'read from the Talon statement', false],
+  ['counted',   'unit, deal or invoice records', false],
+  ['entered',   'dealer or CRM entered', false],
+  ['derived',   'ERS arithmetic', true]
 ];
 
 function renderNav(){
@@ -56,9 +56,11 @@ function renderNav(){
         '</a>';
     }
   }
-  html += '<div class="railfoot"><b>Row sources</b><br>';
+  html += '<div class="railfoot"><div class="lg-title">Row sources</div>';
   for (i = 0; i < ERS_SOURCES.length; i++) {
-    html += ERS_SOURCES[i][0] + ' &middot; ' + ERS_SOURCES[i][1] + (i < ERS_SOURCES.length - 1 ? '<br>' : '');
+    html += '<div class="lg-row' + (ERS_SOURCES[i][2] ? ' derived' : '') + '">' +
+      '<span class="lg-k">' + ERS_SOURCES[i][0] + '</span>' +
+      '<span class="lg-v">' + ERS_SOURCES[i][1] + '</span></div>';
   }
   html += '</div>';
   mount.innerHTML = html;

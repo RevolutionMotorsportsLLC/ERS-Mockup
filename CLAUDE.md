@@ -233,30 +233,43 @@ Coast's real August 2026 closed-month statement, and the Balance Sheet balances 
 Income Statement's department rows sum to its own stated total, both confirmed against
 the source workbook.
 
-**Also done: a product-polish pass on the shared kit**, September 2026 — `styles/tokens.css`,
+**Also done: a design pass on the shared kit**, September 2026 — `styles/tokens.css`,
 `styles/app.css` and `scripts/nav.js` only. No page markup, no sample data, no formula or
 column rule changed; the conventions above all still hold and still read the same. What
 moved:
 
-- **Tokens** carry a surface ramp (`--paper` / `--card` / `--sunken` / `--sunken-2`), a
-  proper ink ramp including `--ink-faint`, three elevation steps, small radii, and a
-  motion scale. Colour values in the design block above are unchanged — `--accent` is
-  still `#D9541F`, and the judgment colours are still `--up` / `--down`.
-- **Controls** share one language: `.btn` (with a `.primary` variant), `select.btn` with
-  a drawn caret, `.chip` as a pill. Hover, active, `:focus-visible` (one accent ring,
-  everywhere) and disabled states are all defined. `.chip[aria-pressed="true"]` still means
-  "this toggle is on."
+- **Tokens** carry a surface ramp (`--paper` / `--card` / `--sunken` / `--sunken-2`), the
+  ink ramp plus `--ink-faint`, four elevation steps, a radius scale, and a motion scale.
+  The documented palette is unchanged and exact — `--paper`, the ink ramp, `--rule`,
+  `--rule-hard`, `--accent`, `--accent-soft`, `--up`, `--down` all still match the values
+  in the Design system block above. Everything else is working colour derived from them
+  (`--accent-hover`, `--accent-deep`, `--accent-softer`, the up/down tints).
+- **The rail** is a proper chrome edge: brand lockup with an accent rule, rounded nav
+  items with an accent bar on the current page, unbuilt tabs marked with a **Soon** badge
+  and made inert instead of a dead `#` link, and a **Row sources** legend at the foot
+  restating the four tags from hard rule 3 — with `derived` called out in accent, since
+  it is the only band where a formula can be wrong.
+- **Controls** share one language: `.btn` with a `.primary` variant, `select.btn` with a
+  drawn caret, `.chip` as a pill. Hover, active, `:focus-visible` (one accent ring,
+  everywhere) and disabled are all defined. `.chip[aria-pressed="true"]` still means "this
+  toggle is on."
+- **The comparison tabs** (`bases`) render as a segmented control — one raised segment for
+  the selected basis — rather than an underline tab strip. Same three tabs, same order,
+  same semantics.
+- **The KPI ribbon** is the visual anchor: larger tabular numerals, a hairline accent rule
+  along the top of the panel, and the progress track as a filled pill with a marker. It
+  and the progress bar are still one card, as required above.
 - **Tables** are unchanged in structure and convention — cards, `.tot` double rule,
-  segment bands, `.src` source tags are all exactly as documented above. The source tag is
-  now a real pill rather than loose monospace, so it reads as metadata. Numbers use
-  `tabular-nums` so columns align optically as well as numerically.
-- **The rail** marks unbuilt tabs with a "Soon" badge and makes them inert rather than a
-  dead `#` link that bounces the reader to the top of the page. It also carries a small
-  **Row sources** legend restating the four source tags from hard rule 3, so the
-  vocabulary is on screen wherever a tagged row is.
-- **Print.** "Print page" now actually prints, and `@media print` in `app.css` strips the
-  rail, the controls and the developer notes, keeps table heads repeating, and stops cards
-  breaking across pages — so what comes out is a clean report a dealer can hand over.
+  segment bands, `.src` source tags are exactly as documented above. The source tag is now
+  a real pill (and on a grand-total row, an accent pill), so it reads as metadata rather
+  than loose monospace. Numbers use `tabular-nums` so columns align optically as well as
+  numerically.
+- **Responsive is actually fixed.** Grid children get `min-width:0` and wide tables scroll
+  inside their own card, so the page never gains a horizontal scrollbar — previously the
+  layout overflowed at 1280px and below on several tabs.
+- **Print.** "Print page" now actually prints, and `@media print` strips the rail, the
+  controls and the developer notes, keeps table heads repeating, and stops cards breaking
+  across pages — so what comes out is a clean report a dealer can hand over.
 - **Reduced motion** is honoured globally; the transitions are polish, never information.
 
 Anything in that pass that a developer would otherwise get wrong belongs in the
