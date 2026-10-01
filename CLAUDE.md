@@ -249,6 +249,7 @@ earlier version was rescaled down 15% because a fifteen-row table would not fit 
 /scripts/charts.js     shared SVG chart kit — bullets, funnels, waterfalls, matrices
 README.md              entry point for developers implementing this
 CLAUDE.md              this file
+HANDOFF.md             what just happened, what is open, where to pick up — read first
 OPEN_QUESTIONS.md      the items that need Logan's answer before the spec is final
 DESIGN_AUDIT.md        design audit and layout proposal that led to the chart work
 ```
